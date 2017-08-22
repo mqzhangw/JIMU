@@ -1,6 +1,6 @@
 package com.mrzhang.component.componentlib.router;
 
-import com.mrzhang.component.componentlib.activator.IActivator;
+import com.mrzhang.component.componentlib.applicationlike.IApplicationLike;
 
 import java.util.HashMap;
 
@@ -49,21 +49,21 @@ public class Router {
         services.remove(serviceName);
     }
 
-    public static void registerActivator(String classname) {
+    public static void registerComponent(String classname) {
         try {
-            Class activatorClass = Class.forName(classname);
-            IActivator activator = (IActivator) activatorClass.newInstance();
-            activator.onCreate();
+            Class clazz = Class.forName(classname);
+            IApplicationLike applicationLike = (IApplicationLike) clazz.newInstance();
+            applicationLike.onCreate();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public static void unregisterActivator(String classname) {
+    public static void unregisterComponent(String classname) {
         try {
-            Class activatorClass = Class.forName(classname);
-            IActivator activator = (IActivator) activatorClass.newInstance();
-            activator.onStop();
+            Class clazz = Class.forName(classname);
+            IApplicationLike applicationLike = (IApplicationLike) clazz.newInstance();
+            applicationLike.onStop();
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -1,6 +1,6 @@
-package com.mrzhang.reader.activator;
+package com.mrzhang.reader.applike;
 
-import com.mrzhang.component.componentlib.activator.IActivator;
+import com.mrzhang.component.componentlib.applicationlike.IApplicationLike;
 import com.mrzhang.component.componentlib.router.Router;
 import com.mrzhang.componentservice.readerbook.ReadBookService;
 import com.mrzhang.reader.serviceimpl.ReadBookServiceImpl;
@@ -9,7 +9,7 @@ import com.mrzhang.reader.serviceimpl.ReadBookServiceImpl;
  * Created by mrzhang on 2017/6/15.
  */
 
-public class ReaderActivator implements IActivator {
+public class ReaderAppLike implements IApplicationLike {
 
     Router router = Router.getInstance();
 

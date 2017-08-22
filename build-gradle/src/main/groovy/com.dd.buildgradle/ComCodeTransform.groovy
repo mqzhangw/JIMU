@@ -28,7 +28,7 @@ public class ComCodeTransform extends Transform {
 
         //要收集的application，一般情况下只有一个
         List<CtClass> applications = new ArrayList<>();
-        //要收集的activators，一般情况下有几个组件就有几个activator
+        //要收集的applicationlikes，一般情况下有几个组件就有几个applicationlike
         List<CtClass> activators = new ArrayList<>();
 
         for (CtClass ctClass : box) {
@@ -44,7 +44,7 @@ public class ComCodeTransform extends Transform {
             System.out.println("application is   " + ctClass.getName());
         }
         for (CtClass ctClass : activators) {
-            System.out.println("activator is   " + ctClass.getName());
+            System.out.println("applicationlike is   " + ctClass.getName());
         }
 
         transformInvocation.inputs.each { TransformInput input ->
@@ -146,7 +146,7 @@ public class ComCodeTransform extends Transform {
     private boolean isActivator(CtClass ctClass) {
         try {
             for (CtClass ctClassInter : ctClass.getInterfaces()) {
-                if ("com.mrzhang.component.componentlib.activator.IActivator".equals(ctClassInter.name)) {
+                if ("com.mrzhang.component.componentlib.applicationlike.IApplicationLike".equals(ctClassInter.name)) {
                     return true;
                 }
             }

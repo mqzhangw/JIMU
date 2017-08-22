@@ -49,10 +49,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.install_share:
-                Router.registerActivator("com.mrzhang.share.activator.ShareActivator");
+                Router.registerComponent("com.mrzhang.share.applike.ShareApplike");
                 break;
             case R.id.uninstall_share:
-                Router.unregisterActivator("com.mrzhang.share.activator.ShareActivator");
+                Router.unregisterComponent("com.mrzhang.share.applike.ShareApplike");
                 break;
         }
     }

@@ -15,7 +15,7 @@ public class ReaderApplication extends Application {
         super.onCreate();
 
         //如果isRegisterCompoAuto为false，则需要通过反射加载组件
-        Router.registerActivator("com.mrzhang.share.activator.ShareActivator");
+        Router.registerComponent("com.mrzhang.share.applike.ShareApplike");
     }
 
 }

@@ -29,7 +29,7 @@ public class ReaderFragment extends Fragment {
 
                 @Override
                 public void onClick(View v) {
-                    UIRouter.getInstance().openUri(getActivity(), "igetapp://share", null);
+                    UIRouter.getInstance().openUri(getActivity(), "componentdemo://share", null);
                 }
             });
 

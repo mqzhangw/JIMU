@@ -15,7 +15,7 @@ import com.mrzhang.share.ShareActivity;
 
 public class ShareUIRouter implements IComponentRouter {
 
-    private static final String SCHME = "igetapp";
+    private static final String SCHME = "componentdemo";
 
     private static final String SHAREHOST = "share";
 

@@ -23,6 +23,6 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
--keep class com.mrzhang.component.basiclib.** {*;}
--keep class * implements com.mrzhang.component.basiclib.activator.IActivator {*;}
+-keep class com.mrzhang.component.componentlib.** {*;}
+-keep class * implements com.mrzhang.component.componentlib.applicationlike.IApplicationLike {*;}
 
