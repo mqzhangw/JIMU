@@ -12,7 +12,7 @@
 
 图中没有体现的module有两个，一个是componentlib，这个是我们组件化的基础库，像Router/UIRouter等都定义在这里；另一个是build-gradle，这个是我们组件化编译的gradle插件，也是整个组件化方案的核心。
 我们在demo中要实现的场景是：主项目app集成reader和share两个组件，其中reader提供一个读书的fragment给app调用（组件交互），share提供一个activity来给reader来调用（UI跳转）。主项目app可以动态的添加和卸载share组件（生命周期）。而集成调试和代码边界是通过build-gradle插件来实现的。
-###1 单独调试和发布
+### 1 单独调试和发布
 单独调试的配置与上篇文章基本一致，通过在组件工程下的gradle.properties文件中设置一个isRunAlone的变量来区分不同的场景，唯一的不同点是在组件的build.gradle中不需要写下面的样板代码：
 ```
 if(isRunAlone.toBoolean()){
@@ -26,7 +26,7 @@ apply plugin: 'com.android.application'
      如果组件开发并测试完成，需要发布一个release版本的aar文件到中央仓库，只需要把isRunAlone修改为false，然后运行assembleRelease命令就可以了。这里简单起见没有进行版本管理，大家如果需要自己加上就好了。值得注意的是，发布组件是唯一需要修改isRunAlone=false的情况，即使后面将组件集成到app中，也不需要修改isRunAlone的值，既保持isRunAlone=true即可。所以实际上在Androidstudio中，是可以看到三个application工程的，随便点击一个都是可以独立运行的，并且可以根据配置引入其他需要依赖的组件。这背后的工作都由com.dd.comgradle插件来默默完成。
 
 ![项目中有三个application工程.png](http://upload-images.jianshu.io/upload_images/6650461-cabaa38ecd2e6a97.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-###2 组件交互
+### 2 组件交互
 在这里组件的交互专指组件之间的数据传输，在我们的方案中使用的是接口+实现的方式，组件之间完全面向接口编程。
 在demo中我们让reader提供一个fragment给app使用来说明。首先reader组件在componentservice中定义自己的服务
 ```
@@ -69,7 +69,7 @@ if (router.getService(ReadBookService.class.getSimpleName()) != null) {
 ```
 这里需要注意的是由于组件是可以动态加载和卸载的，因此在使用ReadBookService的需要进行判空处理。我们看到数据的传输是通过一个中央路由Router来实现的，这个Router的实现其实很简单，其本质就是一个HashMap，具体代码大家参见源码。
      通过上面几个步骤就可以轻松实现组件之间的交互，由于是面向接口，所以组件之间是完全解耦的。至于如何让组件之间在编译阶段不不可见，是通过上文所说的com.dd.comgradle实现的，这个在第一篇文章中已经讲到，后面会贴出具体的代码。
-###3 UI跳转
+### 3 UI跳转
 页面（activity）的跳转也是通过一个中央路由UIRouter来实现，不同的是这里增加了一个优先级的概念。（这块的代码参考了我之前在网易的技术老大的实现思路，在这里表示感谢，老大你永远是我的老大[色]）。具体的实现就不在这里赘述了，代码还是很清晰的。
 页面的跳转通过短链的方式，例如我们要跳转到share页面，只需要调用
 ```
@@ -95,7 +95,7 @@ public boolean openUri(Context context, Uri uri, Bundle bundle) {
 ```
 在这里如果已经组件已经响应了这个短链，就返回true，这样更低优先级的组件就不会接收到这个短链。
 目前根据schme和host跳转的逻辑是开发人员自己编写的，这块后面要修改成根据注解生成。这部分已经有一些优秀的开源项目可以参考，如ARouter等。
-###4 集成调试
+### 4 集成调试
  集成调试可以认为由app或者其他组件充当host的角色，引入其他相关的组件一起参与编译，从而测试整个交互流程。在demo中app和reader都可以充当host的角色。在这里我们以app为例。
 首先我们需要在根项目的gradle.properties中增加一个变量mainmodulename，其值就是工程中的主项目，这里是app。设置为mainmodulename的module，其isRunAlone永远是true。
 然后在app项目的gradle.properties文件中增加两个变量：
@@ -111,7 +111,7 @@ compileComponent=readercomponent,sharecomponent
 - sharecomponent:assembleRelease 或者:sharecomponent:assembleRelease→ sharecomponent
 
 上面的内容要实现的目的就是每个组件可以直接在Androidstudio中run，也可以使用命令进行打包，这期间不需要修改任何配置，却可以自动引入依赖的组件。这在开发中可以极大加快工作效率。
-###5 代码边界
+### 5 代码边界
 至于依赖的组件是如何集成到host中的，其本质还是直接使用compile project（...）或者compile modulePackage:module@aar。那么为啥不直接在build.gradle中直接引入呢，而要经过com.dd.comgradle这个插件来进行诸多复杂的操作？原因在第一篇文章中也讲到了，那就是组件之间的完全隔离，也可以称之为代码边界。如果我们直接compile组件，那么组件的所有实现类就完全暴露出来了，使用方就可以直接引入实现类来编程，从而绕过了面向接口编程的约束。这样就完全失去了解耦的效果了，可谓前功尽弃。
 那么如何解决这个问题呢？我们的解决方式还是从分析task入手，只有在assemble任务的时候才进行compile引入。这样在代码的开发期间，组件是完全不可见的，因此就杜绝了犯错误的机会。具体的代码如下：
 ```
@@ -149,7 +149,7 @@ private void compileComponents(AssembleTask assembleTask, Project project) {
     }
 }
 ```
-###6 生命周期
+### 6 生命周期
       在上一篇文章中我们就讲过，组件化和插件化的唯一区别是组件化不能动态的添加和修改组件，但是对于已经参与编译的组件是可以动态的加载和卸载的，甚至是降维的。
      首先我们看组件的加载，使用章节5中的集成调试，可以在打包的时候把依赖的组件参与编译，此时你反编译apk的代码会看到各个组件的代码和资源都已经包含在包里面。但是由于每个组件的唯一入口ApplicationLike还没有执行oncreate()方法，所以组件并没有把自己的服务注册到中央路由，因此组件实际上是不可达的。
       在什么时机加载组件以及如何加载组件？目前com.dd.comgradle提供了两种方式，字节码插入和反射调用。
