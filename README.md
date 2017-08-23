@@ -39,7 +39,7 @@ isRunAlone=true
 debugComponent=sharecomponent
 compileComponent=com.mrzhang.share:sharecomponent
 ```
-上面三个属性分别对应是否单独调试、debug模式下依赖的组件，release模式下依赖的组件。具体使用方式请参照文章
+上面三个属性分别对应是否单独调试、debug模式下依赖的组件，release模式下依赖的组件。具体使用方式请解释请参见上文第二篇文章
 
 #### 3、应用组件化编译脚本
 在组件和host的build.gradle都增加配置：
@@ -54,3 +54,4 @@ combuild {
     isRegisterCompoAuto = false
 }
 ```
+有关isRegisterCompoAuto的解释请参见上文第二篇文章
