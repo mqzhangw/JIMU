@@ -18,6 +18,7 @@ demo解读请参考文章[Android彻底组件化demo发布](http://www.jianshu.c
 mainmodulename=app
 ```
 其中mainmodulename是项目中的host工程，一般为app
+
 在根目录的build.gradle中增加配置
 ```
 buildscript {
@@ -48,6 +49,7 @@ compileComponent=com.mrzhang.share:sharecomponent
 apply plugin: 'com.dd.comgradle'
 ```
 不需要在引用com.android.application或者com.android.library
+
 同时增加以下extension配置：
 ```
 combuild {
