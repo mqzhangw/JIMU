@@ -1,4 +1,6 @@
 ## AndroidComponent
+组件化方案已经迁移到罗辑思维公司的公共库，请大家移步[DDComponentForAndroid](https://github.com/luojilab/DDComponentForAndroid)，各位多给star哈
+
 原理解释请参考文章[Android彻底组件化方案实践](http://www.jianshu.com/p/1b1d77f58e84)
 
 demo解读请参考文章[Android彻底组件化demo发布](http://www.jianshu.com/p/59822a7b2fad)
