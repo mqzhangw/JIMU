@@ -1,0 +1,20 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+
+    package="com.luojilab.share.kotlin">
+
+    <application
+        android:allowBackup="true"
+        android:label="sharekotlin"
+        android:supportsRtl="true"
+        tools:replace="android:label">
+
+
+        <activity android:name=".ShareMessageActivity">
+
+        </activity>
+
+
+    </application>
+
+</manifest>
