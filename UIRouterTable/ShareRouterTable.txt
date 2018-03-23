@@ -4,6 +4,6 @@ HOST : share
 
 分享书籍页面
 /shareBook
-author:com.luojilab.componentservice.share.bean.Author
+author:com.luojilab.api.share.bean.Author
 bookName:String
 

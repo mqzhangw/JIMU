@@ -45,6 +45,7 @@ dependencies {
 combuild {
     applicationName = 'com.luojilab.share.runalone.application.ShareApplication'
     isRegisterCompoAuto = true
+    isNeedApiToJava = true
 }
 repositories {
     mavenCentral()

@@ -1,8 +1,10 @@
 package com.dd.buildgradle
 
 import com.dd.buildgradle.exten.ComExtension
+import com.dd.buildgradle.task.CopyApiTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.Task
 
 class ComBuild implements Plugin<Project> {
 
@@ -10,6 +12,8 @@ class ComBuild implements Plugin<Project> {
     String compilemodule = "app"
 
     void apply(Project project) {
+        System.out.println("CompnentBuild begin ")
+
         project.extensions.create('combuild', ComExtension)
 
         String taskNames = project.gradle.startParameter.taskNames.toString()
@@ -51,8 +55,6 @@ class ComBuild implements Plugin<Project> {
                         manifest.srcFile 'src/main/runalone/AndroidManifest.xml'
                         java.srcDirs = ['src/main/java', 'src/main/runalone/java']
                         res.srcDirs = ['src/main/res', 'src/main/runalone/res']
-                        assets.srcDirs = ['src/main/assets', 'src/main/runalone/assets']
-                        jniLibs.srcDirs = ['src/main/jniLibs', 'src/main/runalone/jniLibs']
                     }
                 }
             }
@@ -61,10 +63,29 @@ class ComBuild implements Plugin<Project> {
                 compileComponents(assembleTask, project)
                 project.android.registerTransform(new ComCodeTransform(project))
             }
+
+            if (module.equals(compilemodule)) {
+                project.afterEvaluate {
+                    boolean isNeedApiToJava = project.extensions.combuild.isNeedApiToJava
+                    System.out.println("compilemodule isNeedApiToJava " + isNeedApiToJava)
+                    if (isNeedApiToJava) {
+                        Task preBuild = project.tasks.findByPath(":" + compilemodule + ":preBuild")
+                        CopyApiTask copyApiTask = project.tasks.create("copyApiToJavaBeforeBuild", CopyApiTask)
+                        copyApiTask.compilemodule = compilemodule
+                        if (assembleTask.isDebug) {
+                            copyApiTask.components = (String) project.properties.get("debugComponent")
+                        } else {
+                            copyApiTask.components = (String) project.properties.get("compileComponent")
+                        }
+                        preBuild.dependsOn copyApiTask
+                    }
+                }
+            }
         } else {
             project.apply plugin: 'com.android.library'
             System.out.println("apply plugin is " + 'com.android.library')
         }
+
 
     }
 
@@ -117,7 +138,7 @@ class ComBuild implements Plugin<Project> {
      * @param assembleTask
      * @param project
      */
-    private void compileComponents(AssembleTask assembleTask, Project project) {
+    private String compileComponents(AssembleTask assembleTask, Project project) {
         String components
         if (assembleTask.isDebug) {
             components = (String) project.properties.get("debugComponent")
@@ -153,6 +174,8 @@ class ComBuild implements Plugin<Project> {
                 System.out.println("add dependencies project : " + str)
             }
         }
+
+        return components
     }
 
     private class AssembleTask {
@@ -160,5 +183,6 @@ class ComBuild implements Plugin<Project> {
         boolean isDebug = false
         List<String> modules = new ArrayList<>()
     }
+
 
 }

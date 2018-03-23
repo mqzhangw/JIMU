@@ -7,11 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.luojilab.api.share.bean.Author;
 import com.luojilab.component.componentlib.router.ui.UIRouter;
 import com.luojilab.component.componentlib.service.JsonService;
-import com.luojilab.componentservice.share.bean.Author;
-import com.luojilab.componentservice.share.bean.AuthorKt;
-
+import com.luojilab.share.kotlin.bean.AuthorKt;
 
 /**
  * Created by mrzhang on 2017/6/15.

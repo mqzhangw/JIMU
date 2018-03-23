@@ -1,4 +1,4 @@
-package com.luojilab.componentservice.share.bean;
+package com.luojilab.api.share.bean;
 
 /**
  * Created by mrzhang on 2017/12/14.

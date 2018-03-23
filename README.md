@@ -78,9 +78,11 @@ apply plugin: 'com.dd.comgradle'
 combuild {
     applicationName = 'com.luojilab.reader.runalone.application.ReaderApplication'
     isRegisterCompoAuto = true
+    isNeedApiToJava = true
 }
 ```
 组件注册还支持反射的方式，有关isRegisterCompoAuto的解释请参见上文第二篇文章
+isNeedApiToJava标识是否使用.api化机制，开启后每次build会自动生成componentservice组件中的代码
 
 #### 4、混淆
 在混淆文件中增加如下配置

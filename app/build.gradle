@@ -48,5 +48,6 @@ dependencies {
 combuild {
     applicationName = 'com.luojilab.componentdemo.application.AppApplication'
     isRegisterCompoAuto = true
+    isNeedApiToJava = true
 }
 

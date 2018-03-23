@@ -50,7 +50,9 @@ dependencies {
 combuild {
     applicationName = 'com.luojilab.reader.runalone.application.ReaderApplication'
     isRegisterCompoAuto = false
+    isNeedApiToJava = true
 }
+
 repositories {
     mavenCentral()
 }

@@ -44,4 +44,5 @@ dependencies {
 combuild {
     applicationName = 'com.luojilab.share.runalone.application.KotlinApplication'
     isRegisterCompoAuto = true
+    isNeedApiToJava = true
 }

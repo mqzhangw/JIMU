@@ -2,9 +2,9 @@ package com.luojilab.share.kotlin
 
 import android.os.Bundle
 import com.luojilab.component.basicres.BaseActivity
-import com.luojilab.componentservice.share.bean.AuthorKt
 import com.luojilab.router.facade.annotation.Autowired
 import com.luojilab.router.facade.annotation.RouteNode
+import com.luojilab.share.kotlin.bean.AuthorKt
 import kotlinx.android.synthetic.main.kotlin_activity_share.*
 
 /**
