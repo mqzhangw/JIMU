@@ -1,17 +1,5 @@
 apply plugin: 'groovy'
-
-ext {
-    bintrayName = 'build-gradle'
-    artifact = bintrayName
-    libraryName = 'component build'
-    libraryDescription = 'gradle plugin for buid component'
-    libraryVersion = "1.2.0"
-    licenseName = 'The Apache Software License, Version 2.0'
-    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-    allLicenses = ["Apache-2.0"]
-}
-apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
-apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'
+apply plugin: 'maven'
 
 dependencies {
     compile 'com.android.tools.build:gradle:2.3.2'
@@ -22,3 +10,17 @@ dependencies {
     compile localGroovy()
 }
 
+repositories {
+    mavenCentral()
+}
+
+group = 'com.mrzhang.andcomponent'
+version = '0.0.2'
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: uri('../repo'))
+        }
+    }
+}

@@ -3,24 +3,12 @@ apply plugin: 'com.android.library'
 sourceCompatibility = "1.7"
 targetCompatibility = "1.7"
 
-
-ext {
-    bintrayName = 'componentlib'
-    artifact = bintrayName
-    libraryName = 'component build lib '
-    libraryDescription = 'component build lib '
-    libraryVersion = "1.3.0"
-    licenseName = 'The Apache Software License, Version 2.0'
-    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-    allLicenses = ["Apache-2.0"]
-}
-
 android {
     compileSdkVersion 26
-    buildToolsVersion "26.0.0"
+    buildToolsVersion "26.0.2"
 
     defaultConfig {
-        minSdkVersion 15
+        minSdkVersion 14
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
@@ -37,17 +25,52 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:26.+'
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-    testCompile 'junit:junit:4.12'
-    compile project(':router-annotation')
-    compile 'com.google.code.gson:gson:2.8.2'
-
+    api fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.android.support:appcompat-v7:26.0.2'
 }
 
 
-apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
-apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'
+def sdk_appendix = "baselib"
+def sdk_baseName = "component"
+def sdk_version = "0.0.2"
+
+task buildJar(dependsOn: ['compileReleaseJavaWithJavac'], type: Jar) {
+
+    appendix = sdk_appendix
+    baseName = sdk_baseName
+    version = sdk_version
+    //classifier = "release"
+    //后缀名
+    extension = "jar"
+    //最终的Jar 包名 ， 如果没设置 ， 默认为[baseName] - [appendix] - [version] - [classifier].[extension]
+
+    // 需打包的资源所在的路径集
+    def srcClassDir = [project.buildDir.absolutePath + "/intermediates/classes/release"];
+    //初始化资源路径集
+    from srcClassDir
+
+    //排除这两个文件
+    include("com/mrzhang/**/*.class")
+    exclude("com/mrzhang/component/componentlib/BuildConfig.class",
+            "com/mrzhang/component/componentlib/R.class",
+            "com/mrzhang/component/componentlib/R\$*.class")
+}
+
+task buildJarAndCopy(dependsOn: "buildJar", type: Copy) {
+    from(project.buildDir.absolutePath + "/libs")
+    include(sdk_baseName + "-" + sdk_appendix + "-" + sdk_version + ".jar")
+    into("release")
+}
+
+
+apply plugin: 'maven'
+group = 'com.mrzhang.component.componentlib'
+version = '0.0.1'
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: uri('../repo'))
+        }
+    }
+}

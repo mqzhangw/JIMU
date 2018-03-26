@@ -2,21 +2,14 @@ apply plugin: 'com.dd.comgradle'
 
 android {
     compileSdkVersion 26
-    buildToolsVersion "26.0.1"
+    buildToolsVersion "26.0.2"
     defaultConfig {
-        applicationId "com.luojilab.androidcomponent"
+        applicationId "com.mrzhang.androidcomponent"
         minSdkVersion 15
-        targetSdkVersion 14
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments = [host: "app"]
-            }
-        }
-
     }
     buildTypes {
         release {
@@ -25,28 +18,18 @@ android {
         }
 
         debug {
-            signingConfig signingConfigs.debug
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
-    lintOptions {
-        checkReleaseBuilds false
-        // Or, if you prefer, you can continue to check for errors in release builds,
-        // but continue the build even when errors are found:
-        abortOnError false
-    }
-
 }
 
 dependencies {
-    compile project(':componentservice')
-    annotationProcessor project(':router-anno-compiler')
+    api project(':componentservice')
 }
 
 combuild {
-    applicationName = 'com.luojilab.componentdemo.application.AppApplication'
+    applicationName = 'com.mrzhang.component.application.AppApplication'
     isRegisterCompoAuto = true
 }
 
