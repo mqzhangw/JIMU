@@ -1,5 +1,4 @@
 include ':app',
-        ':sharecomponentkotlin',
         ':componentlib',
         ':readercomponent',
         ':sharecomponent',

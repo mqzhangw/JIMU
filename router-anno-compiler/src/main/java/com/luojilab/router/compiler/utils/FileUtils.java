@@ -40,7 +40,7 @@ public class FileUtils {
         BufferedWriter out = null;
         try {
             out = new BufferedWriter(new OutputStreamWriter(
-                    new FileOutputStream(fileName, append), "UTF-8"));
+                    new FileOutputStream(fileName, append)));
             out.write(content);
         } catch (Exception e) {
             e.printStackTrace();

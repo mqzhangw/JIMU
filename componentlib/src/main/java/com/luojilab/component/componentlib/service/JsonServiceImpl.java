@@ -4,8 +4,7 @@ package com.luojilab.component.componentlib.service;
  * Created by mrzhang on 2017/12/14.
  */
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+import com.alibaba.fastjson.JSON;
 
 import java.util.List;
 
@@ -22,20 +21,16 @@ import java.util.List;
 class JsonServiceImpl implements JsonService {
     @Override
     public <T> T parseObject(String text, Class<T> clazz) {
-        Gson gson = new Gson();
-        return gson.fromJson(text, clazz);
+        return JSON.parseObject(text, clazz);
     }
 
     @Override
     public <T> List<T> parseArray(String text, Class<T> clazz) {
-        Gson gson = new Gson();
-        return gson.fromJson(text, new TypeToken<List<T>>() {
-        }.getType());
+        return JSON.parseArray(text, clazz);
     }
 
     @Override
     public String toJsonString(Object instance) {
-        Gson gson = new Gson();
-        return gson.toJson(instance);
+        return JSON.toJSONString(instance);
     }
 }

@@ -1,6 +1,5 @@
 package com.luojilab.share;
 
-import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,22 +12,18 @@ import com.luojilab.componentservice.share.bean.Author;
 import com.luojilab.share.databinding.ShareActivityShareBinding;
 
 /**
- * Created by mrzhang on 2017/6/20.
+ * Created by mrzhang on 2017/12/19.
  */
-//@RouteNode(path = "/shareBook", desc = "分享书籍页面")
-@Route(path = "/share/shareBook")
-public class ShareActivity extends AppCompatActivity {
+@Route(path = "/share/shareMagazine")
+public class Share2Activity extends AppCompatActivity {
 
-    @Autowired
-    String bookName;
+    @Autowired(name = "bookName")
+    String magazineName;
 
     @Autowired
     Author author;
 
     ShareActivityShareBinding binding;
-
-    private final static int RESULT_CODE = 8888;
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -37,20 +32,15 @@ public class ShareActivity extends AppCompatActivity {
 
         ARouter.getInstance().inject(this);
 
-        binding.shareTitle.setText("Book");
+        binding.shareTitle.setText("Magazine");
 
-        if (bookName != null) {
-            binding.shareTvTag.setText(bookName);
+        if (magazineName != null) {
+            binding.shareTvTag.setText(magazineName);
         }
 
         if (author != null) {
             binding.shareTvAuthor.setText(author.getName());
             binding.shareTvCounty.setText(author.getCounty());
         }
-
-        Intent intent = new Intent();
-        intent.putExtra("result", "Share Success");
-        setResult(RESULT_CODE, intent);
-
     }
 }

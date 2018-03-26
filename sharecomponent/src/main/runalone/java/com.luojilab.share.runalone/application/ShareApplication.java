@@ -1,12 +1,12 @@
 package com.luojilab.share.runalone.application;
 
-import com.luojilab.component.basicres.BaseApplication;
+import android.app.Application;
 
 /**
  * Created by mrzhang on 2017/8/16.
  */
 
-public class ShareApplication extends BaseApplication {
+public class ShareApplication extends Application {
 
     @Override
     public void onCreate() {

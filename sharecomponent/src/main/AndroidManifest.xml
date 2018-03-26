@@ -6,10 +6,14 @@
     <application
         android:allowBackup="true"
         android:label="@string/share_app_name"
-        android:supportsRtl="true"
-        tools:replace="android:label">
+        tools:replace="android:label"
+        android:supportsRtl="true">
 
         <activity android:name="com.luojilab.share.ShareActivity">
+
+        </activity>
+
+        <activity android:name="com.luojilab.share.Share2Activity">
 
         </activity>
 

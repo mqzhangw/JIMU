@@ -7,10 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.luojilab.component.componentlib.router.ui.UIRouter;
-import com.luojilab.component.componentlib.service.JsonService;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.luojilab.componentservice.share.bean.Author;
-import com.luojilab.componentservice.share.bean.AuthorKt;
 
 
 /**
@@ -35,14 +33,7 @@ public class ReaderFragment extends Fragment {
 
                 @Override
                 public void onClick(View v) {
-                    goToShareActivityWithBundle();
-                }
-            });
-            rootView.findViewById(R.id.tv_2).setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    goToShareActivityWithUri();
+                    goToShareActivityNormal();
                 }
             });
             rootView.findViewById(R.id.tv_3).setOnClickListener(new View.OnClickListener() {
@@ -57,34 +48,26 @@ public class ReaderFragment extends Fragment {
         return rootView;
     }
 
-    // UI transfer with Bundle
-    private void goToShareActivityWithBundle() {
+    private void goToShareActivityNormal() {
         Author author = new Author();
         author.setName("Margaret Mitchell");
         author.setCounty("USA");
-        Bundle bundle = new Bundle();
-        bundle.putString("bookName", "Gone with the Wind");
-        bundle.putString("author", JsonService.Factory.getInstance().create().toJsonString(author));
-        UIRouter.getInstance().openUri(getActivity(), "DDComp://share/shareBook", bundle);
+        ARouter.getInstance().build("/share/shareBook")
+                .withString("bookName", "Gone with the Wind")
+                .withObject("author", author)
+                .navigation();
     }
 
-    // UI transfer with URI
-    //user kotlin data class
-    private void goToShareActivityWithUri() {
-        AuthorKt author = new AuthorKt("Barack Obama", 65, "New York");
-        UIRouter.getInstance().openUri(getActivity(),
-                "DDComp://kotlin/shareMagazine?bookName=NYTIME&author="
-                        + JsonService.Factory.getInstance().create().toJsonString(author), null);
-    }
 
     //startActivityForResult
     private void goToShareActivityForResult() {
         Author author = new Author();
         author.setName("Margaret Mitchell");
         author.setCounty("USA");
-        UIRouter.getInstance().openUri(getActivity(),
-                "DDComp://share/shareBook?bookName=Gone with the Wind&author="
-                        + JsonService.Factory.getInstance().create().toJsonString(author), null, REQUEST_CODE);
+        ARouter.getInstance().build("/share/shareMagazine")
+                .withString("bookName", "Gone with the Wind")
+                .withObject("author", author)
+                .navigation(getActivity(), REQUEST_CODE);
     }
 
 }
