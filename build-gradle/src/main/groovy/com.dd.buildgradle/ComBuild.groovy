@@ -3,6 +3,7 @@ package com.dd.buildgradle
 import com.dd.buildgradle.exten.ComExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import com.dd.buildgradle.util.StringUtil
 
 class ComBuild implements Plugin<Project> {
 
@@ -136,7 +137,12 @@ class ComBuild implements Plugin<Project> {
         }
         for (String str : compileComponents) {
             System.out.println("comp is " + str)
-            if (str.contains(":")) {
+            str = str.trim()
+            if (str.startsWith(":")) {
+                str = str.substring(1)
+            }
+            // 是否是maven 坐标
+            if (StringUtil.isMavenArtifact(str)) {
                 /**
                  * 示例语法:groupId:artifactId:version(@aar)
                  * compileComponent=com.luojilab.reader:readercomponent:1.0.0
