@@ -102,7 +102,7 @@ combuild {
 
 
 ### 组件化讨论群
-DDComponent的讨论群，群号693097923，欢迎大家加入：
+JIMU的讨论群，群号693097923，欢迎大家加入：
 
-![进群请扫码](http://upload-images.jianshu.io/upload_images/6650461-45da9dd9dc2a79b2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![进群请扫码](https://upload-images.jianshu.io/upload_images/6650461-6adc3ed96ebd8d70.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
