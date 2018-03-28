@@ -98,7 +98,7 @@ combuild {
 -keep class * implements com.luojilab.component.componentlib.applicationlike.IApplicationLike {*;}
 ```
 
-关于如何进行组件之间数据交互和UI跳转，请参看 [Wiki](https://github.com/luojilab/DDComponentForAndroid/wiki)
+关于如何进行组件之间数据交互和UI跳转，请参看 [Wiki](https://github.com/mqzhangw/JIMU/wiki)
 
 
 ### 组件化讨论群
