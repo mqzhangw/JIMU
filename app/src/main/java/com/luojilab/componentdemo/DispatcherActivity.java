@@ -11,6 +11,29 @@ import com.luojilab.component.componentlib.router.ui.UIRouter;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * this is just a demo to display one case in outer awake & pager direct:
+ * <em>
+ * As we all know, we may run into the user sense: Jone open one url
+ * generated or related to our APP in mobile browser,
+ * we need to awake the APP and navigate to the correct page, to create
+ * a immersion-operation-experience for Jone.
+ * <p>
+ * But, your website may uses REST-arch to realize or not. thus, in some cases
+ * the web page will know some information from it's url without request the server,
+ * and if those information is enough for navigation, you can use this way to realize
+ * page navigation.
+ * </em>
+ * <p>
+ * remember: this is just a demo to show how to solve one case. not the rule to realize
+ * outer awake function.
+ * <p>
+ * <em>
+ * suggestion to solve some typical real cases will be post in doc.
+ * and this demo will be removed in future.
+ * </em>
+ */
+@Deprecated
 public class DispatcherActivity extends AbsDispatcherActivity {
     private static final String TAG = "DispatcherActivity";
    /*
