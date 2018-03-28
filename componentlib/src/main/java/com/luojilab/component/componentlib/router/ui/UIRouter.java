@@ -6,6 +6,10 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
+import com.luojilab.component.componentlib.exceptions.UiRouterException;
+import com.luojilab.component.componentlib.log.ILogger;
+import com.luojilab.component.componentlib.log.impl.DefaultLogger;
+import com.luojilab.component.componentlib.utils.UriUtils;
 import com.luojilab.router.facade.utils.RouteUtils;
 
 import java.util.ArrayList;
@@ -22,6 +26,35 @@ import java.util.Map;
  */
 
 public class UIRouter implements IUIRouter {
+
+    ///////////////////////////////////////////////////////////////////////////
+    // logger define and init methods areas
+    ///////////////////////////////////////////////////////////////////////////
+
+    private static ILogger logger = new DefaultLogger("[DdCompo-UiRouter]");
+
+    public static void showLog(boolean isShowLog) {
+        logger.showLog(isShowLog);
+    }
+
+    public static void showStackTrace(boolean isShowStackTrace) {
+        logger.showStackTrace(isShowStackTrace);
+    }
+
+    public static void showMonitor(boolean isShowMonitor) {
+        logger.showMonitor(isShowMonitor);
+    }
+
+    public static void enableDebug() {
+        showLog(true);
+        showMonitor(true);
+        showStackTrace(true);
+    }
+
+    public static ILogger getLogger() {
+        return logger;
+    }
+
     private static Map<String, IComponentRouter> routerInstanceCache = new HashMap<>();
 
     private List<IComponentRouter> uiRouters = new ArrayList<>();
@@ -132,9 +165,13 @@ public class UIRouter implements IUIRouter {
     public boolean openUri(Context context, Uri uri, Bundle bundle, Integer requestCode) {
         for (IComponentRouter temp : uiRouters) {
             try {
-                if (temp.verifyUri(uri) && temp.openUri(context, uri, bundle, requestCode)) {
+                //ignore params check
+                VerifyResult verifyResult = temp.verifyUri(uri,bundle,false);
+                if (verifyResult.isSuccess() && temp.openUri(context, uri, bundle, requestCode))
                     return true;
-                }
+//                if (temp.verifyUri(uri) && temp.openUri(context, uri, bundle, requestCode)) {
+//                    return true;
+//                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -142,16 +179,46 @@ public class UIRouter implements IUIRouter {
         return false;
     }
 
+    /**
+     * use {@link #verifyUri(Uri, Bundle, boolean)} instead
+     */
     @Override
+    @Deprecated
     public boolean verifyUri(Uri uri) {
         for (IComponentRouter temp : uiRouters) {
             if (temp.verifyUri(uri)) {
                 return true;
             }
         }
+        getLogger().monitor("cannot verify uri for: " + UriUtils.toSafeString(uri) + ";\r cannot navigate to the target");
         return false;
     }
 
+    @Override
+    @NonNull
+    public VerifyResult verifyUri(Uri uri, Bundle bundle, boolean checkParams) {
+        StringBuilder verifyMsg = new StringBuilder();
+        for (IComponentRouter temp : uiRouters) {
+            VerifyResult result = temp.verifyUri(uri, bundle, checkParams);
+//            if (result != null) {
+                if (result.isSuccess())
+                    return result;
+                else if (result.getThrowable() != null)
+                    verifyMsg.append(result.getThrowable().getMessage()).append("\r");
+
+//            }
+        }
+
+        String msg = "cannot verify uri for: " + UriUtils.toSafeString(uri) +
+                ";\r cannot navigate to the target\r"
+                + verifyMsg.toString() + "check if uri error，params error or component has not been mounted";
+
+        getLogger().monitor(msg);
+
+        return new VerifyResult(false, new UiRouterException(msg) {
+        });
+
+    }
 
     private void removeOldUIRouter(IComponentRouter router) {
         Iterator<IComponentRouter> iterator = uiRouters.iterator();
@@ -160,11 +227,17 @@ public class UIRouter implements IUIRouter {
             if (tmp == router) {
                 iterator.remove();
                 priorities.remove(tmp);
+                getLogger().monitor("remove OldUIRouter success");
             }
         }
     }
 
     private IComponentRouter fetch(@NonNull String host) {
+        if (TextUtils.isEmpty(host)) {
+            getLogger().monitor("Try to fetch ComponentRouter for null/empty host. Ignore!");
+            return null;
+        }
+
 
         String path = RouteUtils.genHostUIRouterClass(host);
 

@@ -100,6 +100,18 @@ public abstract class AbsDispatcherActivity extends AppCompatActivity {
      */
     protected abstract void onNullUri();
 
+//    /**
+//     * missing required param on preCondition period;
+//     */
+//    @Deprecated
+//    protected abstract void onParamException(ParamException e);
+//
+//    /**
+//     * no one matched for the uri,may uri error or component is not mounted
+//     */
+//    @Deprecated
+//    protected abstract void onNonMatchedException(UiRouterException.NonMatchedException e);
+
     protected abstract void onVerifyFailed(@Nullable Throwable throwable);
 
     /**
