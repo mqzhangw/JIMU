@@ -1,7 +1,10 @@
-## DDComponent
+## JIMU
 
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/luojilab/DDComponentForAndroid/pulls)
 [![License](https://img.shields.io/badge/License-Apache%202.0-orange.svg)](https://github.com/luojilab/DDComponentForAndroid/blob/master/LICENSE) 
+
+### 项目介绍
+JIMU（积木）是一套Android组件化框架，支持组件的代码资源隔离、单独调试、集成调试、组件交互、UI跳转、生命周期等完整功能。这套方案最开始是我在“得到”独立开发并开源的项目，现在单独出来分开维护。取名为JIMU（积木），其含义是应用这套框架可以做到组件之间的完全隔离，每个组件可以单独运行，同时又可以通过“接口”任意拼接成一个完成APP，这种能力就是我们实施组件化的最终目的。
 
 ### 最新版本
 
