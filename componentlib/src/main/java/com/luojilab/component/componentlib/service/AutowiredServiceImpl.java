@@ -1,10 +1,14 @@
 package com.luojilab.component.componentlib.service;
 
-import android.util.Log;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.util.LruCache;
 
+import com.luojilab.component.componentlib.exceptions.ParamException;
+import com.luojilab.component.componentlib.log.ILogger;
 import com.luojilab.component.componentlib.router.ISyringe;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,15 +43,42 @@ public class AutowiredServiceImpl implements AutowiredService {
                 autowiredHelper.inject(instance);
                 classCache.put(className, autowiredHelper);
             } else {
-                // TODO: 2017/12/21 change to specific log system
-                Log.d("[DDComponent]", "[autowire] " + className + "is in blacklist, ignore data inject");
+                ILogger.logger.monitor("[autowire] " + className + "is in blacklist, ignore data inject");
             }
         } catch (Exception ex) {
             if (ex instanceof NullPointerException) { // may define custom exception better
                 throw new NullPointerException(ex.getMessage());
             }
             ex.printStackTrace();
-            blackList.add(className);    // This instance need not autowired.
+            blackList.add(className);    // This instance don't need autowired.
+        }
+    }
+
+    @Override
+    public void preCondition(@NonNull Class targetActivityClz, Bundle params) throws ParamException {
+        String className = targetActivityClz.getName();
+
+        try {
+            ISyringe iSyringe = classCache.get(className);
+
+            if (null == iSyringe) {  // No cache.
+                iSyringe = (ISyringe) Class.forName(className + SUFFIX_AUTOWIRED)
+                        .getConstructor().newInstance();
+            }
+
+            classCache.put(className, iSyringe);
+            iSyringe.preCondition(params);
+
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
     }
 }
