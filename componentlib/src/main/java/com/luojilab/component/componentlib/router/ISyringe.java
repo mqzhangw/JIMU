@@ -1,5 +1,9 @@
 package com.luojilab.component.componentlib.router;
 
+import android.os.Bundle;
+
+import com.luojilab.component.componentlib.exceptions.ParamException;
+
 /**
  * <p><b>Package:</b> com.luojilab.component.componentlib.di.route </p>
  * <p><b>Project:</b> DDComponentForAndroid </p>
@@ -15,4 +19,6 @@ public interface ISyringe {
      *             with one annotation called Autowired
      */
     void inject(Object self);
+
+    void preCondition(Bundle bundle) throws ParamException;
 }
