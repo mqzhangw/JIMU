@@ -53,6 +53,14 @@
             </intent-filter>
         </activity>
         <activity android:name=".router.UiRouterDemoActivity" />
+        <activity android:name=".router.cases.Demo1Activity" />
+        <activity android:name=".router.cases.Demo2Activity" />
+        <activity android:name=".router.cases.Demo3Activity" />
+        <activity android:name=".router.cases.Demo4Activity" />
+        <activity android:name=".router.cases.Demo5Activity" />
+        <activity android:name=".router.cases.Demo6Activity" />
+        <activity android:name=".router.cases.Demo7Activity" />
+        <activity android:name=".router.cases.Demo8Activity" />
 
     </application>
 

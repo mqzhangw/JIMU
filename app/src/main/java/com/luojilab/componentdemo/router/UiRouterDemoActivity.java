@@ -15,6 +15,14 @@ import android.widget.TextView;
 import com.luojilab.component.componentlib.router.ui.UIRouter;
 import com.luojilab.component.componentlib.router.ui.VerifyResult;
 import com.luojilab.componentdemo.R;
+import com.luojilab.componentdemo.router.cases.Demo1Activity;
+import com.luojilab.componentdemo.router.cases.Demo2Activity;
+import com.luojilab.componentdemo.router.cases.Demo3Activity;
+import com.luojilab.componentdemo.router.cases.Demo4Activity;
+import com.luojilab.componentdemo.router.cases.Demo5Activity;
+import com.luojilab.componentdemo.router.cases.Demo6Activity;
+import com.luojilab.componentdemo.router.cases.Demo7Activity;
+import com.luojilab.componentdemo.router.cases.Demo8Activity;
 import com.luojilab.router.facade.annotation.RouteNode;
 
 import java.util.Arrays;
@@ -24,7 +32,16 @@ import java.util.List;
 public class UiRouterDemoActivity extends AppCompatActivity {
 
     private ListView lvCases;
-    private List<Case> demos = Arrays.asList();
+    private List<Case> demos = Arrays.asList(
+            Demo1Activity.aCase,
+            Demo2Activity.aCase,
+            Demo3Activity.aCase,
+            Demo4Activity.aCase,
+            Demo5Activity.aCase,
+            Demo6Activity.aCase,
+            Demo7Activity.aCase,
+            Demo8Activity.aCase
+    );
 
     private static final String TAG = "UiRouterDemoActivity";
 
@@ -61,6 +78,7 @@ public class UiRouterDemoActivity extends AppCompatActivity {
             UIRouter.getInstance().openUri(UiRouterDemoActivity.this,
                     aCase.url, aCase.bundle);
         } else {
+            Log.e("JIMU","安全模式发现异常："+result.getThrowable().getMessage());
 
             /*可以在此处进行统计收集或者开发阶段控制台打印错误信息*/
             result.getThrowable().printStackTrace();

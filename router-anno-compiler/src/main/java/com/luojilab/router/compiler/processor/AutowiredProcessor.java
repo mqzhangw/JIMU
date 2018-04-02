@@ -78,7 +78,7 @@ public class AutowiredProcessor extends AbstractProcessor {
 
     private static final String SUFFIX_AUTOWIRED = "$$Router$$Autowired";
 
-    private static final ClassName ParamException = ClassName.get("com.luojilab.component.componentlib.exceptions","ParamException");
+    private static final ClassName ParamException = ClassName.get("com.luojilab.component.componentlib.exceptions", "ParamException");
 
     @Override
     public synchronized void init(ProcessingEnvironment processingEnvironment) {
@@ -126,7 +126,7 @@ public class AutowiredProcessor extends AbstractProcessor {
         // Build input param name.
         ParameterSpec objectParamSpec = ParameterSpec.builder(TypeName.OBJECT, "target").build();
 
-        ParameterSpec bundleParamSpec = AnnoUtils.generateMethodParameterSpec(bundleTm,"bundle");
+        ParameterSpec bundleParamSpec = AnnoUtils.generateMethodParameterSpec(bundleTm, "bundle");
 
         if (MapUtils.isNotEmpty(parentAndChild)) {
             for (Map.Entry<TypeElement, List<Element>> entry : parentAndChild.entrySet()) {
@@ -224,8 +224,8 @@ public class AutowiredProcessor extends AbstractProcessor {
 
                     //preCondition
 
-                    if(fieldConfig.required()) {
-                        preConditionMethodBuilder.beginControlFlow("if (!bundle.containsKey(\""+fieldName+"\"))");
+                    if (fieldConfig.required()) {
+                        preConditionMethodBuilder.beginControlFlow("if (!bundle.containsKey(\"" + fieldName + "\"))");
 
                         preConditionMethodBuilder.addStatement("throw new $T(" +
                                 "\"" + fieldName + "\")", ParamException);
@@ -239,8 +239,6 @@ public class AutowiredProcessor extends AbstractProcessor {
 
                 ////////////////
                 helper.addMethod(preConditionMethodBuilder.build());
-
-
 
 
                 // Generate autowire helper
@@ -284,6 +282,8 @@ public class AutowiredProcessor extends AbstractProcessor {
             statement += (isActivity ? ("getStringExtra($S)") : ("getString($S)"));
         } else if (type == Type.PARCELABLE.ordinal()) {
             statement += (isActivity ? ("getParcelableExtra($S)") : ("getParcelable($S)"));
+        } else if (type == Type.SERIALIZABLE.ordinal()) {
+            statement += (isActivity ? ("getSerializableExtra($S)") : ("getSerializable($S)"));
         } else if (type == Type.OBJECT.ordinal()) {
             statement = "jsonService.parseObject(substitute." +
                     (isActivity ? "getIntent()." : "getArguments().") +

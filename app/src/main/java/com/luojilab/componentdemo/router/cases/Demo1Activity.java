@@ -1,5 +1,7 @@
 package com.luojilab.componentdemo.router.cases;
 
+import android.widget.TextView;
+
 import com.luojilab.componentdemo.router.UiRouterDemoActivity;
 import com.luojilab.router.facade.annotation.RouteNode;
 
@@ -19,4 +21,8 @@ public class Demo1Activity extends TestActivity {
             null);
 
 
+    @Override
+    protected void displayInfo(TextView textView) {
+        textView.setText("无参数跳转成功");
+    }
 }

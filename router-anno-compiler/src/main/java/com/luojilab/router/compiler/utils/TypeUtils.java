@@ -8,6 +8,7 @@ import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 
 import static com.luojilab.router.compiler.utils.Constants.PARCELABLE;
+import static com.luojilab.router.compiler.utils.Constants.SERIALIZABLE;
 
 /**
  * <p><b>Package:</b> com.luojilab.router.compiler.utils </p>
@@ -21,12 +22,14 @@ public class TypeUtils {
     private Types types;
     private Elements elements;
     private TypeMirror parcelableType;
+    private TypeMirror serializableType;
 
     public TypeUtils(Types types, Elements elements) {
         this.types = types;
         this.elements = elements;
 
         parcelableType = this.elements.getTypeElement(PARCELABLE).asType();
+        serializableType = this.elements.getTypeElement(SERIALIZABLE).asType();
     }
 
     /**
@@ -63,7 +66,11 @@ public class TypeUtils {
             default:    // Other side, maybe the PARCELABLE or OBJECT.
                 if (types.isSubtype(typeMirror, parcelableType)) {  // PARCELABLE
                     return Type.PARCELABLE.ordinal();
-                } else {    // For others
+                }
+//                else if (types.isSubtype(typeMirror, serializableType)) {
+//                    return Type.SERIALIZABLE.ordinal(); 暂不支持需要做转型
+//                }
+                else {    // For others
                     return Type.OBJECT.ordinal();
                 }
         }
