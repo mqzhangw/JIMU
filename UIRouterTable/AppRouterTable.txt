@@ -5,3 +5,6 @@ HOST : app
 首页
 /main
 
+UiRouter使用演示页面
+/uirouter/demo
+

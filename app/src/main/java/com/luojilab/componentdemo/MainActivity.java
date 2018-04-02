@@ -11,6 +11,7 @@ import com.luojilab.component.basiclib.ToastManager;
 import com.luojilab.component.basicres.BaseActivity;
 import com.luojilab.component.basicres.BaseApplication;
 import com.luojilab.component.componentlib.router.Router;
+import com.luojilab.component.componentlib.router.ui.UIRouter;
 import com.luojilab.componentservice.readerbook.ReadBookService;
 import com.luojilab.router.facade.annotation.RouteNode;
 
@@ -32,6 +33,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         uninstallReadBtn = findViewById(R.id.uninstall_share);
         installReadBookBtn.setOnClickListener(this);
         uninstallReadBtn.setOnClickListener(this);
+
+        findViewById(R.id.ui_router_demos).setOnClickListener(this);
         showFragment();
     }
 
@@ -61,6 +64,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             case R.id.uninstall_share:
                 Router.unregisterComponent("com.luojilab.share.applike.ShareApplike");
                 Router.unregisterComponent("com.luojilab.share.kotlin.applike.KotlinApplike");
+                break;
+            case R.id.ui_router_demos:
+                UIRouter.getInstance().openUri(MainActivity.this, "JIMU://app/uirouter/demo", null);
                 break;
         }
     }

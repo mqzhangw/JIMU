@@ -1,3 +1,4 @@
+/*
 package com.luojilab.share.runalone;
 
 import android.net.Uri;
@@ -13,16 +14,20 @@ import com.luojilab.componentservice.share.bean.Author;
 import java.util.Arrays;
 import java.util.List;
 
+*/
 /**
- * 独立测试模块时可以这样做
- */
+ * 独立测试模块时可以这样做，并在manifest中声明相应内容
+ *//*
+
 public class DispatcherActivity extends AbsDispatcherActivity {
 
     private static final String TAG = "DispatcherActivity";
+*/
 /*
     * use ddcompo://www.luojilab.com/compodemo?target=share/shareBook?bookName=Dummy to display
     *
-    * */
+    * *//*
+
 
     private static final List<String> transferHost = Arrays.asList(
             "www.luojilab.com",
@@ -84,3 +89,4 @@ public class DispatcherActivity extends AbsDispatcherActivity {
                         + JsonService.Factory.getSingletonImpl().toJsonString(author), null);
     }
 }
+*/

@@ -42,6 +42,7 @@ android {
 
 dependencies {
     compile project(':componentservice')
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
     annotationProcessor project(':router-anno-compiler')
 }
 
@@ -49,4 +50,3 @@ combuild {
     applicationName = 'com.luojilab.componentdemo.application.AppApplication'
     isRegisterCompoAuto = true
 }
-

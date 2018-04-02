@@ -19,42 +19,40 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity android:name=".DispatcherActivity">
-
             <intent-filter>
                 <data
                     android:host="www.luojilab.com"
-                    android:scheme="http"/>
-                <action android:name="android.intent.action.VIEW"/>
+                    android:scheme="http" />
 
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
-
             <intent-filter>
                 <data
                     android:host="*"
-                    android:scheme="ddcompo"/>
-                <action android:name="android.intent.action.VIEW"/>
+                    android:scheme="ddcompo" />
 
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
-
             <intent-filter>
                 <data
-                    android:path="/compodemo"
                     android:host="www.luojilab.com"
-                    android:scheme="ddcompo"/>
-                <action android:name="android.intent.action.VIEW"/>
+                    android:path="/compodemo"
+                    android:scheme="ddcompo" />
 
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
-
         </activity>
-
+        <activity android:name=".router.UiRouterDemoActivity" />
 
     </application>
 

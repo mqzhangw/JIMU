@@ -21,7 +21,11 @@ public @interface RouteNode {
     String path();
     /**
      * The priority of route.
+     *
+     * we inspect the path and throw exception when duplicated
+     * paths were find, thus, it's useless and impossible to use priority
      */
+    @Deprecated
     int priority() default -1;
 
     /**
