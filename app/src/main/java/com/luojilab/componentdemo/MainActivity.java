@@ -14,6 +14,8 @@ import com.luojilab.component.componentlib.router.Router;
 import com.luojilab.componentservice.readerbook.ReadBookService;
 import com.luojilab.router.facade.annotation.RouteNode;
 
+import org.xml.sax.helpers.XMLReaderFactory;
+
 @RouteNode(path = "/main", desc = "首页")
 public class MainActivity extends BaseActivity implements View.OnClickListener {
 

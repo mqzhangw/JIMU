@@ -1,0 +1,24 @@
+android {
+    flavorDimensions "mode", "app"
+    productFlavors {
+
+        hotsoon {
+            dimension "mode"
+        }
+
+        hypstar {
+            dimension "mode"
+        }
+
+        normal {
+            dimension "app"
+        }
+
+        fg {
+            dimension "app"
+        }
+
+
+    }
+
+}

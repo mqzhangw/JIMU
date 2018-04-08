@@ -1,5 +1,5 @@
 apply plugin: 'com.dd.comgradle'
-
+apply from: rootProject.file('gradle/flavorable-all.gradle')
 
 android {
     compileSdkVersion 26

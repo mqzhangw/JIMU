@@ -1,4 +1,5 @@
 apply plugin: 'com.dd.comgradle'
+apply from: rootProject.file('gradle/flavorable-all.gradle')
 
 android {
     compileSdkVersion 26
@@ -30,6 +31,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
 
     lintOptions {
         checkReleaseBuilds false
