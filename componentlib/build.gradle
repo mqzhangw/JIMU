@@ -44,6 +44,7 @@ dependencies {
     })
     testCompile 'junit:junit:4.12'
     compile project(':router-annotation')
+//    compile 'com.github.mqzhangw:JIMU:router-anno1.0.1'
     compile 'com.google.code.gson:gson:2.8.2'
 
 }

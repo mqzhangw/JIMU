@@ -15,26 +15,21 @@ import android.support.v7.app.AppCompatActivity;
  * <p>
  * Register your own impl each component as follow in manifest:
  * <p>
- *
+ * <p>
  * <pre class="prettyprint">
- *      &lt;activity android:name=".XXXXXXX"&gt;
- *
- *       &lt;intent-filter&gt;
- *          &lt;data
- *              android:host="AAA.BBB.CCC"
- *              android:scheme="http"/&gt;
- *
- *              &lt;action android:name="android.intent.action.VIEW"/&gt;
- *
- *              &lt;category android:name="android.intent.category.DEFAULT"/&gt;
- *              &lt;category android:name="android.intent.category.BROWSABLE"/&gt;
- *      &lt;/intent-filter&gt;
- *
- *      &lt;/activity&gt;
+ * &lt;activity android:name=".XXXXXXX"&gt;
+ * &lt;intent-filter&gt;
+ * &lt;data
+ * android:host="AAA.BBB.CCC"
+ * android:scheme="http"/&gt;
+ * &lt;action android:name="android.intent.action.VIEW"/&gt;
+ * &lt;category android:name="android.intent.category.DEFAULT"/&gt;
+ * &lt;category android:name="android.intent.category.BROWSABLE"/&gt;
+ * &lt;/intent-filter&gt;
+ * &lt;/activity&gt;
  * </pre>
- *
- *
- * </p>
+ * <p>
+ * <p>
  * Created by leobert on 14/01/2018.
  */
 public abstract class AbsDispatcherActivity extends AppCompatActivity {
@@ -70,7 +65,7 @@ public abstract class AbsDispatcherActivity extends AppCompatActivity {
         if (needTransferUri(uri))
             uri = transferUri(uri);
 
-        VerifyResult verifyResult = UIRouter.getInstance().verifyUri(uri,null,true);
+        VerifyResult verifyResult = UIRouter.getInstance().verifyUri(uri, null, true);
 
         if (verifyResult.isSuccess()) {
             try {
@@ -80,7 +75,7 @@ public abstract class AbsDispatcherActivity extends AppCompatActivity {
                 onExceptionWhenOpenUri(uri, e);
             }
         } else {
-           onVerifyFailed(verifyResult.getThrowable());
+            onVerifyFailed(verifyResult.getThrowable());
         }
 
         onHandled();
