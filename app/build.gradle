@@ -43,7 +43,8 @@ android {
 dependencies {
     compile project(':componentservice')
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    annotationProcessor project(':router-anno-compiler')
+//    annotationProcessor project(':router-anno-compiler')
+    annotationProcessor 'com.github.mqzhangw:JIMU:router-anno-compiler-1.0.1'
 }
 
 combuild {
