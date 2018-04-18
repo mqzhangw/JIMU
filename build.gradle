@@ -9,6 +9,9 @@ buildscript {
             url 'https://maven.google.com/'
             name 'Google'
         }
+        maven {
+            url 'https://dl.bintray.com/leobert-lan-oss/maven/'
+        }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.3.3'
@@ -23,6 +26,9 @@ allprojects {
     repositories {
         jcenter()
         maven { url 'https://jitpack.io' }
+        maven {
+            url 'https://dl.bintray.com/leobert-lan-oss/maven/'
+        }
         maven {
             url 'https://maven.google.com/'
             name 'Google'

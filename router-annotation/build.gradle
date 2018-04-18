@@ -1,6 +1,9 @@
 apply plugin: 'java'
 
+group="com.github.jimu"
+
 ext {
+    bintrayRepo = 'maven'
     bintrayName = 'router-annotation'
     artifact = bintrayName
     libraryName = 'router-annotation '
