@@ -1,6 +1,6 @@
 package com.luojilab.component.componentlib.msg;
 
-import android.os.Parcelable;
+import com.luojilab.component.componentlib.msg.bean.EventBean;
 
 /**
  * <p><b>Package:</b> com.luojilab.component.componentlib.msg </p>
@@ -9,6 +9,6 @@ import android.os.Parcelable;
  * <p><b>Description:</b> TODO </p>
  * Created by leobert on 2018/4/25.
  */
-public interface EventListener<T extends Parcelable> {
+public interface EventListener<T extends EventBean> {
     void onEvent(T event);
 }

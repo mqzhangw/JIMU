@@ -1,4 +1,4 @@
-package com.luojilab.component.componentlib.msg;
+package com.luojilab.component.componentlib.msg.core;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -8,6 +8,7 @@ import android.os.RemoteException;
 import android.text.TextUtils;
 
 import com.luojilab.component.componentlib.log.ILogger;
+import com.luojilab.component.componentlib.msg.Constants;
 import com.luojilab.component.componentlib.msg.bean.SubscribeMessage;
 
 import java.lang.ref.WeakReference;
@@ -80,7 +81,9 @@ public class RemoteObservableHandler extends Handler {
             }
 
             Messenger messenger = subscriberRef.get();
-            Message cm = new Message();
+
+            Message cm = Message.obtain();
+            cm.what = Constants.WHAT_RECEIVE_EVENT_FROM_REMOTE;
             cm.setData(msg.getData());
             try {
                 messenger.send(cm);

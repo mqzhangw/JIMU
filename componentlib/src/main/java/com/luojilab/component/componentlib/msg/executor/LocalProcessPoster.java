@@ -9,9 +9,14 @@ import android.support.annotation.NonNull;
  * <p><b>Description:</b> TODO </p>
  * Created by leobert on 2018/4/25.
  */
-public class LocalProcessPoster implements IPoster{
+public class LocalProcessPoster implements IPoster,Runnable{
     @Override
     public <T> void postEvent(@NonNull T event) {
+
+    }
+
+    @Override
+    public void run() {
 
     }
 }

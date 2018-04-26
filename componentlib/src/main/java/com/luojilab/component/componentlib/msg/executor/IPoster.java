@@ -11,5 +11,4 @@ import android.support.annotation.NonNull;
  */
 public interface IPoster {
     <T> void postEvent(@NonNull T event);
-
 }

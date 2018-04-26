@@ -1,9 +1,11 @@
-package com.luojilab.component.componentlib.msg;
+package com.luojilab.component.componentlib.msg.core;
 
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 import android.os.Messenger;
+
+import com.luojilab.component.componentlib.msg.core.RemoteObservableHandler;
 
 /**
  * <p><b>Package:</b> com.luojilab.component.componentlib.msg </p>

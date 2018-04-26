@@ -9,5 +9,7 @@ package com.luojilab.component.componentlib.msg;
  */
 public interface Constants {
     int WHAT_POST_EVENT_TO_SUBSCRIBER = 1;
+    int WHAT_RECEIVE_EVENT_FROM_REMOTE = 2;
     String BUNDLE_STR_EVENT_CLZ = "bundle_str_event_clz";
+    String BUNDLE_PAR_EVENT = "bundle_par_event";
 }
