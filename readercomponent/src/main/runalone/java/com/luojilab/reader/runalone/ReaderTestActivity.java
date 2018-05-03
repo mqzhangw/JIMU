@@ -55,27 +55,33 @@ public class ReaderTestActivity extends AppCompatActivity {
         }
     }
 
+    private EventListener<TestClz> eventListener1 = new EventListener<TestClz>() {
+        @Override
+        public void onEvent(TestClz event) {
+            Log.d(TAG, "isMainThread:" + Utils.isMainThread());
+            Log.d(TAG, "subscribe on MainThread, receive: " + event.toString());
+        }
+    };
+
+    private EventListener<TestClz> eventListener2 = new EventListener<TestClz>() {
+        @Override
+        public void onEvent(TestClz event) {
+            Log.d(TAG, "isMainThread:" + Utils.isMainThread());
+            //just for filter
+            Log.i(TAG, "subscribe on background, receive: " + event.toString());
+
+        }
+    };
+
+    Thread forceTestThread;
+
     public void testEventManager() {
-        eventManager.subscribe(TestClz.class, new EventListener<TestClz>() {
-            @Override
-            public void onEvent(TestClz event) {
-                Log.d(TAG, "isMainThread:" + Utils.isMainThread());
-                Log.d(TAG, "subscribe on MainThread, receive: " + event.toString());
-            }
-        });
+        eventManager.subscribe(TestClz.class, eventListener1);
 
         new Thread(new Runnable() {
             @Override
             public void run() {
-                eventManager.subscribe(TestClz.class, AriseAt.local(), ConsumeOn.Background, new EventListener<TestClz>() {
-                    @Override
-                    public void onEvent(TestClz event) {
-                        Log.d(TAG,"isMainThread:"+ Utils.isMainThread());
-                        //just for filter
-                        Log.i(TAG, "subscribe on background, receive: " + event.toString());
-
-                    }
-                });
+                eventManager.subscribe(TestClz.class, AriseAt.local(), ConsumeOn.Background, eventListener2);
 //                        postEvent();
             }
         }).start();
@@ -83,18 +89,21 @@ public class ReaderTestActivity extends AppCompatActivity {
 //        postEvent();
 
         //force test.
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
+       forceTestThread = new ForceTestThread();
+       forceTestThread.start();
 
-                int i = 0;
-                while (true) {
-                    i++;
-                    eventManager.postEvent(new TestClz("forceTest:" + i));
-                }
+    }
+
+    public static final class ForceTestThread extends Thread {
+        @Override
+        public void run() {
+            super.run();
+            int i = 0;
+            while (true) {
+                i++;
+                EventManager.getInstance().postEvent(new TestClz("forceTest:" + i));
             }
-        }).start();
-
+        }
     }
 
     public void postEvent() {
@@ -112,6 +121,18 @@ public class ReaderTestActivity extends AppCompatActivity {
                 eventManager.postEvent(new TestClz("post on background"));
             }
         }).start();
+    }
 
+    @Override
+    public void finish() {
+        super.finish();
+        EventManager.getInstance().unsubscribe(eventListener1);
+        EventManager.getInstance().unsubscribe(eventListener2);
+    }
+
+    @Override
+    protected void onDestroy() {
+        forceTestThread.interrupt();
+        super.onDestroy();
     }
 }

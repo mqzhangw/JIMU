@@ -19,4 +19,21 @@ public final class SubscriberList<T extends EventBean> extends CopyOnWriteArrayL
     public WeakReference<EventListener<T>> get(int index) {
         return super.get(index);
     }
+
+    public boolean removeCallback(EventListener listener) {
+        boolean ret = false;
+        for (int i = 0;i<size();i++) {
+            WeakReference<EventListener<T>> ref = get(i);
+            if (ref == null || ref.get() == null)
+                continue;
+
+            if (ref.get().equals(listener)) {
+                ret = true;
+                remove(ref);
+                i--;
+                ref.clear();
+            }
+        }
+        return ret;
+    }
 }

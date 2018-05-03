@@ -81,6 +81,10 @@ public final class EventManager {
         secy.subscribe(eventClz, eventType, consumeOn, listener);
     }
 
+    public <T extends EventBean> void unsubscribe(@NonNull EventListener<T> listener) {
+        secy.unsubscribe(listener);
+    }
+
 
     ///////////////////////////////////////////////////////////////////////////
     // post

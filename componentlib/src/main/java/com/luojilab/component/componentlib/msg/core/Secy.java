@@ -13,6 +13,7 @@ import com.luojilab.component.componentlib.msg.executor.IPoster;
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * <p><b>Package:</b> com.luojilab.component.componentlib.msg.core </p>
@@ -77,13 +78,13 @@ public final class Secy {
             cache = workThreadSubscriber;
         }
 
-        SubscriberList<EventBean> subscribers =  cache.get(eventClz);
+        SubscriberList<EventBean> subscribers = cache.get(eventClz);
 
         if (subscribers == null) {
             subscribers = new SubscriberList<>();
-            cache.put(eventClz,subscribers);
+            cache.put(eventClz, subscribers);
         }
-        WeakReference<EventListener<EventBean>> listenerRef =  new WeakReference<>((EventListener<EventBean>) listener);
+        WeakReference<EventListener<EventBean>> listenerRef = new WeakReference<>((EventListener<EventBean>) listener);
 
         //ignore duplicate subscriber
         subscribers.add(listenerRef);
@@ -143,10 +144,30 @@ public final class Secy {
 //                        if (!state.onMainThread)
 //                            subscriberRef.get().onEvent(event);
 //                        else //always use the work thread
-                            workThreadPoster.postEvent(event, subscriberRef.get());
+                        workThreadPoster.postEvent(event, subscriberRef.get());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+                }
+            }
+        }
+    }
+
+    public <T extends EventBean> void unsubscribe(final @NonNull EventListener<T> listener) {
+        removeSubscribe(mainThreadSubscriber, listener);
+        removeSubscribe(workThreadSubscriber, listener);
+    }
+
+    private void removeSubscribe(SubscriberCache cache, EventListener listener) {
+        synchronized (Secy.class) {
+            Set<Class> keys = cache.keySet();
+            for (Class clz : keys) {
+                SubscriberList list = cache.get(clz);
+                if (list == null)
+                    continue;
+                boolean b = list.removeCallback(listener);
+                if (b) {
+                    ILogger.logger.monitor("remove one subscribe success");
                 }
             }
         }
