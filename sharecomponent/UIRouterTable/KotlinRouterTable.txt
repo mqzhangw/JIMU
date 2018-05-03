@@ -1,0 +1,14 @@
+auto generated, do not change !!!! 
+
+HOST : kotlin
+
+test multi java and kotlin in one module
+/javatest
+author:com.luojilab.componentservice.share.bean.AuthorKt
+bookName:String
+
+分享杂志页面
+/shareMagazine
+author:com.luojilab.componentservice.share.bean.AuthorKt
+bookName:String
+

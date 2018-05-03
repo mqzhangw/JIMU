@@ -28,12 +28,13 @@ public interface IComponentRouter {
 
     /**
      * use {@link #verifyUri(Uri, Bundle, boolean)} instead
+     *
      * @param uri the uri to be verified
      * @return true if sth accept it
      */
     @Deprecated
-
     boolean verifyUri(Uri uri);
 
-    @NonNull VerifyResult verifyUri(Uri uri, Bundle bundle, boolean checkParams);
+    @NonNull
+    VerifyResult verifyUri(Uri uri, Bundle bundle, boolean checkParams);
 }

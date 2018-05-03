@@ -23,15 +23,14 @@ public class CrossSubscriberHandler extends Handler {
     public void handleMessage(Message msg) {
 //        super.handleMessage(msg);
         if (msg == null) {
-            ILogger.logger.error(ILogger.defaultTag,"subscriber handle get a null message");
+            ILogger.logger.error(ILogger.defaultTag, "subscriber handle get a null message");
             return;
         }
 
 
         switch (msg.what) {
             case Constants.WHAT_RECEIVE_EVENT_FROM_REMOTE:
-                postRemoteEventInCurrentProcess(msg
-                );
+                postRemoteEventInCurrentProcess(msg);
                 break;
             default:
                 break;
@@ -40,13 +39,13 @@ public class CrossSubscriberHandler extends Handler {
 
     private void postRemoteEventInCurrentProcess(@NonNull Message message) {
         if (message.getData() == null) {
-            ILogger.logger.error(ILogger.defaultTag,"subscriber handle get a message without bundle data");
+            ILogger.logger.error(ILogger.defaultTag, "subscriber handle get a message without bundle data");
             return;
         }
         Bundle data = message.getData();
         if (!data.containsKey(Constants.BUNDLE_PAR_EVENT) ||
                 !data.containsKey(Constants.BUNDLE_STR_EVENT_CLZ)) {
-            ILogger.logger.error(ILogger.defaultTag,"subscriber handle get a message missing params in bundle");
+            ILogger.logger.error(ILogger.defaultTag, "subscriber handle get a message missing params in bundle");
             return;
         }
 

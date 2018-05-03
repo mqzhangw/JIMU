@@ -1,9 +1,15 @@
 package com.luojilab.component.componentlib.router.ui;
 
+import android.annotation.TargetApi;
+import android.content.ClipData;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Rect;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.luojilab.component.componentlib.exceptions.UiRouterException;
@@ -166,12 +172,9 @@ public class UIRouter implements IUIRouter {
         for (IComponentRouter temp : uiRouters) {
             try {
                 //ignore params check
-                VerifyResult verifyResult = temp.verifyUri(uri,bundle,false);
+                VerifyResult verifyResult = temp.verifyUri(uri, bundle, false);
                 if (verifyResult.isSuccess() && temp.openUri(context, uri, bundle, requestCode))
                     return true;
-//                if (temp.verifyUri(uri) && temp.openUri(context, uri, bundle, requestCode)) {
-//                    return true;
-//                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -201,10 +204,10 @@ public class UIRouter implements IUIRouter {
         for (IComponentRouter temp : uiRouters) {
             VerifyResult result = temp.verifyUri(uri, bundle, checkParams);
 //            if (result != null) {
-                if (result.isSuccess())
-                    return result;
-                else if (result.getThrowable() != null)
-                    verifyMsg.append(result.getThrowable().getMessage()).append("\r");
+            if (result.isSuccess())
+                return result;
+            else if (result.getThrowable() != null)
+                verifyMsg.append(result.getThrowable().getMessage()).append("\r");
 
 //            }
         }
@@ -237,8 +240,6 @@ public class UIRouter implements IUIRouter {
             getLogger().monitor("Try to fetch ComponentRouter for null/empty host. Ignore!");
             return null;
         }
-
-
         String path = RouteUtils.genHostUIRouterClass(host);
 
         if (routerInstanceCache.containsKey(path))
@@ -258,5 +259,64 @@ public class UIRouter implements IUIRouter {
         }
 
         return null;
+    }
+
+
+    public interface IntentDecor {
+        void decor(IntentDecorDelegate delegate);
+    }
+
+    public static final class IntentDecorDelegate {
+        private final Intent intent;
+
+        private Intent getIntent() {
+            return intent;
+        }
+
+        public IntentDecorDelegate(Intent intent) {
+            this.intent = intent;
+        }
+
+        public void setAction(@Nullable String action) {
+            intent.setAction(action);
+        }
+
+        public void setData(@Nullable Uri data) {
+            intent.setData(data);
+        }
+
+        public void setType(@Nullable String type) {
+            intent.setType(type);
+        }
+
+        public void setDataAndType(@Nullable Uri data, @Nullable String type) {
+            intent.setDataAndType(data, type);
+        }
+
+        public void setSelector(@Nullable Intent selector) {
+            intent.setSelector(selector);
+        }
+
+        @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+        public void setClipData(@Nullable ClipData clip) {
+            intent.setClipData(clip);
+        }
+
+        public void setFlags(int flags) {
+            intent.setFlags(flags);
+        }
+
+        public void addFlags(int flags) {
+            intent.addFlags(flags);
+        }
+
+        @TargetApi(Build.VERSION_CODES.O)
+        public void removeFlags(int flags) {
+            intent.removeFlags(flags);
+        }
+
+        public void setSourceBounds(@Nullable Rect r) {
+            intent.setSourceBounds(r);
+        }
     }
 }

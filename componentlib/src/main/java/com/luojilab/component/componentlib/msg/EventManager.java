@@ -6,6 +6,8 @@ import com.luojilab.component.componentlib.log.ILogger;
 import com.luojilab.component.componentlib.msg.bean.EventBean;
 import com.luojilab.component.componentlib.msg.bean.State;
 import com.luojilab.component.componentlib.msg.core.Secy;
+import com.luojilab.component.componentlib.msg.executor.LocalProcessBackgroundPoster;
+import com.luojilab.component.componentlib.msg.executor.LocalProcessMainThreadPoster;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -15,6 +17,7 @@ import java.util.concurrent.Executors;
  * <p><b>Project:</b> JIMU </p>
  * <p><b>Classname:</b> EventManager </p>
  * <p><b>Description:</b> TODO </p>
+ * use package-local to force use api
  * Created by leobert on 2018/4/25.
  */
 public final class EventManager {
@@ -29,7 +32,8 @@ public final class EventManager {
     };
 
     private EventManager() {
-        secy = new Secy();
+        secy = new Secy(new LocalProcessMainThreadPoster(),
+                new LocalProcessBackgroundPoster(DEFAULT_EXECUTOR_SERVICE));
     }
 
     private static volatile EventManager instance;
@@ -37,7 +41,7 @@ public final class EventManager {
     private Secy secy;
 
     public static EventManager getInstance() {
-        if (instance == null) {//锁细化
+        if (instance == null) {
             synchronized (EventManager.class) {
                 if (instance == null) {
                     instance = new EventManager();
@@ -48,7 +52,7 @@ public final class EventManager {
     }
 
 
-    ExecutorService executorService = DEFAULT_EXECUTOR_SERVICE;
+//    ExecutorService executorService = DEFAULT_EXECUTOR_SERVICE;
 
     ///////////////////////////////////////////////////////////////////////////
     // subscribe
@@ -74,7 +78,7 @@ public final class EventManager {
                 + "\rconsume on:" + consumeOn);
         eventType.log();
 
-        secy.subscribe(eventClz,eventType,consumeOn,listener);
+        secy.subscribe(eventClz, eventType, consumeOn, listener);
     }
 
 
@@ -82,12 +86,13 @@ public final class EventManager {
     // post
     ///////////////////////////////////////////////////////////////////////////
 
-    public <T> void postEvent(T event) {
-
+    public <T extends EventBean> void postEvent(@NonNull T event) {
+        if (event == null) {
+            ILogger.logger.monitor("cannot post null");
+            return;
+        }
+        secy.postNormalEventOnLocalProcess(stateThreadLocal.get(), event);
     }
 
-    public void info() {
-// TODO: 2018/4/26 print current state info in logcat
-    }
 
 }

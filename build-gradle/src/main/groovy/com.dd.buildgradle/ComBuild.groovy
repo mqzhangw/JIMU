@@ -104,6 +104,7 @@ class ComBuild implements Plugin<Project> {
                     assembleTask.isDebug = true
                 }
                 assembleTask.isAssemble = true
+                System.out.println("debug assembleTask info:"+task)
                 String[] strs = task.split(":")
                 assembleTask.modules.add(strs.length > 1 ? strs[strs.length - 2] : "all")
                 break

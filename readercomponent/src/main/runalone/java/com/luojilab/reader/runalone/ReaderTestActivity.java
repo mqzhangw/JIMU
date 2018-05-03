@@ -4,7 +4,14 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
+import com.luojilab.component.componentlib.msg.AriseAt;
+import com.luojilab.component.componentlib.msg.ConsumeOn;
+import com.luojilab.component.componentlib.msg.EventListener;
+import com.luojilab.component.componentlib.msg.EventManager;
+import com.luojilab.component.componentlib.msg.Utils;
+import com.luojilab.component.componentlib.msg.bean.EventBean;
 import com.luojilab.reader.R;
 import com.luojilab.reader.ReaderFragment;
 
@@ -23,5 +30,88 @@ public class ReaderTestActivity extends AppCompatActivity {
         fragment = new ReaderFragment();
         final FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.add(R.id.tab_content, fragment).commitAllowingStateLoss();
+
+        testEventManager();
+
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    // 临时放置的测试代码
+    ///////////////////////////////////////////////////////////////////////////
+
+    private static final String TAG = "temp-tag";
+    private EventManager eventManager = EventManager.getInstance();
+
+    private static final class TestClz implements EventBean {
+        private final String string;
+
+        public TestClz(String string) {
+            this.string = string;
+        }
+
+        @Override
+        public String toString() {
+            return super.toString() + "  " + string;
+        }
+    }
+
+    public void testEventManager() {
+        eventManager.subscribe(TestClz.class, new EventListener<TestClz>() {
+            @Override
+            public void onEvent(TestClz event) {
+                Log.d(TAG, "isMainThread:" + Utils.isMainThread());
+                Log.d(TAG, "subscribe on MainThread, receive: " + event.toString());
+            }
+        });
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                eventManager.subscribe(TestClz.class, AriseAt.local(), ConsumeOn.Background, new EventListener<TestClz>() {
+                    @Override
+                    public void onEvent(TestClz event) {
+                        Log.d(TAG,"isMainThread:"+ Utils.isMainThread());
+                        //just for filter
+                        Log.i(TAG, "subscribe on background, receive: " + event.toString());
+
+                    }
+                });
+//                        postEvent();
+            }
+        }).start();
+
+//        postEvent();
+
+        //force test.
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                int i = 0;
+                while (true) {
+                    i++;
+                    eventManager.postEvent(new TestClz("forceTest:" + i));
+                }
+            }
+        }).start();
+
+    }
+
+    public void postEvent() {
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                eventManager.postEvent(new TestClz("post on mainThread"));
+            }
+        });
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                eventManager.postEvent(new TestClz("post on background"));
+            }
+        }).start();
+
     }
 }

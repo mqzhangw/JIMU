@@ -2,10 +2,17 @@ package com.luojilab.component.componentlib.msg.core;
 
 import android.support.annotation.NonNull;
 
+import com.luojilab.component.componentlib.log.ILogger;
 import com.luojilab.component.componentlib.msg.AriseAt;
 import com.luojilab.component.componentlib.msg.ConsumeOn;
 import com.luojilab.component.componentlib.msg.EventListener;
 import com.luojilab.component.componentlib.msg.bean.EventBean;
+import com.luojilab.component.componentlib.msg.bean.State;
+import com.luojilab.component.componentlib.msg.executor.IPoster;
+
+import java.lang.ref.WeakReference;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * <p><b>Package:</b> com.luojilab.component.componentlib.msg.core </p>
@@ -16,27 +23,132 @@ import com.luojilab.component.componentlib.msg.bean.EventBean;
  */
 public final class Secy {
 
+    private final IPoster mainThreadPoster;
+    private final IPoster workThreadPoster;
+
+    private final SubscriberCache mainThreadSubscriber = new SubscriberCache();
+
+    private final SubscriberCache workThreadSubscriber = new SubscriberCache();
+
+    private final Map<String, MessageBridgeAttacher> remoteBridgeAttachers = new HashMap<>();
+
+
+    public Secy(IPoster mainThreadPoster, IPoster workThreadPoster) {
+        this.mainThreadPoster = mainThreadPoster;
+        this.workThreadPoster = workThreadPoster;
+    }
+
     public <T extends EventBean> void subscribe(@NonNull Class<T> eventClz,
                                                 @NonNull AriseAt ariseAt,
                                                 @NonNull ConsumeOn consumeOn,
                                                 @NonNull EventListener<T> listener) {
-        if (ariseAt.isLocal()) {
-            subscribeLocalEvent(eventClz,consumeOn,listener);
-        } else {
-            subscribeRemoteEvent(eventClz,consumeOn,listener);
+        synchronized (Secy.class) {
+            if (!ariseAt.isLocal()) {
+                //寻找绑定服务
+                String processFullName = ariseAt.getProcessFullName();
+                MessageBridgeAttacher attacher;
+                if (remoteBridgeAttachers.containsKey(processFullName))
+                    attacher = remoteBridgeAttachers.get(processFullName);
+                else {
+                    attacher = createAttacher(processFullName);
+                    remoteBridgeAttachers.put(processFullName, attacher);
+                }
+
+                attacher.onSubscribe(eventClz);
+            }
+            subscribeEvent(eventClz, consumeOn, listener);
         }
     }
 
-    private void subscribeLocalEvent(@NonNull Class eventClz,
-                                     @NonNull ConsumeOn consumeOn,
-                                     @NonNull EventListener listener) {
+    @NonNull
+    private MessageBridgeAttacher createAttacher(String processName) {
+        // TODO: 2018/4/27
+        return null;
+    }
+
+    //caution: maintain thread safety!
+    private <T extends EventBean> void subscribeEvent(@NonNull Class<T> eventClz,
+                                                      @NonNull ConsumeOn consumeOn,
+                                                      @NonNull EventListener<T> listener) {
+        SubscriberCache cache;
+        if (ConsumeOn.Main.equals(consumeOn)) {
+            cache = mainThreadSubscriber;
+        } else {
+            cache = workThreadSubscriber;
+        }
+
+        SubscriberList<EventBean> subscribers =  cache.get(eventClz);
+
+        if (subscribers == null) {
+            subscribers = new SubscriberList<>();
+            cache.put(eventClz,subscribers);
+        }
+        WeakReference<EventListener<EventBean>> listenerRef =  new WeakReference<>((EventListener<EventBean>) listener);
+
+        //ignore duplicate subscriber
+        subscribers.add(listenerRef);
 
     }
 
-    private void subscribeRemoteEvent(@NonNull Class eventClz,
-                                      @NonNull ConsumeOn consumeOn,
-                                      @NonNull EventListener listener) {
+    public <T extends EventBean> void postNormalEventOnLocalProcess(State threadLocalState, T event) {
 
+        threadLocalState.addEvent2Queue(event);
+
+        if (!threadLocalState.onPosting) {
+            threadLocalState.onPosting = true;
+
+            try {
+                while (!threadLocalState.isQueueEmpty()) {
+                    EventBean temp = threadLocalState.peekFromQueue();//, threadState;
+                    Class clz = event.getClass();
+                    postOne(temp, threadLocalState, clz);
+                }
+            } finally {
+                threadLocalState.onPosting = false;
+            }
+        } else {
+            ILogger.logger.error(ILogger.defaultTag, "bug!");
+        }
     }
 
+
+    private <T extends EventBean> void postOne(T event, State state, Class<T> eventClass) {
+        SubscriberList<EventBean> mainThreadSubscribers;
+        SubscriberList<EventBean> workThreadSubscribers;
+
+        synchronized (this) {
+            mainThreadSubscribers = mainThreadSubscriber.get(eventClass);
+            workThreadSubscribers = workThreadSubscriber.get(eventClass);
+        }
+
+        if (mainThreadSubscribers != null && !mainThreadSubscribers.isEmpty()) {
+            for (WeakReference<EventListener<EventBean>> subscriberRef : mainThreadSubscribers) {
+                if (subscriberRef.get() != null) {
+                    try {
+                        if (state.onMainThread)
+                            subscriberRef.get().onEvent(event);
+                        else
+                            mainThreadPoster.postEvent(event, subscriberRef.get());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+
+        if (workThreadSubscribers != null && !workThreadSubscribers.isEmpty()) {
+            for (WeakReference<EventListener<EventBean>> subscriberRef : workThreadSubscribers) {
+                if (subscriberRef.get() != null) {
+                    try {
+//                        if (!state.onMainThread)
+//                            subscriberRef.get().onEvent(event);
+//                        else //always use the work thread
+                            workThreadPoster.postEvent(event, subscriberRef.get());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+    }
 }

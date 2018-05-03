@@ -1,5 +1,6 @@
 package com.luojilab.component.componentlib.msg;
 
+import android.os.Looper;
 import android.text.TextUtils;
 
 import java.io.BufferedReader;
@@ -35,5 +36,9 @@ public class Utils {
             }
         }
         return null;
+    }
+
+    public static boolean isMainThread() {
+        return Looper.myLooper() == Looper.getMainLooper();
     }
 }
