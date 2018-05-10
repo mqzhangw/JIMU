@@ -1,6 +1,7 @@
 package com.luojilab.reader.applike;
 
 import com.luojilab.component.componentlib.applicationlike.IApplicationLike;
+import com.luojilab.component.componentlib.applicationlike.RegisterCompManual;
 import com.luojilab.component.componentlib.router.Router;
 import com.luojilab.component.componentlib.router.ui.UIRouter;
 import com.luojilab.componentservice.readerbook.ReadBookService;
@@ -9,7 +10,7 @@ import com.luojilab.reader.serviceimpl.ReadBookServiceImplKotlin;
 /**
  * Created by mrzhang on 2017/6/15.
  */
-
+@RegisterCompManual
 public class ReaderAppLike implements IApplicationLike {
 
     Router router = Router.getInstance();

@@ -41,10 +41,10 @@ class ComCodeTransform extends Transform {
             }
         }
         for (CtClass ctClass : applications) {
-            System.out.println("application is   " + ctClass.getName())
+            System.out.println("Application is   " + ctClass.getName())
         }
         for (CtClass ctClass : activators) {
-            System.out.println("applicationlike is   " + ctClass.getName())
+            System.out.println("ApplicationLike will be auto register: " + ctClass.getName())
         }
 
         transformInvocation.inputs.each { TransformInput input ->
@@ -67,6 +67,18 @@ class ComCodeTransform extends Transform {
             //对类型为“文件夹”的input进行遍历
             input.directoryInputs.each { DirectoryInput directoryInput ->
                 boolean isRegisterCompoAuto = project.extensions.combuild.isRegisterCompoAuto
+
+                System.out.println(">>>")
+                System.out.println(">>>")
+                System.out.println(">>>")
+                System.out.println(">>>")
+
+                System.out.println("check isRegisterCompoAuto:  "
+                        + directoryInput.file.getPath()
+                        + " ; isRegisterCompoAuto:"
+                        + isRegisterCompoAuto)
+
+
                 if (isRegisterCompoAuto) {
                     String fileName = directoryInput.file.absolutePath
                     File dir = new File(fileName)
@@ -83,6 +95,7 @@ class ComCodeTransform extends Transform {
                         }
                     }
                 }
+
                 def dest = transformInvocation.outputProvider.getContentLocation(directoryInput.name,
                         directoryInput.contentTypes,
                         directoryInput.scopes, Format.DIRECTORY)
@@ -108,15 +121,17 @@ class ComCodeTransform extends Transform {
             CtMethod attachBaseContextMethod = ctClassApplication.getDeclaredMethod("onCreate", null)
             attachBaseContextMethod.insertAfter(getAutoLoadComCode(activators))
         } catch (CannotCompileException | NotFoundException e) {
+
+            System.out.println("could not found onCreate in Application;   " + e.toString())
+
             StringBuilder methodBody = new StringBuilder()
             methodBody.append("protected void onCreate() {")
             methodBody.append("super.onCreate();")
-            methodBody.
-                    append(getAutoLoadComCode(activators))
+            methodBody.append(getAutoLoadComCode(activators))
             methodBody.append("}")
             ctClassApplication.addMethod(CtMethod.make(methodBody.toString(), ctClassApplication))
         } catch (Exception e) {
-
+            System.out.println("could not create onCreate() in Application;   " + e.toString())
         }
         ctClassApplication.writeFile(patch)
         ctClassApplication.detach()
@@ -145,15 +160,24 @@ class ComCodeTransform extends Transform {
         return false
     }
 
+    /**
+     * check if the class is implement of IApplication and isRegisterCompoAuto
+     * @param ctClass target class to be checked
+     * @return true if impl& isRegisterCompoAuto
+     */
     private boolean isActivator(CtClass ctClass) {
         try {
             for (CtClass ctClassInter : ctClass.getInterfaces()) {
                 if ("com.luojilab.component.componentlib.applicationlike.IApplicationLike".equals(ctClassInter.name)) {
-                    return true
+//                   todo judge isRegisterCompoAuto
+                    boolean hasManualNotation = ctClass.hasAnnotation(Class.forName("com.luojilab.component.componentlib.applicationlike.RegisterCompManual"))
+//                    return true
+                    System.out.println(">>>> " + ctClass + " manual register?" + hasManualNotation)
+                    return !hasManualNotation
                 }
             }
         } catch (Exception e) {
-            println "class not found exception class name:  " + ctClass.getName()
+            println "isActivator got exception :" + ctClass.getName() + "   ;  " + e.toString()
         }
 
         return false

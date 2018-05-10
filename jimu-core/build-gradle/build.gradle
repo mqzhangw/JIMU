@@ -3,7 +3,7 @@ apply plugin: 'groovy'
 
 def MAVEN_LOCAL_PATH = uri('../../local_repo')
 def ARTIFACT_ID = 'build-gradle'
-def VERSION_NAME = '1.2.1'
+def VERSION_NAME = '1.2.5'
 def GROUP_ID = 'com.github.jimu'
 
 ext {
@@ -17,8 +17,8 @@ ext {
     licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
     allLicenses = ["Apache-2.0"]
 }
-apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
-apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'
+apply from: '../installv1.gradle'
+apply from: '../bintrayv1.gradle'
 
 dependencies {
     compile 'com.android.tools.build:gradle:2.3.2'
