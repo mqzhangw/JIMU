@@ -1,14 +1,18 @@
 package com.luojilab.component.componentlib.msg;
 
+import android.app.Application;
 import android.support.annotation.NonNull;
 
 import com.luojilab.component.componentlib.log.ILogger;
 import com.luojilab.component.componentlib.msg.bean.EventBean;
 import com.luojilab.component.componentlib.msg.bean.State;
+import com.luojilab.component.componentlib.msg.core.MessageBridgeService;
 import com.luojilab.component.componentlib.msg.core.Secy;
 import com.luojilab.component.componentlib.msg.executor.LocalProcessBackgroundPoster;
 import com.luojilab.component.componentlib.msg.executor.LocalProcessMainThreadPoster;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -21,8 +25,10 @@ import java.util.concurrent.Executors;
  * Created by leobert on 2018/4/25.
  */
 public final class EventManager {
-    private final static ExecutorService DEFAULT_EXECUTOR_SERVICE =
+    private static final ExecutorService DEFAULT_EXECUTOR_SERVICE =
             Executors.newCachedThreadPool();
+    private static final Map<String, Class<? extends MessageBridgeService>> processMsgBridgeServiceMapper
+            = new HashMap<>();
 
     private ThreadLocal<State> stateThreadLocal = new ThreadLocal<State>() {
         @Override
@@ -31,9 +37,22 @@ public final class EventManager {
         }
     };
 
-    private EventManager() {
-        secy = new Secy(new LocalProcessMainThreadPoster(),
-                new LocalProcessBackgroundPoster(DEFAULT_EXECUTOR_SERVICE));
+    public static void init(Application application) {
+        if (instance == null) {
+            synchronized (EventManager.class) {
+                if (instance == null) {
+                    instance = new EventManager(application);
+                }
+            }
+        } else {
+            ILogger.logger.monitor("EventManager has initialized");
+        }
+    }
+
+    private EventManager(Application application) {
+        secy = new Secy(application,new LocalProcessMainThreadPoster(),
+                new LocalProcessBackgroundPoster(DEFAULT_EXECUTOR_SERVICE),
+                processMsgBridgeServiceMapper);
     }
 
     private static volatile EventManager instance;
@@ -42,11 +61,12 @@ public final class EventManager {
 
     public static EventManager getInstance() {
         if (instance == null) {
-            synchronized (EventManager.class) {
-                if (instance == null) {
-                    instance = new EventManager();
-                }
-            }
+//            synchronized (EventManager.class) {
+//                if (instance == null) {
+//                    instance = new EventManager();
+//                }
+//            }
+            throw new IllegalStateException("you must call init(Application app) at first");
         }
         return instance;
     }

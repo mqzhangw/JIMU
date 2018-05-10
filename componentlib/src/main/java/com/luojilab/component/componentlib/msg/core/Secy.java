@@ -1,5 +1,6 @@
 package com.luojilab.component.componentlib.msg.core;
 
+import android.app.Application;
 import android.support.annotation.NonNull;
 
 import com.luojilab.component.componentlib.log.ILogger;
@@ -27,17 +28,27 @@ public final class Secy {
     private final IPoster mainThreadPoster;
     private final IPoster workThreadPoster;
 
+    private final Map<String,Class<? extends MessageBridgeService>> processMsgBridgeServiceMapper;
+
     private final SubscriberCache mainThreadSubscriber = new SubscriberCache();
 
     private final SubscriberCache workThreadSubscriber = new SubscriberCache();
 
     private final Map<String, MessageBridgeAttacher> remoteBridgeAttachers = new HashMap<>();
+    private Application application;
 
 
-    public Secy(IPoster mainThreadPoster, IPoster workThreadPoster) {
+
+    public Secy(Application application, IPoster mainThreadPoster, IPoster workThreadPoster,
+                Map<String, Class<? extends MessageBridgeService>> processMsgBridgeServiceMapper) {
+        this.application = application;
         this.mainThreadPoster = mainThreadPoster;
         this.workThreadPoster = workThreadPoster;
+        this.processMsgBridgeServiceMapper = processMsgBridgeServiceMapper;
     }
+
+
+
 
     public <T extends EventBean> void subscribe(@NonNull Class<T> eventClz,
                                                 @NonNull AriseAt ariseAt,

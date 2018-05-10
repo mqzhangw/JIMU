@@ -19,14 +19,12 @@ import java.util.concurrent.ExecutorService;
  */
 public class LocalProcessBackgroundPoster implements IPoster, Runnable {
     private final List<Pair<EventBean, EventListener<EventBean>>> cache;
-//    private final List<Pair<EventBean, EventListener<EventBean>>> cache2;
 
     private boolean started = false;
     private final ExecutorService executorService;
 
     public LocalProcessBackgroundPoster(@NonNull ExecutorService executorService) {
         cache = new ArrayList<>();
-//        cache2 = new ArrayList<>();
         this.executorService = executorService;
     }
 

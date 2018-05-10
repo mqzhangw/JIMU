@@ -14,4 +14,6 @@ import com.luojilab.component.componentlib.msg.bean.EventBean;
  */
 public interface IPoster {
     <T extends EventBean> void postEvent(@NonNull T event, @NonNull EventListener<T> target);
+
+
 }
