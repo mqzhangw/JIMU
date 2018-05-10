@@ -10,14 +10,12 @@ kapt {
 }
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion "26.0.1"
-
-
+    compileSdkVersion versions.compileSdk
+    buildToolsVersion versions.androidTools
 
     defaultConfig {
-        minSdkVersion 15
-        targetSdkVersion 14
+        minSdkVersion versions.minSdk
+        targetSdkVersion versions.targetSdk
         versionCode 1
         versionName "1.0"
 
@@ -41,7 +39,7 @@ dependencies {
     compile project(':componentservice')
 //    kapt project(':router-anno-compiler')
     kapt 'com.github.jimu:router-anno-compiler:1.0.1'
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    compile deps.kotlin.kotlin_jdk7
 }
 
 combuild {

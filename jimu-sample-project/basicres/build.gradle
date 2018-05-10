@@ -1,12 +1,12 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion "26.0.1"
+    compileSdkVersion versions.compileSdk
+    buildToolsVersion versions.androidTools
 
     defaultConfig {
-        minSdkVersion 15
-        targetSdkVersion 14
+        minSdkVersion versions.minSdk
+        targetSdkVersion versions.targetSdk
         versionCode 1
         versionName "1.0"
 
@@ -25,7 +25,7 @@ android {
 
 dependencies {
     compile project(':basiclib')
-    testCompile 'junit:junit:4.12'
+    testCompile deps.junit
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
