@@ -4,12 +4,18 @@ sourceCompatibility = "1.7"
 targetCompatibility = "1.7"
 
 
+
+def MAVEN_LOCAL_PATH = uri('../../local_repo')
+def ARTIFACT_ID = 'componentlib'
+def VERSION_NAME = '1.3.1'
+def GROUP_ID = 'com.github.jimu'
+
 ext {
-    bintrayName = 'componentlib'
-    artifact = bintrayName
-    libraryName = 'component build lib '
+    bintrayName = ARTIFACT_ID
+    artifact = ARTIFACT_ID
+    libraryName = ARTIFACT_ID
     libraryDescription = 'component build lib '
-    libraryVersion = "1.3.1"
+    libraryVersion = VERSION_NAME
     licenseName = 'The Apache Software License, Version 2.0'
     licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
     allLicenses = ["Apache-2.0"]
@@ -53,3 +59,17 @@ dependencies {
 
 apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
 apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'
+
+uploadArchives() {
+    repositories {
+        mavenDeployer {
+            repository(url: MAVEN_LOCAL_PATH)
+            pom.project {
+                groupId GROUP_ID
+                artifactId ARTIFACT_ID
+                version VERSION_NAME
+                packaging 'aar'
+            }
+        }
+    }
+}

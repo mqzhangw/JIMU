@@ -1,11 +1,18 @@
 apply plugin: 'groovy'
 
+
+def MAVEN_LOCAL_PATH = uri('../../local_repo')
+def ARTIFACT_ID = 'build-gradle'
+def VERSION_NAME = '1.2.1'
+def GROUP_ID = 'com.github.jimu'
+
 ext {
-    bintrayName = 'build-gradle'
-    artifact = bintrayName
-    libraryName = 'component build'
+    bintrayRepo = 'maven'
+    bintrayName = ARTIFACT_ID
+    artifact = ARTIFACT_ID
+    libraryName = ARTIFACT_ID
+    libraryVersion = VERSION_NAME
     libraryDescription = 'gradle plugin for buid component'
-    libraryVersion = "1.2.0"
     licenseName = 'The Apache Software License, Version 2.0'
     licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
     allLicenses = ["Apache-2.0"]
@@ -24,3 +31,15 @@ dependencies {
 
 }
 
+uploadArchives() {
+    repositories {
+        mavenDeployer {
+            repository(url: MAVEN_LOCAL_PATH)
+            pom.project {
+                groupId GROUP_ID
+                artifactId ARTIFACT_ID
+                version VERSION_NAME
+            }
+        }
+    }
+}

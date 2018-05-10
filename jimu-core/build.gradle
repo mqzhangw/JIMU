@@ -96,5 +96,9 @@ allprojects {
             url 'https://maven.google.com/'
             name 'Google'
         }
+        maven {
+            url uri('../local_repo')
+            name 'local-repo'
+        }
     }
 }
