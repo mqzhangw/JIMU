@@ -94,10 +94,12 @@ combuild {
   <methods>;
 }
 -keep class com.luojilab.component.componentlib.** {*;}
--keep class com.luojilab.router.** {*;}
+-keep class com.luojilab.gen.router.** {*;}
 -keep class * implements com.luojilab.component.componentlib.router.ISyringe {*;}
 -keep class * implements com.luojilab.component.componentlib.applicationlike.IApplicationLike {*;}
+
 ```
+*注意：com.luojilab.component.componentlib和com.luojilab.gen.router包可能在项目迁移的过程中发生过或即将发生变化，文档更新不一定及时，请手工确认一下生成类的包路径。*
 
 关于如何进行组件之间数据交互和UI跳转，请参看 [Wiki](https://github.com/mqzhangw/JIMU/wiki)
 
