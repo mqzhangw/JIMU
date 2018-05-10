@@ -24,7 +24,7 @@ dependencies {
     compile 'org.apache.commons:commons-collections4:4.1'
 
 //    compile project(':router-annotation')
-    compile 'com.github.jimu:router-annotation:1.0.1'
+    compile deps.jimu.router_anno
 
 }
 
