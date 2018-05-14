@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 
 import com.luojilab.component.componentlib.log.ILogger;
 import com.luojilab.component.componentlib.msg.bean.EventBean;
+import com.luojilab.component.componentlib.msg.bean.RemoteEventBean;
 import com.luojilab.component.componentlib.msg.bean.State;
 import com.luojilab.component.componentlib.msg.core.MessageBridgeService;
 import com.luojilab.component.componentlib.msg.core.Secy;
@@ -116,6 +117,11 @@ public final class EventManager {
             return;
         }
         secy.postNormalEventOnLocalProcess(stateThreadLocal.get(), event);
+
+        if (event instanceof RemoteEventBean) {
+            RemoteEventBean remoteEventBean = (RemoteEventBean) event;
+            secy.postNormalEventToRemoteProcess(stateThreadLocal.get(),remoteEventBean);
+        }
     }
 
 

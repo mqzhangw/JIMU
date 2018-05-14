@@ -1,13 +1,16 @@
 package com.luojilab.component.componentlib.msg.core;
 
 import android.app.Application;
+import android.app.Service;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 
 import com.luojilab.component.componentlib.log.ILogger;
 import com.luojilab.component.componentlib.msg.AriseAt;
 import com.luojilab.component.componentlib.msg.ConsumeOn;
 import com.luojilab.component.componentlib.msg.EventListener;
 import com.luojilab.component.componentlib.msg.bean.EventBean;
+import com.luojilab.component.componentlib.msg.bean.RemoteEventBean;
 import com.luojilab.component.componentlib.msg.bean.State;
 import com.luojilab.component.componentlib.msg.executor.IPoster;
 
@@ -20,7 +23,7 @@ import java.util.Set;
  * <p><b>Package:</b> com.luojilab.component.componentlib.msg.core </p>
  * <p><b>Project:</b> JIMU </p>
  * <p><b>Classname:</b> Secy </p>
- * <p><b>Description:</b> TODO </p>
+ * <p><b>Description:</b> the real realization of EventManager </p>
  * Created by leobert on 2018/4/26.
  */
 public final class Secy {
@@ -28,15 +31,21 @@ public final class Secy {
     private final IPoster mainThreadPoster;
     private final IPoster workThreadPoster;
 
-    private final Map<String,Class<? extends MessageBridgeService>> processMsgBridgeServiceMapper;
 
     private final SubscriberCache mainThreadSubscriber = new SubscriberCache();
 
     private final SubscriberCache workThreadSubscriber = new SubscriberCache();
 
+    private final Map<String, Class<? extends MessageBridgeService>> processMsgBridgeServiceMapper;
+    /**
+     * BridgeAttacher cache;
+     * <p>
+     * K: processName
+     * <p>
+     * V: {@link MessageBridgeAttacher}
+     */
     private final Map<String, MessageBridgeAttacher> remoteBridgeAttachers = new HashMap<>();
     private Application application;
-
 
 
     public Secy(Application application, IPoster mainThreadPoster, IPoster workThreadPoster,
@@ -46,8 +55,6 @@ public final class Secy {
         this.workThreadPoster = workThreadPoster;
         this.processMsgBridgeServiceMapper = processMsgBridgeServiceMapper;
     }
-
-
 
 
     public <T extends EventBean> void subscribe(@NonNull Class<T> eventClz,
@@ -73,9 +80,23 @@ public final class Secy {
     }
 
     @NonNull
-    private MessageBridgeAttacher createAttacher(String processName) {
-        // TODO: 2018/4/27
-        return null;
+    private synchronized MessageBridgeAttacher createAttacher(String processName) {
+        if (TextUtils.isEmpty(processName)) {
+            ILogger.logger.error(ILogger.defaultTag, "cannot execute for a empty process name");
+            throw new IllegalArgumentException("processName cannot be empty");
+        }
+        Class<? extends Service> bridgeServiceClz = null;
+        if (processMsgBridgeServiceMapper.containsKey(processName))
+            bridgeServiceClz = processMsgBridgeServiceMapper.get(processName);
+        else {
+            String errorMsg = "cannot find target bridge service for" + processName + " are you missing decline it?";
+            ILogger.logger.error(ILogger.defaultTag, errorMsg);
+            throw new RuntimeException(errorMsg);
+        }
+
+        MessageBridgeAttacher attacher = new MessageBridgeAttacher(processName, bridgeServiceClz, application);
+
+        return attacher;
     }
 
     //caution: maintain thread safety!
@@ -113,7 +134,7 @@ public final class Secy {
                 while (!threadLocalState.isQueueEmpty()) {
                     EventBean temp = threadLocalState.peekFromQueue();//, threadState;
                     Class clz = event.getClass();
-                    postOne(temp, threadLocalState, clz);
+                    postOneOnLocalProcess(temp, threadLocalState, clz);
                 }
             } finally {
                 threadLocalState.onPosting = false;
@@ -123,8 +144,21 @@ public final class Secy {
         }
     }
 
+    public <T extends RemoteEventBean> void postNormalEventToRemoteProcess(State threadLocalState, T event) {
+        // TODO: 2018/5/12 realize it
 
-    private <T extends EventBean> void postOne(T event, State state, Class<T> eventClass) {
+    }
+
+
+
+        /**
+         * post one event in local process
+         * @param event event to be post
+         * @param state current thread state of EventManager
+         * @param eventClass Class of the event
+         * @param <T> any class impl EventBean {@link EventBean}
+         */
+    private <T extends EventBean> void postOneOnLocalProcess(T event, State state, Class<T> eventClass) {
         SubscriberList<EventBean> mainThreadSubscribers;
         SubscriberList<EventBean> workThreadSubscribers;
 
@@ -133,6 +167,7 @@ public final class Secy {
             workThreadSubscribers = workThreadSubscriber.get(eventClass);
         }
 
+        //send to local process, callback invoked at main thread
         if (mainThreadSubscribers != null && !mainThreadSubscribers.isEmpty()) {
             for (WeakReference<EventListener<EventBean>> subscriberRef : mainThreadSubscribers) {
                 if (subscriberRef.get() != null) {
@@ -148,6 +183,7 @@ public final class Secy {
             }
         }
 
+        //send to local process, callback invoked at background thread
         if (workThreadSubscribers != null && !workThreadSubscribers.isEmpty()) {
             for (WeakReference<EventListener<EventBean>> subscriberRef : workThreadSubscribers) {
                 if (subscriberRef.get() != null) {

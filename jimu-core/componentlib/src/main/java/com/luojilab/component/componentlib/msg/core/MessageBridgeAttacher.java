@@ -10,10 +10,10 @@ import android.content.pm.ResolveInfo;
 import android.os.IBinder;
 import android.os.Messenger;
 import android.os.RemoteException;
+import android.support.annotation.Nullable;
 
 import com.luojilab.component.componentlib.log.ILogger;
-import com.luojilab.component.componentlib.msg.bean.EventBean;
-import com.luojilab.component.componentlib.msg.bean.SubscribeMessage;
+import com.luojilab.component.componentlib.msg.bean.RemoteEventBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,21 +22,26 @@ import java.util.List;
  * <p><b>Package:</b> com.luojilab.component.componentlib.msg.core </p>
  * <p><b>Project:</b> JIMU </p>
  * <p><b>Classname:</b> MessageBridgeAttacher </p>
- * <p><b>Description:</b> TODO </p>
+ * <p><b>Description:</b> cross process messenger attacher, maintain the bridge and subscribe
+ * the event subscriber delegate to the remote process via the bridge</p>
  * Created by leobert on 2018/4/27.
  */
+
+// TODO: 2018/5/12 多线程测试下锁
 final class MessageBridgeAttacher {
     private String remoteProcessName;
     private Class<?> msgBridgeServiceClz;
     private Application application;
 
-    private Messenger remoteMessenger;
+    @Nullable
+    private Messenger remoteMessenger;//keep jobs in subscribeCache if still on initializing
     private Messenger localMessenger = new Messenger(new CrossSubscriberHandler());
 
     private boolean hasAttached = false;
 
-    private List<Class> cache = new ArrayList<>();
+    private List<Class> subscribeCache = new ArrayList<>();
     private final List<Class> trash = new ArrayList<>();
+
 
     MessageBridgeAttacher(String remoteProcessName, Class<?> msgBridgeServiceClz, Application application) {
         this.remoteProcessName = remoteProcessName;
@@ -52,8 +57,9 @@ final class MessageBridgeAttacher {
         PackageManager packageManager = application.getPackageManager();
         List<ResolveInfo> targets = packageManager.queryIntentServices(intent, PackageManager.MATCH_DEFAULT_ONLY);
         if (targets == null || targets.isEmpty()) {
-            ILogger.logger.error(ILogger.defaultTag, "cannot attach remove message bridge for process:" + remoteProcessName);
+            ILogger.logger.error(ILogger.defaultTag, "cannot attach remote message bridge for process:" + remoteProcessName);
             // TODO: 2018/4/27 throw exception
+
             return;
         }
 
@@ -75,13 +81,13 @@ final class MessageBridgeAttacher {
 
     }
 
-    public void onSubscribe(Class<? extends EventBean> clz) {
+    public void onSubscribe(Class<? extends RemoteEventBean> clz) {
         synchronized (this) {
             if (trash.contains(clz)) {
-                ILogger.logger.monitor("has attach messenger to remote "+ remoteProcessName+" for:"+clz.getName());
+                ILogger.logger.monitor("has attach messenger to remote " + remoteProcessName + " for:" + clz.getName());
                 return;
             }
-            cache.add(clz);
+            subscribeCache.add(clz);
             subscribe2Remote();
         }
     }
@@ -89,17 +95,18 @@ final class MessageBridgeAttacher {
     private void subscribe2Remote() {
         if (!hasAttached)
             return;
-        while (!cache.isEmpty()) {
-            Class clz = cache.remove(0);
+        while (!subscribeCache.isEmpty()) {
+            Class clz = subscribeCache.remove(0);
             try {
-                remoteMessenger.send(new SubscribeMessage(localMessenger, clz).obtain());
+                remoteMessenger.send(MessageFactory.obtainSubscribeMsg(localMessenger, clz));
 
                 //consider ack?
                 trash.add(clz);
-            } catch (RemoteException e) {
+            } catch (RemoteException | NullPointerException e) {
                 e.printStackTrace();
             }
         }
     }
+
 
 }

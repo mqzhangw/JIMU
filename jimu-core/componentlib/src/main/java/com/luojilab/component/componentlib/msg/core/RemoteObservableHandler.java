@@ -9,7 +9,6 @@ import android.text.TextUtils;
 
 import com.luojilab.component.componentlib.log.ILogger;
 import com.luojilab.component.componentlib.msg.Constants;
-import com.luojilab.component.componentlib.msg.bean.SubscribeMessage;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -32,7 +31,7 @@ public class RemoteObservableHandler extends Handler {
     public void handleMessage(Message msg) {
         super.handleMessage(msg);
         switch (msg.what) {
-            case SubscribeMessage.WHAT_SUBSCRIBE_CROSS_PROCESS_EVENT:
+            case MessageFactory.WHAT_SUBSCRIBE_CROSS_PROCESS_EVENT:
                 handleSubscribe(msg);
                 break;
             case Constants.WHAT_POST_EVENT_TO_SUBSCRIBER:
@@ -45,7 +44,7 @@ public class RemoteObservableHandler extends Handler {
 
     private void handleSubscribe(Message msg) {
         Bundle bundle = msg.getData();
-        String eventClz = bundle.getString(SubscribeMessage.BUNDLE_STR_EVENT_CLZ);
+        String eventClz = bundle.getString(MessageFactory.BUNDLE_STR_EVENT_CLZ);
 
         List<WeakReference<Messenger>> subscribes;
         if (!eventSubscriber.containsKey(eventClz)) {

@@ -9,5 +9,5 @@ import android.os.Parcelable;
  * <p><b>Description:</b> TODO </p>
  * Created by leobert on 2018/4/26.
  */
-public interface RemoteEventBean extends EventBean,Parcelable{
+public interface RemoteEventBean extends EventBean, Parcelable {
 }
