@@ -55,7 +55,7 @@ public abstract class BaseCompRouter implements IComponentRouter {
     }
 
     @Override
-    public boolean openUri(Context context, Uri uri, Bundle bundle, Integer requestCode) {
+    public boolean openUri(Context context, Uri uri, Bundle bundle, Integer requestCode,IntentDecor... intentDecors) {
         if (!hasInitMap) {
             initMap();
         }
@@ -79,6 +79,15 @@ public abstract class BaseCompRouter implements IComponentRouter {
             UriUtils.setBundleValue(bundle, params, paramsType);
             Intent intent = new Intent(context, target);
             intent.putExtras(bundle);
+
+            if (intentDecors != null) {
+                IntentDecorDelegate delegate = new IntentDecorDelegate(intent);
+                for (IntentDecor decor:intentDecors) {
+                    if (decor == null) continue;
+                    decor.decor(delegate);
+                }
+            }
+
             if (requestCode > 0 && context instanceof Activity) {
                 ((Activity) context).startActivityForResult(intent, requestCode);
                 return true;

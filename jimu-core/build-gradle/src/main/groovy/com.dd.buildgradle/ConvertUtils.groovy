@@ -43,6 +43,7 @@ class ConvertUtils {
                         classNames.add(className)
                     }
                 }
+                jarFile.close()
             }
         }
         classNames.each {
