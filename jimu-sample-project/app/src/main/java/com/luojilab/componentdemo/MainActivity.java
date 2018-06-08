@@ -35,6 +35,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         uninstallReadBtn.setOnClickListener(this);
 
         findViewById(R.id.ui_router_demos).setOnClickListener(this);
+        findViewById(R.id.ui_msg_demos).setOnClickListener(this);
         showFragment();
     }
 
@@ -67,6 +68,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 break;
             case R.id.ui_router_demos:
                 UIRouter.getInstance().openUri(MainActivity.this, "JIMU://app/uirouter/demo", null);
+                break;
+            case R.id.ui_msg_demos:
+                UIRouter.getInstance().openUri(MainActivity.this, "JIMU://app/msg/demo/1", null);
                 break;
         }
     }

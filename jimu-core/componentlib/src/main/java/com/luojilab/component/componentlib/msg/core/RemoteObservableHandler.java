@@ -34,7 +34,7 @@ public class RemoteObservableHandler extends Handler {
             case MessageFactory.WHAT_SUBSCRIBE_CROSS_PROCESS_EVENT:
                 handleSubscribe(msg);
                 break;
-            case Constants.WHAT_POST_EVENT_TO_SUBSCRIBER:
+            case MessageFactory.WHAT_SEND_CROSS_PROCESS_EVENT:
                 handlePostEvent(msg);
                 break;
             default:

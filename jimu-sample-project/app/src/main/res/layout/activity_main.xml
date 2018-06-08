@@ -25,6 +25,12 @@
             android:layout_marginLeft="15dp"
             android:text="卸载分享组件"
             android:textColor="@color/common_color_black" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal">
 
         <Button
             android:id="@+id/ui_router_demos"
@@ -32,6 +38,14 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
             android:text="路由demo"
+            android:textColor="@color/common_color_black" />
+
+        <Button
+            android:id="@+id/ui_msg_demos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:text="消息demo"
             android:textColor="@color/common_color_black" />
     </LinearLayout>
 

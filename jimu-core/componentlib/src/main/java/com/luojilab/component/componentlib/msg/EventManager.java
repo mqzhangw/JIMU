@@ -1,14 +1,18 @@
 package com.luojilab.component.componentlib.msg;
 
 import android.app.Application;
+import android.os.Messenger;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 
 import com.luojilab.component.componentlib.log.ILogger;
 import com.luojilab.component.componentlib.msg.bean.EventBean;
 import com.luojilab.component.componentlib.msg.bean.RemoteEventBean;
 import com.luojilab.component.componentlib.msg.bean.State;
+import com.luojilab.component.componentlib.msg.core.CrossSubscriberHandler;
 import com.luojilab.component.componentlib.msg.core.MessageBridgeService;
 import com.luojilab.component.componentlib.msg.core.Secy;
+import com.luojilab.component.componentlib.msg.executor.CrossProcessPoster;
 import com.luojilab.component.componentlib.msg.executor.LocalProcessBackgroundPoster;
 import com.luojilab.component.componentlib.msg.executor.LocalProcessMainThreadPoster;
 
@@ -28,6 +32,7 @@ import java.util.concurrent.Executors;
 public final class EventManager {
     private static final ExecutorService DEFAULT_EXECUTOR_SERVICE =
             Executors.newCachedThreadPool();
+
     private static final Map<String, Class<? extends MessageBridgeService>> processMsgBridgeServiceMapper
             = new HashMap<>();
 
@@ -37,6 +42,20 @@ public final class EventManager {
             return new State();
         }
     };
+
+    private ThreadLocal<State> stateThreadLocal2 = new ThreadLocal<State>() {
+        @Override
+        protected State initialValue() {
+            return new State();
+        }
+    };
+
+    private CrossProcessPoster crossProcessPoster;
+
+    public static void appendMapper(@NonNull String s, @NonNull Class<? extends MessageBridgeService> serviceClz) {
+        if (!TextUtils.isEmpty(s))
+            processMsgBridgeServiceMapper.put(s, serviceClz);
+    }
 
     public static void init(Application application) {
         if (instance == null) {
@@ -50,9 +69,12 @@ public final class EventManager {
         }
     }
 
+
     private EventManager(Application application) {
-        secy = new Secy(application,new LocalProcessMainThreadPoster(),
+        crossProcessPoster = new CrossProcessPoster();
+        secy = new Secy(application, new LocalProcessMainThreadPoster(),
                 new LocalProcessBackgroundPoster(DEFAULT_EXECUTOR_SERVICE),
+                crossProcessPoster,
                 processMsgBridgeServiceMapper);
     }
 
@@ -120,9 +142,19 @@ public final class EventManager {
 
         if (event instanceof RemoteEventBean) {
             RemoteEventBean remoteEventBean = (RemoteEventBean) event;
-            secy.postNormalEventToRemoteProcess(stateThreadLocal.get(),remoteEventBean);
+            secy.postNormalEventToRemoteProcess(stateThreadLocal2.get(), remoteEventBean);
         }
     }
 
 
+    public void updateMessenger(String processName, Messenger currentProcessMessenger) {
+        ILogger.logger.monitor("eventManager updateMessenger :" + processName
+                + "; check:" + Utils.getProcessName() + ";em:" + getInstance().toString()
+                + ";poster:" + crossProcessPoster.toString());
+        crossProcessPoster.setRemoteMessenger(currentProcessMessenger);
+    }
+
+    public void fastHandleLocalProcessEvent(CrossSubscriberHandler handler, RemoteEventBean event, Class clz) {
+        handler.onFastHandleLocalProcessEvent(secy, stateThreadLocal.get(), event, clz);
+    }
 }

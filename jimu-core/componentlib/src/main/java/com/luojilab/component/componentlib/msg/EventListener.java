@@ -11,4 +11,10 @@ import com.luojilab.component.componentlib.msg.bean.EventBean;
  */
 public interface EventListener<T extends EventBean> {
     void onEvent(T event);
+
+    EventListener NONE_NULL = new EventListener() {
+        @Override
+        public void onEvent(EventBean event) {
+        }
+    };
 }

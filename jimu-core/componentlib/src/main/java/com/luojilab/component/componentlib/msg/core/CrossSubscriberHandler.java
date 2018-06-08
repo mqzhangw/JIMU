@@ -4,11 +4,13 @@ package com.luojilab.component.componentlib.msg.core;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
 import com.luojilab.component.componentlib.log.ILogger;
 import com.luojilab.component.componentlib.msg.Constants;
+import com.luojilab.component.componentlib.msg.EventManager;
+import com.luojilab.component.componentlib.msg.bean.RemoteEventBean;
+import com.luojilab.component.componentlib.msg.bean.State;
 
 /**
  * <p><b>Package:</b> com.luojilab.component.componentlib.msg </p>
@@ -18,6 +20,9 @@ import com.luojilab.component.componentlib.msg.Constants;
  * Created by leobert on 2018/4/25.
  */
 public class CrossSubscriberHandler extends Handler {
+
+    CrossSubscriberHandler() {
+    }
 
     @Override
     public void handleMessage(Message msg) {
@@ -37,21 +42,36 @@ public class CrossSubscriberHandler extends Handler {
         }
     }
 
+    /**
+     * handle event posting in current process after receiving an event from remote process
+     *
+     * @param message msg contains event info
+     */
     private void postRemoteEventInCurrentProcess(@NonNull Message message) {
         if (message.getData() == null) {
             ILogger.logger.error(ILogger.defaultTag, "subscriber handle get a message without bundle data");
             return;
         }
         Bundle data = message.getData();
-        if (!data.containsKey(Constants.BUNDLE_PAR_EVENT) ||
+        data.setClassLoader(getClass().getClassLoader());
+        if (!data.containsKey(Constants.BUNDLE_PARCEL_EVENT) ||
                 !data.containsKey(Constants.BUNDLE_STR_EVENT_CLZ)) {
             ILogger.logger.error(ILogger.defaultTag, "subscriber handle get a message missing params in bundle");
             return;
         }
 
-        Parcelable event = data.getParcelable(Constants.BUNDLE_PAR_EVENT);
+        RemoteEventBean event = data.getParcelable(Constants.BUNDLE_PARCEL_EVENT);
         String eventClzPath = data.getString(Constants.BUNDLE_STR_EVENT_CLZ);
+        try {
+            Class clz = Class.forName(eventClzPath);
+            EventManager.getInstance().fastHandleLocalProcessEvent(this, event, clz);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            ILogger.logger.error(ILogger.defaultTag, "wtf:" + e.getMessage());
+        }
+    }
 
-
+    public void onFastHandleLocalProcessEvent(Secy secy, State state, RemoteEventBean event, Class clz) {
+        secy.postOneOnLocalProcess(event, state, clz);
     }
 }

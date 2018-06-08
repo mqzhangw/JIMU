@@ -1,8 +1,11 @@
 package com.luojilab.component.componentlib.msg.executor;
 
+import android.os.Messenger;
 import android.os.RemoteException;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
+import com.luojilab.component.componentlib.log.ILogger;
 import com.luojilab.component.componentlib.msg.EventListener;
 import com.luojilab.component.componentlib.msg.bean.EventBean;
 import com.luojilab.component.componentlib.msg.bean.RemoteEventBean;
@@ -18,37 +21,48 @@ import java.util.List;
  * <p><b>Description:</b> TODO </p>
  * Created by leobert on 2018/4/25.
  */
-public class CrossProcessPoster implements IPoster{
+public class CrossProcessPoster implements IPoster {
 
+    @Nullable
+    private Messenger remoteMessenger;
+
+    public void setRemoteMessenger(@Nullable Messenger remoteMessenger) {
+        this.remoteMessenger = remoteMessenger;
+        post2Remote();
+    }
 
     private final List<RemoteEventBean> eventCache = new ArrayList<>();
 
-    public <T extends RemoteEventBean> void post(@NonNull T event) {
+    private <T extends RemoteEventBean> void post(@NonNull T event) {
         synchronized (eventCache) {
             eventCache.add(event);
-//            post2Remote();
+            post2Remote();
         }
     }
 
-//    private void post2Remote() {
-//        if (!hasAttached)
-//            return;
-//        synchronized (eventCache) {
-//            while (!eventCache.isEmpty()) {
-//                RemoteEventBean bean = eventCache.remove(0);
-//                try {
-//                    remoteMessenger.send(MessageFactory.obtainEventMsg(bean));
-//
-//                } catch (RemoteException | NullPointerException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }
-//    }
+    private void post2Remote() {
+        if (remoteMessenger == null) {
+            ILogger.logger.monitor("remoteMessenger is not in order ");
+            return;
+        }
+
+        ILogger.logger.monitor("post to remote process");
+
+        synchronized (eventCache) {
+            while (!eventCache.isEmpty()) {
+                RemoteEventBean bean = eventCache.remove(0);
+                try {
+                    remoteMessenger.send(MessageFactory.obtainEventMsg(bean));
+                } catch (RemoteException | NullPointerException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 
 
     @Override
     public <T extends EventBean> void postEvent(@NonNull T event, @NonNull EventListener<T> target) {
-
+        post((RemoteEventBean) event);
     }
 }

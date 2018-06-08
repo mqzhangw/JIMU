@@ -62,6 +62,23 @@
         <activity android:name=".router.cases.Demo7Activity" />
         <activity android:name=".router.cases.Demo8Activity" />
 
+        <service
+            android:name=".msg.MainProcessMsgService"
+            android:enabled="true"
+            android:exported="false" />
+        <service
+            android:name=".msg.RemoteMsgService"
+            android:enabled="true"
+            android:exported="false"
+            android:process=":remote" />
+
+        <activity android:name=".msg.Msg1Activity" />
+
+        <activity android:name=".msg.Msg2Activity" />
+
+        <activity
+            android:name=".msg.Msg3Activity"
+            android:process=":remote" />
     </application>
 
 </manifest>

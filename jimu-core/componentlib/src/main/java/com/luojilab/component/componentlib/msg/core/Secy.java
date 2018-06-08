@@ -30,6 +30,7 @@ public final class Secy {
 
     private final IPoster mainThreadPoster;
     private final IPoster workThreadPoster;
+    private final IPoster crossProcessPoster;
 
 
     private final SubscriberCache mainThreadSubscriber = new SubscriberCache();
@@ -48,11 +49,14 @@ public final class Secy {
     private Application application;
 
 
-    public Secy(Application application, IPoster mainThreadPoster, IPoster workThreadPoster,
+    public Secy(Application application, IPoster mainThreadPoster,
+                IPoster workThreadPoster,
+                IPoster crossProcessPoster,
                 Map<String, Class<? extends MessageBridgeService>> processMsgBridgeServiceMapper) {
         this.application = application;
         this.mainThreadPoster = mainThreadPoster;
         this.workThreadPoster = workThreadPoster;
+        this.crossProcessPoster = crossProcessPoster;
         this.processMsgBridgeServiceMapper = processMsgBridgeServiceMapper;
     }
 
@@ -72,8 +76,12 @@ public final class Secy {
                     attacher = createAttacher(processFullName);
                     remoteBridgeAttachers.put(processFullName, attacher);
                 }
-
-                attacher.onSubscribe(eventClz);
+                try {
+                    attacher.onSubscribe((Class<? extends RemoteEventBean>) eventClz);
+                } catch (ClassCastException e) {
+                    e.printStackTrace();
+                    ILogger.logger.error(ILogger.defaultTag, e.getMessage());
+                }
             }
             subscribeEvent(eventClz, consumeOn, listener);
         }
@@ -145,20 +153,42 @@ public final class Secy {
     }
 
     public <T extends RemoteEventBean> void postNormalEventToRemoteProcess(State threadLocalState, T event) {
-        // TODO: 2018/5/12 realize it
+        threadLocalState.addEvent2Queue(event);
 
+        if (!threadLocalState.onPosting) {
+            threadLocalState.onPosting = true;
+            ILogger.logger.monitor("on post remote:");
+            try {
+                while (!threadLocalState.isQueueEmpty()) {
+                    RemoteEventBean temp = threadLocalState.peekFromQueue();//, threadState;
+                    Class clz = event.getClass();
+                    ILogger.logger.monitor("post remote:" + clz.getName());
+                    postOne2RemoteProcess(temp);
+                }
+
+                ILogger.logger.monitor("all remote posted");
+            } finally {
+                threadLocalState.onPosting = false;
+            }
+        } else {
+            ILogger.logger.error(ILogger.defaultTag, "bug!");
+        }
     }
 
 
+    private <T extends RemoteEventBean> void postOne2RemoteProcess(T event/*, State state, Class<T> eventClass*/) {
+        crossProcessPoster.postEvent(event, EventListener.NONE_NULL);
+    }
 
-        /**
-         * post one event in local process
-         * @param event event to be post
-         * @param state current thread state of EventManager
-         * @param eventClass Class of the event
-         * @param <T> any class impl EventBean {@link EventBean}
-         */
-    private <T extends EventBean> void postOneOnLocalProcess(T event, State state, Class<T> eventClass) {
+    /**
+     * post one event in local process
+     *
+     * @param event      event to be post
+     * @param state      current thread state of EventManager
+     * @param eventClass Class of the event
+     * @param <T>        any class impl EventBean {@link EventBean}
+     */
+    /*private*/ <T extends EventBean> void postOneOnLocalProcess(T event, State state, Class<T> eventClass) {
         SubscriberList<EventBean> mainThreadSubscribers;
         SubscriberList<EventBean> workThreadSubscribers;
 
@@ -219,4 +249,5 @@ public final class Secy {
             }
         }
     }
+
 }
