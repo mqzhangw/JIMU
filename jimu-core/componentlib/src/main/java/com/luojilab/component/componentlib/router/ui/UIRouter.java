@@ -136,17 +136,17 @@ public class UIRouter implements IUIRouter {
     }
 
     @Override
-    public boolean openUri(Context context, String url, Bundle bundle) {
-        return openUri(context, url, bundle, 0);
+    public boolean openUri(Context context, String url, Bundle bundle,IntentDecor... intentDecors) {
+        return openUri(context, url, bundle, 0,intentDecors);
     }
 
     @Override
-    public boolean openUri(Context context, Uri uri, Bundle bundle) {
-        return openUri(context, uri, bundle, 0);
+    public boolean openUri(Context context, Uri uri, Bundle bundle,IntentDecor... intentDecors) {
+        return openUri(context, uri, bundle, 0,intentDecors);
     }
 
     @Override
-    public boolean openUri(Context context, String url, Bundle bundle, Integer requestCode) {
+    public boolean openUri(Context context, String url, Bundle bundle, Integer requestCode,IntentDecor... intentDecors) {
         url = url.trim();
         if (!TextUtils.isEmpty(url)) {
             if (!url.contains("://") &&
@@ -156,7 +156,7 @@ public class UIRouter implements IUIRouter {
                 url = "http://" + url;
             }
             Uri uri = Uri.parse(url);
-            return openUri(context, uri, bundle, requestCode);
+            return openUri(context, uri, bundle, requestCode,intentDecors);
         }
         return true;
     }
