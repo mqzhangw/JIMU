@@ -34,24 +34,24 @@ public abstract class BaseCompRouter implements IComponentRouter {
     }
 
     @Override
-    public boolean openUri(Context context, String url, Bundle bundle) {
+    public boolean openUri(Context context, String url, Bundle bundle,IntentDecor... intentDecors) {
         if (TextUtils.isEmpty(url) || context == null) {
             return true;
         }
-        return openUri(context, Uri.parse(url), bundle, 0);
+        return openUri(context, Uri.parse(url), bundle, 0,intentDecors);
     }
 
     @Override
-    public boolean openUri(Context context, Uri uri, Bundle bundle) {
-        return openUri(context, uri, bundle, 0);
+    public boolean openUri(Context context, Uri uri, Bundle bundle,IntentDecor... intentDecors) {
+        return openUri(context, uri, bundle, 0,intentDecors);
     }
 
     @Override
-    public boolean openUri(Context context, String url, Bundle bundle, Integer requestCode) {
+    public boolean openUri(Context context, String url, Bundle bundle, Integer requestCode,IntentDecor... intentDecors) {
         if (TextUtils.isEmpty(url) || context == null) {
             return true;
         }
-        return openUri(context, Uri.parse(url), bundle, requestCode);
+        return openUri(context, Uri.parse(url), bundle, requestCode,intentDecors);
     }
 
     @Override
