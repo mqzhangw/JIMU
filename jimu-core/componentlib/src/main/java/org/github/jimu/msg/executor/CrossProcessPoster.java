@@ -1,4 +1,4 @@
-package com.luojilab.component.componentlib.msg.executor;
+package org.github.jimu.msg.executor;
 
 import android.os.Messenger;
 import android.os.RemoteException;
@@ -6,16 +6,16 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.luojilab.component.componentlib.log.ILogger;
-import com.luojilab.component.componentlib.msg.EventListener;
-import com.luojilab.component.componentlib.msg.bean.EventBean;
-import com.luojilab.component.componentlib.msg.bean.RemoteEventBean;
-import com.luojilab.component.componentlib.msg.core.MessageFactory;
+import org.github.jimu.msg.EventListener;
+import org.github.jimu.msg.bean.EventBean;
+import org.github.jimu.msg.bean.RemoteEventBean;
+import org.github.jimu.msg.core.MessageFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <p><b>Package:</b> com.luojilab.component.componentlib.msg.executor </p>
+ * <p><b>Package:</b> org.github.jimu.msg.executor </p>
  * <p><b>Project:</b> JIMU </p>
  * <p><b>Classname:</b> CrossProcessPoster </p>
  * <p><b>Description:</b> TODO </p>

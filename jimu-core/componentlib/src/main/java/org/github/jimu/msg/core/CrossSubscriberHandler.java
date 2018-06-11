@@ -1,4 +1,4 @@
-package com.luojilab.component.componentlib.msg.core;
+package org.github.jimu.msg.core;
 
 
 import android.os.Bundle;
@@ -7,13 +7,13 @@ import android.os.Message;
 import android.support.annotation.NonNull;
 
 import com.luojilab.component.componentlib.log.ILogger;
-import com.luojilab.component.componentlib.msg.Constants;
-import com.luojilab.component.componentlib.msg.EventManager;
-import com.luojilab.component.componentlib.msg.bean.RemoteEventBean;
-import com.luojilab.component.componentlib.msg.bean.State;
+import org.github.jimu.msg.Constants;
+import org.github.jimu.msg.EventManager;
+import org.github.jimu.msg.bean.RemoteEventBean;
+import org.github.jimu.msg.bean.State;
 
 /**
- * <p><b>Package:</b> com.luojilab.component.componentlib.msg </p>
+ * <p><b>Package:</b> org.github.jimu.msg </p>
  * <p><b>Project:</b> JIMU </p>
  * <p><b>Classname:</b> CrossSubscriberHandler </p>
  * <p><b>Description:</b> TODO </p>

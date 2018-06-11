@@ -1,4 +1,4 @@
-package com.luojilab.component.componentlib.msg.core;
+package org.github.jimu.msg.core;
 
 import android.app.Service;
 import android.content.Intent;
@@ -6,11 +6,11 @@ import android.os.IBinder;
 import android.os.Messenger;
 
 import com.luojilab.component.componentlib.log.ILogger;
-import com.luojilab.component.componentlib.msg.EventManager;
-import com.luojilab.component.componentlib.msg.Utils;
+import org.github.jimu.msg.EventManager;
+import org.github.jimu.msg.Utils;
 
 /**
- * <p><b>Package:</b> com.luojilab.component.componentlib.msg </p>
+ * <p><b>Package:</b> org.github.jimu.msg </p>
  * <p><b>Project:</b> JIMU </p>
  * <p><b>Classname:</b> MessageBridgeService </p>
  * <p><b>Description:</b> TODO </p>

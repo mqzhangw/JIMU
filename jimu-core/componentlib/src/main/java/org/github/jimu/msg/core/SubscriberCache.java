@@ -1,11 +1,11 @@
-package com.luojilab.component.componentlib.msg.core;
+package org.github.jimu.msg.core;
 
-import com.luojilab.component.componentlib.msg.bean.EventBean;
+import org.github.jimu.msg.bean.EventBean;
 
 import java.util.HashMap;
 
 /**
- * <p><b>Package:</b> com.luojilab.component.componentlib.msg.core </p>
+ * <p><b>Package:</b> org.github.jimu.msg.core </p>
  * <p><b>Project:</b> JIMU </p>
  * <p><b>Classname:</b> SubscriberCache </p>
  * <p><b>Description:</b> just avoid too verbose rawType </p>

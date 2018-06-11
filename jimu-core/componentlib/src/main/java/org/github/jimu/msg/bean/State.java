@@ -1,16 +1,16 @@
-package com.luojilab.component.componentlib.msg.bean;
+package org.github.jimu.msg.bean;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
 
-import com.luojilab.component.componentlib.msg.Utils;
+import org.github.jimu.msg.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <p><b>Package:</b> com.luojilab.component.componentlib.msg.bean </p>
+ * <p><b>Package:</b> org.github.jimu.msg.bean </p>
  * <p><b>Project:</b> JIMU </p>
  * <p><b>Classname:</b> State </p>
  * <p><b>Description:</b> TODO </p>

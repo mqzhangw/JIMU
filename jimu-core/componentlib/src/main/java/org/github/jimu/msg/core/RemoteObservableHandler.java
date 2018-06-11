@@ -1,4 +1,4 @@
-package com.luojilab.component.componentlib.msg.core;
+package org.github.jimu.msg.core;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -8,7 +8,7 @@ import android.os.RemoteException;
 import android.text.TextUtils;
 
 import com.luojilab.component.componentlib.log.ILogger;
-import com.luojilab.component.componentlib.msg.Constants;
+import org.github.jimu.msg.Constants;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ import java.util.Map;
 
 
 /**
- * <p><b>Package:</b> com.luojilab.component.componentlib.msg </p>
+ * <p><b>Package:</b> org.github.jimu.msg </p>
  * <p><b>Project:</b> JIMU </p>
  * <p><b>Classname:</b> RemoteObservableHandler </p>
  * <p><b>Description:</b> TODO </p>

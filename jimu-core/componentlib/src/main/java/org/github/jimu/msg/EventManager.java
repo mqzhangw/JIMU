@@ -1,4 +1,4 @@
-package com.luojilab.component.componentlib.msg;
+package org.github.jimu.msg;
 
 import android.app.Application;
 import android.os.Messenger;
@@ -6,15 +6,15 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.luojilab.component.componentlib.log.ILogger;
-import com.luojilab.component.componentlib.msg.bean.EventBean;
-import com.luojilab.component.componentlib.msg.bean.RemoteEventBean;
-import com.luojilab.component.componentlib.msg.bean.State;
-import com.luojilab.component.componentlib.msg.core.CrossSubscriberHandler;
-import com.luojilab.component.componentlib.msg.core.MessageBridgeService;
-import com.luojilab.component.componentlib.msg.core.Secy;
-import com.luojilab.component.componentlib.msg.executor.CrossProcessPoster;
-import com.luojilab.component.componentlib.msg.executor.LocalProcessBackgroundPoster;
-import com.luojilab.component.componentlib.msg.executor.LocalProcessMainThreadPoster;
+import org.github.jimu.msg.bean.EventBean;
+import org.github.jimu.msg.bean.RemoteEventBean;
+import org.github.jimu.msg.bean.State;
+import org.github.jimu.msg.core.CrossSubscriberHandler;
+import org.github.jimu.msg.core.MessageBridgeService;
+import org.github.jimu.msg.core.Secy;
+import org.github.jimu.msg.executor.CrossProcessPoster;
+import org.github.jimu.msg.executor.LocalProcessBackgroundPoster;
+import org.github.jimu.msg.executor.LocalProcessMainThreadPoster;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,7 +22,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * <p><b>Package:</b> com.luojilab.component.componentlib.msg </p>
+ * <p><b>Package:</b> org.github.jimu.msg </p>
  * <p><b>Project:</b> JIMU </p>
  * <p><b>Classname:</b> EventManager </p>
  * <p><b>Description:</b> TODO </p>

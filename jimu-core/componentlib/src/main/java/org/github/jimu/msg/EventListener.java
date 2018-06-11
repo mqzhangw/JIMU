@@ -1,9 +1,9 @@
-package com.luojilab.component.componentlib.msg;
+package org.github.jimu.msg;
 
-import com.luojilab.component.componentlib.msg.bean.EventBean;
+import org.github.jimu.msg.bean.EventBean;
 
 /**
- * <p><b>Package:</b> com.luojilab.component.componentlib.msg </p>
+ * <p><b>Package:</b> org.github.jimu.msg </p>
  * <p><b>Project:</b> JIMU </p>
  * <p><b>Classname:</b> EventListener </p>
  * <p><b>Description:</b> TODO </p>

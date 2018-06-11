@@ -1,15 +1,15 @@
-package com.luojilab.component.componentlib.msg.core;
+package org.github.jimu.msg.core;
 
 import android.os.Bundle;
 import android.os.Message;
 import android.os.Messenger;
 import android.support.annotation.NonNull;
 
-import com.luojilab.component.componentlib.msg.Constants;
-import com.luojilab.component.componentlib.msg.bean.RemoteEventBean;
+import org.github.jimu.msg.Constants;
+import org.github.jimu.msg.bean.RemoteEventBean;
 
 /**
- * <p><b>Package:</b> com.luojilab.component.componentlib.msg.core </p>
+ * <p><b>Package:</b> org.github.jimu.msg.core </p>
  * <p><b>Project:</b> JIMU </p>
  * <p><b>Classname:</b> SubscribeMessage </p>
  * <p><b>Description:</b> </p>

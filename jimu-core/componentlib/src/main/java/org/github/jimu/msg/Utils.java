@@ -1,4 +1,4 @@
-package com.luojilab.component.componentlib.msg;
+package org.github.jimu.msg;
 
 import android.os.Looper;
 import android.text.TextUtils;
@@ -8,7 +8,7 @@ import java.io.FileReader;
 import java.io.IOException;
 
 /**
- * <p><b>Package:</b> com.luojilab.component.componentlib.msg </p>
+ * <p><b>Package:</b> org.github.jimu.msg </p>
  * <p><b>Project:</b> JIMU </p>
  * <p><b>Classname:</b> Utils </p>
  * <p><b>Description:</b> TODO </p>

@@ -1,4 +1,4 @@
-package com.luojilab.component.componentlib.msg.core;
+package org.github.jimu.msg.core;
 
 import android.app.Application;
 import android.app.Service;
@@ -6,13 +6,13 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.luojilab.component.componentlib.log.ILogger;
-import com.luojilab.component.componentlib.msg.AriseAt;
-import com.luojilab.component.componentlib.msg.ConsumeOn;
-import com.luojilab.component.componentlib.msg.EventListener;
-import com.luojilab.component.componentlib.msg.bean.EventBean;
-import com.luojilab.component.componentlib.msg.bean.RemoteEventBean;
-import com.luojilab.component.componentlib.msg.bean.State;
-import com.luojilab.component.componentlib.msg.executor.IPoster;
+import org.github.jimu.msg.AriseAt;
+import org.github.jimu.msg.ConsumeOn;
+import org.github.jimu.msg.EventListener;
+import org.github.jimu.msg.bean.EventBean;
+import org.github.jimu.msg.bean.RemoteEventBean;
+import org.github.jimu.msg.bean.State;
+import org.github.jimu.msg.executor.IPoster;
 
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
@@ -20,7 +20,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * <p><b>Package:</b> com.luojilab.component.componentlib.msg.core </p>
+ * <p><b>Package:</b> org.github.jimu.msg.core </p>
  * <p><b>Project:</b> JIMU </p>
  * <p><b>Classname:</b> Secy </p>
  * <p><b>Description:</b> the real realization of EventManager </p>

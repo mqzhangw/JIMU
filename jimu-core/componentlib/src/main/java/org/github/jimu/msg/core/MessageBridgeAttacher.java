@@ -1,4 +1,4 @@
-package com.luojilab.component.componentlib.msg.core;
+package org.github.jimu.msg.core;
 
 import android.app.Application;
 import android.content.ComponentName;
@@ -13,13 +13,13 @@ import android.os.RemoteException;
 import android.support.annotation.Nullable;
 
 import com.luojilab.component.componentlib.log.ILogger;
-import com.luojilab.component.componentlib.msg.bean.RemoteEventBean;
+import org.github.jimu.msg.bean.RemoteEventBean;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <p><b>Package:</b> com.luojilab.component.componentlib.msg.core </p>
+ * <p><b>Package:</b> org.github.jimu.msg.core </p>
  * <p><b>Project:</b> JIMU </p>
  * <p><b>Classname:</b> MessageBridgeAttacher </p>
  * <p><b>Description:</b> cross process messenger attacher, maintain the bridge and subscribe

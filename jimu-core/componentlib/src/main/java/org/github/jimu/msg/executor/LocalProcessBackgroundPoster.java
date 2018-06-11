@@ -1,17 +1,17 @@
-package com.luojilab.component.componentlib.msg.executor;
+package org.github.jimu.msg.executor;
 
 import android.support.annotation.NonNull;
 import android.support.v4.util.Pair;
 
-import com.luojilab.component.componentlib.msg.EventListener;
-import com.luojilab.component.componentlib.msg.bean.EventBean;
+import org.github.jimu.msg.EventListener;
+import org.github.jimu.msg.bean.EventBean;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 
 /**
- * <p><b>Package:</b> com.luojilab.component.componentlib.msg.executor </p>
+ * <p><b>Package:</b> org.github.jimu.msg.executor </p>
  * <p><b>Project:</b> JIMU </p>
  * <p><b>Classname:</b> LocalProcessBackgroundPoster </p>
  * <p><b>Description:</b> TODO </p>
