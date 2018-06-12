@@ -2,7 +2,7 @@ package com.luojilab.componentdemo.application;
 
 import com.luojilab.component.basicres.BaseApplication;
 import com.luojilab.component.componentlib.log.ILogger;
-import com.luojilab.component.componentlib.msg.EventManager;
+import org.github.jimu.msg.EventManager;
 import com.luojilab.component.componentlib.router.Router;
 import com.luojilab.component.componentlib.router.ui.UIRouter;
 import com.luojilab.componentdemo.msg.MainProcessMsgService;
@@ -19,8 +19,8 @@ public class AppApplication extends BaseApplication {
         super.onCreate();
         ILogger.logger.setDefaultTag("JIMU");
         UIRouter.enableDebug();
-        EventManager.appendMapper("com.luojilab.componentdemo.application", MainProcessMsgService.class);
-        EventManager.appendMapper("com.luojilab.componentdemo.application:remote", RemoteMsgService.class);
+//        EventManager.appendMapper("com.luojilab.componentdemo.application", MainProcessMsgService.class);
+//        EventManager.appendMapper("com.luojilab.componentdemo.application:remote", RemoteMsgService.class);
 
         EventManager.init(this);
 

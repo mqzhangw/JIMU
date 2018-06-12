@@ -7,10 +7,10 @@ import android.text.Spanned;
 import android.text.style.ClickableSpan;
 import android.view.View;
 
-import com.luojilab.component.componentlib.msg.AriseAt;
-import com.luojilab.component.componentlib.msg.ConsumeOn;
-import com.luojilab.component.componentlib.msg.EventListener;
-import com.luojilab.component.componentlib.msg.EventManager;
+import org.github.jimu.msg.AriseAt;
+import org.github.jimu.msg.ConsumeOn;
+import org.github.jimu.msg.EventListener;
+import org.github.jimu.msg.EventManager;
 import com.luojilab.component.componentlib.router.ui.UIRouter;
 import com.luojilab.componentdemo.msg.event.EventA;
 import com.luojilab.componentdemo.msg.event.EventB;

@@ -11,11 +11,21 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import java.util.List;
+
 /**
  * router behaviors for component type
  * Created by mrzhang on 2017/6/20.
  */
 public interface IComponentRouter {
+
+    boolean openUri(Context context, String url, Bundle bundle);
+
+    boolean openUri(Context context, Uri uri, Bundle bundle);
+
+    boolean openUri(Context context, String url, Bundle bundle, Integer requestCode);
+
+    boolean openUri(Context context, Uri uri, Bundle bundle, Integer requestCode);
 
     /**
      * 打开一个链接
@@ -25,13 +35,13 @@ public interface IComponentRouter {
      * @param intentDecors decorators to decorate the intent of open on page
      * @return 是否正常打开
      */
-    boolean openUri(Context context, String url, Bundle bundle, IntentDecor... intentDecors);
+    boolean openUri(Context context, String url, Bundle bundle, List<IntentDecor> intentDecors);
 
-    boolean openUri(Context context, Uri uri, Bundle bundle, IntentDecor... intentDecors);
+    boolean openUri(Context context, Uri uri, Bundle bundle, List<IntentDecor> intentDecors);
 
-    boolean openUri(Context context, String url, Bundle bundle, Integer requestCode, IntentDecor... intentDecors);
+    boolean openUri(Context context, String url, Bundle bundle, Integer requestCode, List<IntentDecor> intentDecors);
 
-    boolean openUri(Context context, Uri uri, Bundle bundle, Integer requestCode, IntentDecor... intentDecors);
+    boolean openUri(Context context, Uri uri, Bundle bundle, Integer requestCode, List<IntentDecor> intentDecors);
 
     /**
      * use {@link #verifyUri(Uri, Bundle, boolean)} instead

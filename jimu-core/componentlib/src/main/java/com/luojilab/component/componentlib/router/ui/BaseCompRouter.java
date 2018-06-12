@@ -34,28 +34,48 @@ public abstract class BaseCompRouter implements IComponentRouter {
     }
 
     @Override
-    public boolean openUri(Context context, String url, Bundle bundle,IntentDecor... intentDecors) {
+    public boolean openUri(Context context, Uri uri, Bundle bundle) {
+        return openUri(context, uri, bundle, (List<IntentDecor>) null);
+    }
+
+    @Override
+    public boolean openUri(Context context, String url, Bundle bundle) {
+        return openUri(context, url, bundle, (List<IntentDecor>) null);
+    }
+
+    @Override
+    public boolean openUri(Context context, Uri uri, Bundle bundle, Integer requestCode) {
+        return openUri(context, uri, bundle, requestCode, (List<IntentDecor>) null);
+    }
+
+    @Override
+    public boolean openUri(Context context, String url, Bundle bundle, Integer requestCode) {
+        return openUri(context, url, bundle, requestCode, (List<IntentDecor>) null);
+    }
+
+    @Override
+    public boolean openUri(Context context, String url, Bundle bundle, List<IntentDecor> intentDecors) {
         if (TextUtils.isEmpty(url) || context == null) {
             return true;
         }
-        return openUri(context, Uri.parse(url), bundle, 0,intentDecors);
+        return openUri(context, Uri.parse(url), bundle, 0, intentDecors);
     }
 
     @Override
-    public boolean openUri(Context context, Uri uri, Bundle bundle,IntentDecor... intentDecors) {
-        return openUri(context, uri, bundle, 0,intentDecors);
+    public boolean openUri(Context context, Uri uri, Bundle bundle, List<IntentDecor> intentDecors) {
+        return openUri(context, uri, bundle, 0, intentDecors);
     }
 
     @Override
-    public boolean openUri(Context context, String url, Bundle bundle, Integer requestCode,IntentDecor... intentDecors) {
+    public boolean openUri(Context context, String url, Bundle bundle, Integer requestCode, List<IntentDecor> intentDecors) {
         if (TextUtils.isEmpty(url) || context == null) {
             return true;
         }
-        return openUri(context, Uri.parse(url), bundle, requestCode,intentDecors);
+        return openUri(context, Uri.parse(url), bundle, requestCode, intentDecors);
     }
 
     @Override
-    public boolean openUri(Context context, Uri uri, Bundle bundle, Integer requestCode,IntentDecor... intentDecors) {
+    public boolean openUri(Context context, Uri uri, Bundle bundle, Integer requestCode, List<IntentDecor> intentDecors) {
         if (!hasInitMap) {
             initMap();
         }
@@ -82,7 +102,7 @@ public abstract class BaseCompRouter implements IComponentRouter {
 
             if (intentDecors != null) {
                 IntentDecorDelegate delegate = new IntentDecorDelegate(intent);
-                for (IntentDecor decor:intentDecors) {
+                for (IntentDecor decor : intentDecors) {
                     if (decor == null) continue;
                     decor.decor(delegate);
                 }
@@ -121,9 +141,9 @@ public abstract class BaseCompRouter implements IComponentRouter {
 
     @Override
     @NonNull
-    public VerifyResult verifyUri(Uri uri, Bundle bundle,boolean checkParams) {
+    public VerifyResult verifyUri(Uri uri, Bundle bundle, boolean checkParams) {
         monitorLog("verify for: " + UriUtils.toSafeString(uri) +
-                    " in " + getClass().getSimpleName() + " ;host is: " + getHost());
+                " in " + getClass().getSimpleName() + " ;host is: " + getHost());
 
         if (uri == null)
             return new VerifyResult(false);
@@ -155,7 +175,7 @@ public abstract class BaseCompRouter implements IComponentRouter {
             return new VerifyResult(true);
         } catch (ParamException e) {
             e.printStackTrace();
-            return new VerifyResult(false,e);
+            return new VerifyResult(false, e);
         }
     }
 

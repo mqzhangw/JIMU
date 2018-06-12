@@ -6,8 +6,8 @@ import android.text.Spanned;
 import android.text.style.ClickableSpan;
 import android.view.View;
 
-import com.luojilab.component.componentlib.msg.EventListener;
-import com.luojilab.component.componentlib.msg.EventManager;
+import org.github.jimu.msg.EventListener;
+import org.github.jimu.msg.EventManager;
 import com.luojilab.componentdemo.msg.event.EventA;
 import com.luojilab.router.facade.annotation.RouteNode;
 

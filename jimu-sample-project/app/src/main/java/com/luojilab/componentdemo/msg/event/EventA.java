@@ -1,6 +1,6 @@
 package com.luojilab.componentdemo.msg.event;
 
-import com.luojilab.component.componentlib.msg.bean.EventBean;
+import org.github.jimu.msg.bean.EventBean;
 
 /**
  * <p><b>Package:</b> com.luojilab.componentdemo.msg.event </p>

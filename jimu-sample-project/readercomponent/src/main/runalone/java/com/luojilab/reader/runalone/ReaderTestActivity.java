@@ -6,12 +6,12 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-import com.luojilab.component.componentlib.msg.AriseAt;
-import com.luojilab.component.componentlib.msg.ConsumeOn;
-import com.luojilab.component.componentlib.msg.EventListener;
-import com.luojilab.component.componentlib.msg.EventManager;
-import com.luojilab.component.componentlib.msg.Utils;
-import com.luojilab.component.componentlib.msg.bean.EventBean;
+import org.github.jimu.msg.AriseAt;
+import org.github.jimu.msg.ConsumeOn;
+import org.github.jimu.msg.EventListener;
+import org.github.jimu.msg.EventManager;
+import org.github.jimu.msg.Utils;
+import org.github.jimu.msg.bean.EventBean;
 import com.luojilab.reader.R;
 import com.luojilab.reader.ReaderFragment;
 

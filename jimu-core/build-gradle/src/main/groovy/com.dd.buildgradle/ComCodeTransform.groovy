@@ -5,6 +5,8 @@ import com.android.build.gradle.internal.pipeline.TransformManager
 import javassist.*
 import org.apache.commons.codec.digest.DigestUtils
 import org.apache.commons.io.FileUtils
+import org.github.jimu.msg.MsgBridgeService
+import org.github.jimu.msg.ServiceInfoBean
 import org.gradle.api.Project
 
 class ComCodeTransform extends Transform {
@@ -31,7 +33,15 @@ class ComCodeTransform extends Transform {
         //要收集的applicationlikes，一般情况下有几个组件就有几个applicationlike
         List<CtClass> activators = new ArrayList<>()
 
+        List<ServiceInfoBean> serviceInfoBeans = []
+
         for (CtClass ctClass : box) {
+            if (isMsgBridgeService(ctClass)) {
+                MsgBridgeService annotation = ctClass.getAnnotation(MsgBridgeService.class)
+                ServiceInfoBean bean = new ServiceInfoBean(annotation.workProcessName(), ctClass)
+                serviceInfoBeans.add(bean)
+            }
+
             if (isApplication(ctClass)) {
                 applications.add(ctClass)
                 continue
@@ -39,6 +49,7 @@ class ComCodeTransform extends Transform {
             if (isActivator(ctClass)) {
                 activators.add(ctClass)
             }
+
         }
         for (CtClass ctClass : applications) {
             System.out.println("Application is   " + ctClass.getName())
@@ -46,6 +57,10 @@ class ComCodeTransform extends Transform {
         for (CtClass ctClass : activators) {
             System.out.println("ApplicationLike will be auto register: " + ctClass.getName())
         }
+
+        serviceInfoBeans?.forEach({
+            System.out.println("find MessageBridgeService: " + it.toString())
+        })
 
         transformInvocation.inputs.each { TransformInput input ->
             //对类型为jar文件的input进行遍历
@@ -78,23 +93,29 @@ class ComCodeTransform extends Transform {
                         + " ; isRegisterCompoAuto:"
                         + isRegisterCompoAuto)
 
+//                if (isRegisterCompoAuto) {
+                String fileName = directoryInput.file.absolutePath
+                File dir = new File(fileName)
+                dir.eachFileRecurse { File file ->
+                    String filePath = file.absolutePath
+                    String classNameTemp = filePath.replace(fileName, "")
+                            .replace("\\", ".")
+                            .replace("/", ".")
+                    if (classNameTemp.endsWith(".class")) {
+                        String className = classNameTemp.substring(1, classNameTemp.length() - 6)
+                        if (className.equals(applicationName)) {
 
-                if (isRegisterCompoAuto) {
-                    String fileName = directoryInput.file.absolutePath
-                    File dir = new File(fileName)
-                    dir.eachFileRecurse { File file ->
-                        String filePath = file.absolutePath
-                        String classNameTemp = filePath.replace(fileName, "")
-                                .replace("\\", ".")
-                                .replace("/", ".")
-                        if (classNameTemp.endsWith(".class")) {
-                            String className = classNameTemp.substring(1, classNameTemp.length() - 6)
-                            if (className.equals(applicationName)) {
+                            injectEventManagerInitializeCode(applications[0], serviceInfoBeans, fileName)
+
+                            //auto register component
+                            if (isRegisterCompoAuto)
                                 injectApplicationCode(applications.get(0), activators, fileName)
-                            }
+
+                            applications[0].detach()
                         }
                     }
                 }
+//                }
 
                 def dest = transformInvocation.outputProvider.getContentLocation(directoryInput.name,
                         directoryInput.contentTypes,
@@ -113,8 +134,34 @@ class ComCodeTransform extends Transform {
         }
     }
 
+    private void injectEventManagerInitializeCode(CtClass ctClassApplication, List<CtClass> serviceInfoBeans, String patch) {
+        System.out.println("injectEventManagerInitializeCode begin")
+        ctClassApplication.defrost()
+        try {
+            CtMethod attachBaseContextMethod = ctClassApplication.getDeclaredMethod("onCreate", null)
+            attachBaseContextMethod.insertBefore(generateEventManagerInitializeCode(serviceInfoBeans))
+        } catch (CannotCompileException | NotFoundException e) {
 
-    private void injectApplicationCode(CtClass ctClassApplication, List<CtClass> activators, String patch) {
+            System.out.println("could not found onCreate in Application;   " + e.toString())
+
+            StringBuilder methodBody = new StringBuilder()
+            methodBody.append("protected void onCreate() {")
+            methodBody.append("super.onCreate();")
+            methodBody.append(generateEventManagerInitializeCode(serviceInfoBeans))
+            methodBody.append("}")
+            ctClassApplication.addMethod(CtMethod.make(methodBody.toString(), ctClassApplication))
+        } catch (Exception e) {
+            System.out.println("could not create onCreate() in Application;   " + e.toString())
+        }
+        ctClassApplication.writeFile(patch)
+//        ctClassApplication.detach()
+
+        System.out.println("injectEventManagerInitializeCode success ")
+
+    }
+
+
+    private void injectApplicationCode(CtClass ctClassApplication, List<ServiceInfoBean> activators, String patch) {
         System.out.println("injectApplicationCode begin")
         ctClassApplication.defrost()
         try {
@@ -134,9 +181,23 @@ class ComCodeTransform extends Transform {
             System.out.println("could not create onCreate() in Application;   " + e.toString())
         }
         ctClassApplication.writeFile(patch)
-        ctClassApplication.detach()
+//        ctClassApplication.detach()
 
         System.out.println("injectApplicationCode success ")
+    }
+
+      static String generateEventManagerInitializeCode(List<ServiceInfoBean> serviceInfoBeans) {
+        StringBuilder initializeCodeBuilder = new StringBuilder()
+        serviceInfoBeans?.forEach({
+            //   EventManager.appendMapper("pname", XXX.class);
+
+            initializeCodeBuilder.append("org.github.jimu.msg.EventManager.appendMapper(\"")
+                    .append(it.fullProcessName)
+                    .append("\",")
+                    .append(it.serviceClass.getName())
+                    .append(".class);")
+        })
+        return initializeCodeBuilder.toString()
     }
 
     private String getAutoLoadComCode(List<CtClass> activators) {
@@ -169,7 +230,6 @@ class ComCodeTransform extends Transform {
         try {
             for (CtClass ctClassInter : ctClass.getInterfaces()) {
                 if ("com.luojilab.component.componentlib.applicationlike.IApplicationLike".equals(ctClassInter.name)) {
-//                   todo judge isRegisterCompoAuto
                     boolean hasManualNotation = ctClass.hasAnnotation(Class.forName("com.luojilab.component.componentlib.applicationlike.RegisterCompManual"))
 //                    return true
                     System.out.println(">>>> " + ctClass + " manual register?" + hasManualNotation)
@@ -181,6 +241,10 @@ class ComCodeTransform extends Transform {
         }
 
         return false
+    }
+
+    private boolean isMsgBridgeService(CtClass ctClass) {
+        return ctClass.hasAnnotation(MsgBridgeService.class)
     }
 
     @Override

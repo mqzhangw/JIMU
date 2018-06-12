@@ -1,8 +1,8 @@
-package com.luojilab.component.componentlib.msg;
+package org.github.jimu.msg;
 
 import android.support.test.runner.AndroidJUnit4;
 
-import com.luojilab.component.componentlib.msg.bean.EventBean;
+import org.github.jimu.msg.bean.EventBean;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -11,7 +11,7 @@ import org.junit.runner.RunWith;
 import static org.junit.Assert.*;
 
 /**
- * <p><b>Package:</b> com.luojilab.component.componentlib.msg </p>
+ * <p><b>Package:</b> org.github.jimu.msg </p>
  * <p><b>Project:</b> JIMU </p>
  * <p><b>Classname:</b> EventManagerTest </p>
  * <p><b>Description:</b> TODO </p>

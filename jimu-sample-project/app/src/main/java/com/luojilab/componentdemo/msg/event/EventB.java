@@ -2,7 +2,7 @@ package com.luojilab.componentdemo.msg.event;
 
 import android.os.Parcel;
 
-import com.luojilab.component.componentlib.msg.bean.RemoteEventBean;
+import org.github.jimu.msg.bean.RemoteEventBean;
 
 /**
  * <p><b>Package:</b> com.luojilab.componentdemo.msg.event </p>
