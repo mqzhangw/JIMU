@@ -45,6 +45,9 @@ public class AutowiredServiceImpl implements AutowiredService {
             } else {
                 ILogger.logger.monitor("[autowire] " + className + "is in blacklist, ignore data inject");
             }
+        } catch (ClassNotFoundException e) {
+            //ignore
+            blackList.add(className);  // This instance don't need autowired.
         } catch (Exception ex) {
             if (ex instanceof NullPointerException) { // may define custom exception better
                 throw new NullPointerException(ex.getMessage());
