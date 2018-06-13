@@ -47,6 +47,9 @@ public class AutowiredServiceImpl implements AutowiredService {
             }
         } catch (ClassNotFoundException e) {
             //ignore
+            ILogger.logger.info(ILogger.defaultTag,"[autowire] cannot find class:" + className + SUFFIX_AUTOWIRED+
+                    "; may be obfuscated , no @Autowire notated field, missing annotationProcessor; ignore data inject");
+        
             blackList.add(className);  // This instance don't need autowired.
         } catch (Exception ex) {
             if (ex instanceof NullPointerException) { // may define custom exception better
