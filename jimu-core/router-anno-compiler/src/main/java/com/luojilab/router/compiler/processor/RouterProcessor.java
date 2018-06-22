@@ -1,6 +1,7 @@
 package com.luojilab.router.compiler.processor;
 
 import com.google.auto.service.AutoService;
+import com.luojilab.router.compiler.utils.Constants;
 import com.luojilab.router.compiler.utils.FileUtils;
 import com.luojilab.router.compiler.utils.Logger;
 import com.luojilab.router.compiler.utils.TypeUtils;
@@ -160,7 +161,15 @@ public class RouterProcessor extends AbstractProcessor {
         //simpleName
         String cn = claName.substring(claName.lastIndexOf(".") + 1);
         // superClassName
-        ClassName superClass = ClassName.get(elements.getTypeElement(BASECOMPROUTER));
+
+        TypeElement typeBaseCompRouter = elements.getTypeElement(BASECOMPROUTER);
+
+        if (typeBaseCompRouter == null) {
+            logger.error(Constants.MISSING_BASECOMPROUTER_MSG);
+            return;
+        }
+        
+        ClassName superClass = ClassName.get(typeBaseCompRouter);
 
         MethodSpec initHostMethod = generateInitHostMethod();
         MethodSpec initMapMethod = generateInitMapMethod();

@@ -51,5 +51,9 @@ public interface Constants {
 
     String BASECOMPROUTER = "com.luojilab.component.componentlib.router.ui.BaseCompRouter";
 
-
+    String MISSING_BASECOMPROUTER_MSG = "class BaseCompRouter not found\n确认以下细节：" +
+            "1.该Module是否使用了componentlib依赖\n" +
+            "2.确保版本适配，最新的适配版本套件，参考仓库release-note\n" +
+            "3.使用的componentlib库中BaseCompRouter没有被混淆\n" +
+            "more detail: https://github.com/mqzhangw/JIMU/issues/26";
 }
