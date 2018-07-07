@@ -20,7 +20,7 @@ JIMU（积木）是一套Android组件化框架，支持组件的代码资源隔
 
 模块|build-gradle|componentlib|router-anno-compiler|router-annotation
 ---|---|---|---|---
-最新版本|[![Download](https://api.bintray.com/packages/zhmqq0527/compbuild/build-gradle/images/download.svg)](https://bintray.com/zhmqq0527/compbuild/build-gradle/_latestVersion)|[![Download](https://api.bintray.com/packages/leobert-lan-oss/maven/componentlib/images/download.svg)](https://bintray.com/leobert-lan-oss/maven/componentlib/_latestVersion)|[![Download](https://api.bintray.com/packages/leobert-lan-oss/maven/router-anno-compiler/images/download.svg)](https://bintray.com/leobert-lan-oss/maven/router-anno-compiler/_latestVersion)|[![Download](https://api.bintray.com/packages/leobert-lan-oss/maven/router-annotation/images/download.svg)](https://bintray.com/leobert-lan-oss/maven/router-annotation/_latestVersion)
+最新版本|[![Download](https://api.bintray.com/packages/leobert-lan-oss/maven/build-gradle/images/download.svg)](https://api.bintray.com/packages/leobert-lan-oss/maven/build-gradle/_latestVersion)|[![Download](https://api.bintray.com/packages/leobert-lan-oss/maven/componentlib/images/download.svg)](https://bintray.com/leobert-lan-oss/maven/componentlib/_latestVersion)|[![Download](https://api.bintray.com/packages/leobert-lan-oss/maven/router-anno-compiler/images/download.svg)](https://bintray.com/leobert-lan-oss/maven/router-anno-compiler/_latestVersion)|[![Download](https://api.bintray.com/packages/leobert-lan-oss/maven/router-annotation/images/download.svg)](https://bintray.com/leobert-lan-oss/maven/router-annotation/_latestVersion)
 
 *因为没有创建组织账号，可能会发布到不同的仓库，出现版本差异时请关注下release-note*
 
