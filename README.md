@@ -56,15 +56,16 @@ mainmodulename=app
 ```gradle
 buildscript {
     dependencies {
-        classpath 'com.luojilab.ddcomponent:build-gradle:1.2.0'
+        classpath 'com.github.jimu:build-gradle:A.B.C'
     }
 }
 ```
+*current lastest version 1.3.2 has just post a request to includeed in the bintray's jCenter,maybe you cannot fetch it before the request has been approved*
 
 为每个组件引入依赖库，如果项目中存在basiclib等基础库，可以统一交给basiclib引入
 
 ```gradle
-compile 'com.luojilab.ddcomponent:componentlib:1.3.0'
+compile 'com.github.jimu:componentlib:A.B.C'
 ```
 
 #### 2、拆分组件为module工程
