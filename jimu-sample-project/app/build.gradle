@@ -18,6 +18,8 @@ android {
             }
         }
 
+        vectorDrawables.useSupportLibrary = true
+
     }
     buildTypes {
         release {
@@ -39,11 +41,14 @@ android {
         abortOnError false
     }
 
+
 }
 
 dependencies {
     compile project(':componentservice')
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.android.support:design:27.0.2'
+    compile 'com.android.support:support-vector-drawable:27.0.2'
     annotationProcessor deps.jimu.router_anno_compiler
 }
 

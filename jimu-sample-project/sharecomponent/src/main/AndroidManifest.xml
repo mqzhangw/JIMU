@@ -9,7 +9,7 @@
         android:supportsRtl="true"
         tools:replace="android:label">
 
-        <activity android:name="com.luojilab.share.ShareActivity">
+        <activity android:name="com.luojilab.share.BookShareEditActivity">
 
         </activity>
 

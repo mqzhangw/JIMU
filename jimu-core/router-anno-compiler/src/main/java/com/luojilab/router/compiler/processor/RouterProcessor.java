@@ -168,7 +168,7 @@ public class RouterProcessor extends AbstractProcessor {
             logger.error(Constants.MISSING_BASECOMPROUTER_MSG);
             return;
         }
-        
+
         ClassName superClass = ClassName.get(typeBaseCompRouter);
 
         MethodSpec initHostMethod = generateInitHostMethod();

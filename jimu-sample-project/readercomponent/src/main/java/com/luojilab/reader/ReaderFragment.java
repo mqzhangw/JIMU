@@ -65,7 +65,7 @@ public class ReaderFragment extends Fragment {
         Bundle bundle = new Bundle();
         bundle.putString("bookName", "Gone with the Wind");
         bundle.putString("author", JsonService.Factory.getSingletonImpl().toJsonString(author));
-        UIRouter.getInstance().openUri(getActivity(), "DDComp://share/shareBook", bundle);
+        UIRouter.getInstance().openUri(getActivity(), "DDComp://share/share/edit/book", bundle);
     }
 
     // UI transfer with URI
@@ -83,7 +83,7 @@ public class ReaderFragment extends Fragment {
         author.setName("Margaret Mitchell");
         author.setCounty("USA");
         UIRouter.getInstance().openUri(getActivity(),
-                "DDComp://share/shareBook?bookName=Gone with the Wind&author="
+                "DDComp://share/share/edit/book?bookName=Gone with the Wind&author="
                         + JsonService.Factory.getSingletonImpl().toJsonString(author), null, REQUEST_CODE);
     }
 

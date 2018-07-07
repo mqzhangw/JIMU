@@ -1,43 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <TextView
+        android:id="@+id/share_title"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
+        android:gravity="center"
+        android:textSize="16sp"
+        tools:text="title" />
 
+    <TextView
+        android:id="@+id/share_tv_tag"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="132dp"
+        android:gravity="center"
+        android:textSize="24sp"
+        tools:text="book info" />
 
-        <TextView
-            android:id="@+id/share_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="80dp"
-            android:gravity="center"
-            android:textSize="16sp" />
+    <TextView
+        android:id="@+id/share_tv_author"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/share_tv_tag"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:textSize="16sp"
+        tools:text="author" />
 
-        <TextView
-            android:id="@+id/share_tv_tag"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:gravity="center"
-            android:textSize="24sp" />
+    <TextView
+        android:id="@+id/share_tv_county"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/share_tv_author"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:textSize="16sp"
+        tools:text="country" />
 
-        <TextView
-            android:id="@+id/share_tv_author"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/share_tv_tag"
-            android:layout_centerInParent="true"
-            android:layout_marginTop="10dp"
-            android:gravity="center"
-            android:textSize="16sp" />
+    <EditText
+        android:id="@+id/share_et_reason"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/share_tv_county"
+        android:layout_margin="30dp"
+        android:gravity="center_horizontal"
+        android:hint="reason for share"
+        android:maxHeight="150dp"
+        android:minHeight="100dp" />
 
-        <TextView
-            android:id="@+id/share_tv_county"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/share_tv_author"
-            android:layout_centerInParent="true"
-            android:layout_marginTop="10dp"
-            android:gravity="center"
-            android:textSize="16sp" />
+    <Button
+        android:id="@+id/share_btn_wechat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/share_btn_qq"
+        android:layout_centerHorizontal="true"
+        android:text="share wechat" />
 
-    </RelativeLayout>
+    <Button
+        android:id="@+id/share_btn_qq"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="30dp"
+        android:text="share QQ" />
+
+</RelativeLayout>

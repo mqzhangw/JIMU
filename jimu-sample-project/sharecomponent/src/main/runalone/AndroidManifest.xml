@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/commonAppTheme"
         tools:replace="android:label">
-        <activity android:name="com.luojilab.share.ShareActivity">
+        <activity android:name="com.luojilab.share.BookShareEditActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

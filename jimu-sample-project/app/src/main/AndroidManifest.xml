@@ -73,12 +73,13 @@
             android:process=":remote" />
 
         <activity android:name=".msg.Msg1Activity" />
-
         <activity android:name=".msg.Msg2Activity" />
-
         <activity
             android:name=".msg.Msg3Activity"
             android:process=":remote" />
+        <activity
+            android:name=".DemoActivity"
+            android:label="@string/title_activity_demo"></activity>
     </application>
 
 </manifest>
