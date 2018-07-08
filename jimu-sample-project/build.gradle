@@ -68,6 +68,11 @@ buildscript {
             ],
 
             gson     : 'com.google.code.gson:gson:2.8.2',
+
+            report : [
+                    'anno' : 'osp.leobert.android:ReportNotation:1.0.0',
+                    'compiler':'osp.leobert.android:report-anno-compiler:1.0.0'
+            ]
     ]
 
 

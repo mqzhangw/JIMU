@@ -32,7 +32,11 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [module: "ComponentLib"]
+            }
+        }
     }
     buildTypes {
         release {
@@ -53,6 +57,9 @@ dependencies {
 //    compile project(':router-annotation')
     compile deps.jimu.router_anno
     compile deps.gson
+
+    compile deps.report.anno
+    annotationProcessor deps.report.compiler
 
 }
 
