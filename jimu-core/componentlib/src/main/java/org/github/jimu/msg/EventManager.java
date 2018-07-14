@@ -6,7 +6,9 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.luojilab.component.componentlib.log.ILogger;
+
 import org.github.jimu.msg.bean.EventBean;
+import org.github.jimu.msg.bean.ManagerMethod;
 import org.github.jimu.msg.bean.RemoteEventBean;
 import org.github.jimu.msg.bean.State;
 import org.github.jimu.msg.core.CrossSubscriberHandler;
@@ -16,10 +18,15 @@ import org.github.jimu.msg.executor.CrossProcessPoster;
 import org.github.jimu.msg.executor.LocalProcessBackgroundPoster;
 import org.github.jimu.msg.executor.LocalProcessMainThreadPoster;
 
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import osp.leobert.android.reportprinter.notation.ChangeLog;
 
 /**
  * <p><b>Package:</b> org.github.jimu.msg </p>
@@ -156,5 +163,27 @@ public final class EventManager {
 
     public void fastHandleLocalProcessEvent(CrossSubscriberHandler handler, RemoteEventBean event, Class clz) {
         handler.onFastHandleLocalProcessEvent(secy, stateThreadLocal.get(), event, clz);
+    }
+
+    @SuppressWarnings("unchecked")
+    @ChangeLog(version = "1.3.3", changes = {
+            "add static factory to create proxy for manager api"
+    })
+    public <T> T create(final Class<T> service) {
+        Utils.validateCompoEventManagerInterface(service);
+
+        return (T) Proxy.newProxyInstance(service.getClassLoader(),
+                new Class<?>[]{service},
+                new InvocationHandler() {
+                    @Override
+                    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+                        if (method.getDeclaringClass() == Object.class) { //avoid proxy the inherited method from Object
+                            return method.invoke(this, args);
+                        }
+
+                        ManagerMethod.parse(method).invoke(args);
+                        return null;
+                    }
+                });
     }
 }

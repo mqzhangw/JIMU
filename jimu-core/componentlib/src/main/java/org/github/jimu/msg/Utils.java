@@ -41,4 +41,13 @@ public class Utils {
     public static boolean isMainThread() {
         return Looper.myLooper() == Looper.getMainLooper();
     }
+
+    static <T> void validateCompoEventManagerInterface(Class<T> service) {
+        if (!service.isInterface()) {
+            throw new IllegalArgumentException("CompoEventManagerAPI must be declared as interfaces.");
+        }
+        if (service.getInterfaces().length > 0) {
+            throw new IllegalArgumentException("CompoEventManagerAPI interfaces must not extend any other interfaces.");
+        }
+    }
 }
