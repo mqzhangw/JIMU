@@ -50,4 +50,9 @@ public class Utils {
             throw new IllegalArgumentException("CompoEventManagerAPI interfaces must not extend any other interfaces.");
         }
     }
+
+    public static void checkNotNull(Object obj, String msg) {
+        if (obj == null)
+            throw new NullPointerException("null check failed; " + msg);
+    }
 }

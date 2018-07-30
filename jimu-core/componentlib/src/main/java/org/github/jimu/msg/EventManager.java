@@ -169,7 +169,7 @@ public final class EventManager {
     @ChangeLog(version = "1.3.3", changes = {
             "add static factory to create proxy for manager api"
     })
-    public <T> T create(final Class<T> service) {
+    public static <T> T create(final Class<T> service) {
         Utils.validateCompoEventManagerInterface(service);
 
         return (T) Proxy.newProxyInstance(service.getClassLoader(),

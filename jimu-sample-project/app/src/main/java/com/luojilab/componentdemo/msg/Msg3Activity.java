@@ -6,8 +6,13 @@ import android.text.Spanned;
 import android.text.style.ClickableSpan;
 import android.view.View;
 
+import org.github.jimu.msg.ConsumeOn;
 import org.github.jimu.msg.EventListener;
 import org.github.jimu.msg.EventManager;
+import org.github.jimu.msg.bean.ConsumerMeta;
+
+import com.luojilab.component.componentlib.router.Router;
+import com.luojilab.componentdemo.msg.event.EventA;
 import com.luojilab.componentdemo.msg.event.EventB;
 import com.luojilab.router.facade.annotation.RouteNode;
 
@@ -26,6 +31,17 @@ public class Msg3Activity extends Foo {
             }
         };
         EventManager.getInstance().subscribe(EventB.class, eventBEventListener);
+
+        AppComponentEventManager manager = (AppComponentEventManager) Router.getInstance()
+                .getService(AppComponentEventManager.class.getSimpleName());
+
+
+
+        manager.subscribeEventB(ConsumerMeta.<EventB>newBuilder()
+                .consumeOn(ConsumeOn.Main)
+                .process(":remote") // 一般来说，都不需要特地写进程了，我们约定""就代表默认进程,其他新开辟的进程中需要写
+                .eventListener(eventBEventListener)
+                .build());
     }
 
     @Override
