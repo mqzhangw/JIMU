@@ -21,7 +21,7 @@ import java.util.Map;
  * <p><b>Package:</b> org.github.jimu.msg </p>
  * <p><b>Project:</b> JIMU </p>
  * <p><b>Classname:</b> RemoteObservableHandler </p>
- * <p><b>Description:</b> TODO </p>
+ * <p><b>Description:</b> handler for binder use in the cross process communication </p>
  * Created by leobert on 2018/4/24.
  */
 public class RemoteObservableHandler extends Handler {

@@ -63,21 +63,26 @@ final class MessageBridgeAttacher {
             return;
         }
 
-        application.bindService(intent, new ServiceConnection() {
-            @Override
-            public void onServiceConnected(ComponentName name, IBinder service) {
-                synchronized (MessageBridgeAttacher.this) {
-                    remoteMessenger = new Messenger(service);
-                    hasAttached = true;
-                    subscribe2Remote();
+        try {
+            application.bindService(intent, new ServiceConnection() {
+                @Override
+                public void onServiceConnected(ComponentName name, IBinder service) {
+                    synchronized (MessageBridgeAttacher.this) {
+                        remoteMessenger = new Messenger(service);
+                        hasAttached = true;
+                        subscribe2Remote();
+                    }
                 }
-            }
 
-            @Override
-            public void onServiceDisconnected(ComponentName name) {
+                @Override
+                public void onServiceDisconnected(ComponentName name) {
 
-            }
-        }, Context.BIND_AUTO_CREATE);
+                }
+            }, Context.BIND_AUTO_CREATE);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ILogger.logger.error(ILogger.defaultTag,e.getMessage());
+        }
 
     }
 

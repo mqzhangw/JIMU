@@ -7,7 +7,7 @@ targetCompatibility = "1.7"
 
 def MAVEN_LOCAL_PATH = uri('../../local_repo')
 def ARTIFACT_ID = 'componentlib'
-def VERSION_NAME = '1.3.2.1'
+def VERSION_NAME = '1.3.3'
 def GROUP_ID = 'com.github.jimu'
 
 ext {

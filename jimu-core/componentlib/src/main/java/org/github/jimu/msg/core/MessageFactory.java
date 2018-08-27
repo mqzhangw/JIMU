@@ -11,8 +11,8 @@ import org.github.jimu.msg.bean.RemoteEventBean;
 /**
  * <p><b>Package:</b> org.github.jimu.msg.core </p>
  * <p><b>Project:</b> JIMU </p>
- * <p><b>Classname:</b> SubscribeMessage </p>
- * <p><b>Description:</b> </p>
+ * <p><b>Classname:</b> MessageFactory </p>
+ * <p><b>Description:</b> factory for message</p>
  * Created by leobert on 2018/4/24.
  */
 public class MessageFactory {
@@ -35,7 +35,7 @@ public class MessageFactory {
      * @return the subscribe message
      */
     public static Message obtainSubscribeMsg(Messenger consumerMessenger, Class eventClz) {
-        Message message = Message.obtain();// new Message();
+        Message message = Message.obtain();
         message.what = WHAT_SUBSCRIBE_CROSS_PROCESS_EVENT;
         message.replyTo = consumerMessenger;
         Bundle bundle = new Bundle();

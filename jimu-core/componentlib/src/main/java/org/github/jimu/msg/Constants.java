@@ -4,7 +4,7 @@ package org.github.jimu.msg;
  * <p><b>Package:</b> org.github.jimu.msg </p>
  * <p><b>Project:</b> JIMU </p>
  * <p><b>Classname:</b> Constants </p>
- * <p><b>Description:</b> TODO </p>
+ * <p><b>Description:</b> Constants </p>
  * Created by leobert on 2018/4/24.
  */
 public interface Constants {

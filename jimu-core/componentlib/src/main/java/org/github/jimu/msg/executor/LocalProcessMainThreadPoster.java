@@ -36,7 +36,7 @@ public class LocalProcessMainThreadPoster extends Handler implements IPoster {
     public <T extends EventBean> void postEvent(@NonNull T event, @NonNull EventListener<T> target) {
         synchronized (cache) {
 
-            Pair<EventBean, EventListener<EventBean>> pair = new Pair<>((EventBean)event, (EventListener<EventBean>)target);
+            Pair<EventBean, EventListener<EventBean>> pair = new Pair<>((EventBean) event, (EventListener<EventBean>) target);
             cache.add(pair);
             if (!started) {
                 removeMessages(0);
@@ -60,7 +60,8 @@ public class LocalProcessMainThreadPoster extends Handler implements IPoster {
                 if (cache.size() > 0) {
                     Pair<EventBean, EventListener<EventBean>> temp = cache.remove(0);
                     try {
-                        temp.second.onEvent(temp.first);
+                        if (temp.second != null)
+                            temp.second.onEvent(temp.first);
                     } finally {
                         //ignore
                     }

@@ -16,7 +16,7 @@ import org.github.jimu.msg.bean.State;
  * <p><b>Package:</b> org.github.jimu.msg </p>
  * <p><b>Project:</b> JIMU </p>
  * <p><b>Classname:</b> CrossSubscriberHandler </p>
- * <p><b>Description:</b> TODO </p>
+ * <p><b>Description:</b> handle the request to subscribe a event will post in another process  </p>
  * Created by leobert on 2018/4/25.
  */
 public class CrossSubscriberHandler extends Handler {

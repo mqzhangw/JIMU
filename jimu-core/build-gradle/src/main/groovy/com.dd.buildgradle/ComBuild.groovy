@@ -8,7 +8,7 @@ import com.dd.buildgradle.util.StringUtil
 class ComBuild implements Plugin<Project> {
 
     //默认是app，直接运行assembleRelease的时候，等同于运行app:assembleRelease
-    String compilemodule = "app"
+    String compileModule = "app"
 
     void apply(Project project) {
         project.extensions.create('combuild', ComExtension)
@@ -20,8 +20,8 @@ class ComBuild implements Plugin<Project> {
         AssembleTask assembleTask = getTaskInfo(project.gradle.startParameter.taskNames)
 
         if (assembleTask.isAssemble) {
-            fetchMainModulename(project, assembleTask)
-            System.out.println("compilemodule  is " + compilemodule)
+            fetchMainModuleName(project, assembleTask)
+            System.out.println("compilemodule  is " + compileModule)
         }
 
         if (!project.hasProperty("isRunAlone")) {
@@ -35,7 +35,7 @@ class ComBuild implements Plugin<Project> {
         if (isRunAlone && assembleTask.isAssemble) {
             //对于要编译的组件和主项目，isRunAlone修改为true，其他组件都强制修改为false
             //这就意味着组件不能引用主项目，这在层级结构里面也是这么规定的
-            if (module.equals(compilemodule) || module.equals(mainmodulename)) {
+            if (module.equals(compileModule) || module.equals(mainmodulename)) {
                 isRunAlone = true
             } else {
                 isRunAlone = false
@@ -58,7 +58,7 @@ class ComBuild implements Plugin<Project> {
                 }
             }
             System.out.println("apply plugin is " + 'com.android.application')
-            if (assembleTask.isAssemble && module.equals(compilemodule)) {
+            if (assembleTask.isAssemble && module.equals(compileModule)) {
                 compileComponents(assembleTask, project)
                 project.android.registerTransform(new ComCodeTransform(project))
             }
@@ -76,19 +76,19 @@ class ComBuild implements Plugin<Project> {
      * sharecomponent:assembleRelease :sharecomponent:assembleRelease ---sharecomponent
      * @param assembleTask
      */
-    private void fetchMainModulename(Project project, AssembleTask assembleTask) {
+    private void fetchMainModuleName(Project project, AssembleTask assembleTask) {
         if (!project.rootProject.hasProperty("mainmodulename")) {
             throw new RuntimeException("you should set compilemodule in rootproject's gradle.properties")
         }
         if (assembleTask.modules.size() > 0 && assembleTask.modules.get(0) != null
                 && assembleTask.modules.get(0).trim().length() > 0
                 && !assembleTask.modules.get(0).equals("all")) {
-            compilemodule = assembleTask.modules.get(0)
+            compileModule = assembleTask.modules.get(0)
         } else {
-            compilemodule = project.rootProject.property("mainmodulename")
+            compileModule = project.rootProject.property("mainmodulename")
         }
-        if (compilemodule == null || compilemodule.trim().length() <= 0) {
-            compilemodule = "app"
+        if (compileModule == null || compileModule.trim().length() <= 0) {
+            compileModule = "app"
         }
     }
 

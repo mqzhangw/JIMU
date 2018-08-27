@@ -6,7 +6,7 @@ import org.github.jimu.msg.bean.EventBean;
  * <p><b>Package:</b> org.github.jimu.msg </p>
  * <p><b>Project:</b> JIMU </p>
  * <p><b>Classname:</b> EventListener </p>
- * <p><b>Description:</b> TODO </p>
+ * <p><b>Description:</b> callbacks for the event </p>
  * Created by leobert on 2018/4/25.
  */
 public interface EventListener<T extends EventBean> {

@@ -5,8 +5,9 @@ import com.luojilab.component.componentlib.log.ILogger;
 /**
  * <p><b>Package:</b> org.github.jimu.msg.bean </p>
  * <p><b>Project:</b> JIMU </p>
- * <p><b>Classname:</b> EventType </p>
- * <p><b>Description:</b> TODO </p>
+ * <p><b>Classname:</b> AriseAt </p>
+ * <p><b>Description:</b> represent the relationship between the 'poster' and the 'subscriber'
+ * of their process</p>
  * Created by leobert on 2018/4/25.
  */
 public class AriseAt {

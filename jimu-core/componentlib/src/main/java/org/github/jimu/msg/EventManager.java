@@ -72,7 +72,7 @@ public final class EventManager {
                 }
             }
         } else {
-            ILogger.logger.monitor("EventManager has initialized");
+            ILogger.logger.monitor("EventManager has been initialized previous");
         }
     }
 

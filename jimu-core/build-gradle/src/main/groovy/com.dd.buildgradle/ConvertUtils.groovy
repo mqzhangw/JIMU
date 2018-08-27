@@ -4,6 +4,8 @@ import com.android.SdkConstants
 import com.android.build.api.transform.TransformInput
 import javassist.ClassPool
 import javassist.CtClass
+import javassist.NotFoundException
+import org.apache.commons.io.FileUtils
 
 import java.util.jar.JarEntry
 import java.util.jar.JarFile
@@ -17,7 +19,7 @@ class ConvertUtils {
             it.directoryInputs.each {
                 def dirPath = it.file.absolutePath
                 classPool.insertClassPath(it.file.absolutePath)
-                org.apache.commons.io.FileUtils.listFiles(it.file, null, true).each {
+                FileUtils.listFiles(it.file, null, true).each {
                     if (it.absolutePath.endsWith(SdkConstants.DOT_CLASS)) {
                         def className = it.absolutePath.substring(dirPath.length() + 1, it.absolutePath.length() - SdkConstants.DOT_CLASS.length()).replaceAll(Matcher.quoteReplacement(File.separator), '.')
                         if (classNames.contains(className)) {
@@ -49,8 +51,8 @@ class ConvertUtils {
         classNames.each {
             try {
                 allClass.add(classPool.get(it))
-            } catch (javassist.NotFoundException e) {
-                println "class not found exception class name:  $it "
+            } catch (NotFoundException e) {
+                println "class not found exception class name:  $it ,$e.getMessage()"
             }
         }
         return allClass

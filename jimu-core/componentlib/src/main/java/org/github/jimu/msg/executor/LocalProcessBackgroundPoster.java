@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 
+import osp.leobert.android.reportprinter.notation.Bug;
+
 /**
  * <p><b>Package:</b> org.github.jimu.msg.executor </p>
  * <p><b>Project:</b> JIMU </p>
@@ -40,14 +42,19 @@ public class LocalProcessBackgroundPoster implements IPoster, Runnable {
         }
     }
 
+    /**
+     * todo consider the waste of cpu performance in the infinite loop
+     */
     @Override
     @SuppressWarnings("InfiniteLoopStatement")
+    @Bug(desc = "consider the waste of cpu performance in the infinite loop")
     public void run() {
         try {
             while (true) {
                 synchronized (cache) {
                     if (!cache.isEmpty()) {
                         Pair<EventBean, EventListener<EventBean>> temp = cache.remove(0);
+                        if (temp.second != null)
                         temp.second.onEvent(temp.first);
                     }
                 }

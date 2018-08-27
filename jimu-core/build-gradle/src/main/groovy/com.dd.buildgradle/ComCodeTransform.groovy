@@ -77,8 +77,8 @@ class ComCodeTransform extends Transform {
                         jarInput.contentTypes, jarInput.scopes, Format.JAR)
                 //将输入内容复制到输出
                 FileUtils.copyFile(jarInput.file, dest)
-
             }
+
             //对类型为“文件夹”的input进行遍历
             input.directoryInputs.each { DirectoryInput directoryInput ->
                 boolean isRegisterCompoAuto = project.extensions.combuild.isRegisterCompoAuto
@@ -134,7 +134,8 @@ class ComCodeTransform extends Transform {
         }
     }
 
-    private void injectEventManagerInitializeCode(CtClass ctClassApplication, List<CtClass> serviceInfoBeans, String patch) {
+    private
+    static void injectEventManagerInitializeCode(CtClass ctClassApplication, List<CtClass> serviceInfoBeans, String patch) {
         System.out.println("injectEventManagerInitializeCode begin")
         ctClassApplication.defrost()
         try {
@@ -200,7 +201,7 @@ class ComCodeTransform extends Transform {
         return initializeCodeBuilder.toString()
     }
 
-    private String getAutoLoadComCode(List<CtClass> activators) {
+    private static String getAutoLoadComCode(List<CtClass> activators) {
         StringBuilder autoLoadComCode = new StringBuilder()
         for (CtClass ctClass : activators) {
             autoLoadComCode.append("new " + ctClass.getName() + "()" + ".onCreate();")
@@ -212,7 +213,7 @@ class ComCodeTransform extends Transform {
 
     private boolean isApplication(CtClass ctClass) {
         try {
-            if (applicationName != null && applicationName.equals(ctClass.getName())) {
+            if (applicationName != null && applicationName == ctClass.getName()) {
                 return true
             }
         } catch (Exception e) {
@@ -226,7 +227,7 @@ class ComCodeTransform extends Transform {
      * @param ctClass target class to be checked
      * @return true if impl& isRegisterCompoAuto
      */
-    private boolean isActivator(CtClass ctClass) {
+    private static boolean isActivator(CtClass ctClass) {
         try {
             for (CtClass ctClassInter : ctClass.getInterfaces()) {
                 if ("com.luojilab.component.componentlib.applicationlike.IApplicationLike".equals(ctClassInter.name)) {
@@ -243,7 +244,7 @@ class ComCodeTransform extends Transform {
         return false
     }
 
-    private boolean isMsgBridgeService(CtClass ctClass) {
+    private static boolean isMsgBridgeService(CtClass ctClass) {
         return ctClass.hasAnnotation(MsgBridgeService.class)
     }
 

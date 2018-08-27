@@ -10,7 +10,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * <p><b>Package:</b> org.github.jimu.msg.core </p>
  * <p><b>Project:</b> JIMU </p>
  * <p><b>Classname:</b> SubscriberList </p>
- * <p><b>Description:</b> TODO </p>
+ * <p><b>Description:</b> just lazy... </p>
  * Created by leobert on 2018/4/27.
  */
 public final class SubscriberList<T extends EventBean> extends CopyOnWriteArrayList<WeakReference<EventListener<T>>> {

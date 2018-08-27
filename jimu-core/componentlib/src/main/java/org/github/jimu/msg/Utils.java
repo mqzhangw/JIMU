@@ -11,7 +11,7 @@ import java.io.IOException;
  * <p><b>Package:</b> org.github.jimu.msg </p>
  * <p><b>Project:</b> JIMU </p>
  * <p><b>Classname:</b> Utils </p>
- * <p><b>Description:</b> TODO </p>
+ * <p><b>Description:</b> utilities </p>
  * Created by leobert on 2018/4/26.
  */
 public class Utils {
