@@ -20,7 +20,7 @@ import org.github.jimu.msg.Utils;
  * </p>
  * Created by leobert on 2018/4/25.
  *
- * @see org.github.jimu.msg.MsgBridgeService MsgBridgeService </p>
+ * @see org.github.jimu.msg.MsgBridgeService MsgBridgeService
  */
 public abstract class MessageBridgeService extends Service {
 
