@@ -287,10 +287,18 @@ public class UIRouter implements IUIRouter {
             routerInstanceCache.put(path, instance);
             return instance;
         } catch (ClassNotFoundException e) {
+            getLogger().info(ILogger.defaultTag, "maybe no activity use RouterNode or " +
+                    "Autowired notation in this module, so none generated class such as " + path);
             e.printStackTrace();
         } catch (InstantiationException e) {
+            getLogger().error(ILogger.defaultTag, "check the generated class:" + path
+                    + "; it should have a default 'public accessible' and 'none parameter' constructor");
+
             e.printStackTrace();
         } catch (IllegalAccessException e) {
+            getLogger().error(ILogger.defaultTag, "check the generated class:" + path
+                    + "; it should have a default 'public accessible' and 'none parameter' constructor");
+
             e.printStackTrace();
         }
 
