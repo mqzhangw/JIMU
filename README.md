@@ -120,3 +120,4 @@ JIMU的讨论群，群号693097923，欢迎大家加入：
 
 ![进群请扫码](https://upload-images.jianshu.io/upload_images/6650461-6adc3ed96ebd8d70.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
+PS:最近千人群满了，建议一些基础性问题仔细琢磨下文章，比较麻烦的问题提issue求助。
