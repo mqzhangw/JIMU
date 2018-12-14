@@ -3,7 +3,7 @@ apply plugin: 'java'
 
 def MAVEN_LOCAL_PATH = uri('../../local_repo')
 def ARTIFACT_ID = 'router-anno-compiler'
-def VERSION_NAME = '1.0.1'
+def VERSION_NAME = '1.0.2'
 def GROUP_ID = 'com.github.jimu'
 
 ext {
@@ -11,7 +11,7 @@ ext {
     bintrayName = ARTIFACT_ID
     artifact = ARTIFACT_ID
     libraryName = ARTIFACT_ID
-    libraryDescription = 'component build lib '
+    libraryDescription = 'component build lib \n remove router table report'
     libraryVersion = VERSION_NAME
     licenseName = 'The Apache Software License, Version 2.0'
     licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
@@ -23,7 +23,8 @@ apply from: '../bintrayv1.gradle'
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.google.auto.service:auto-service:1.0-rc2'
+    compile deps.auto.service
+
     compile 'com.squareup:javapoet:1.9.0'
 
 

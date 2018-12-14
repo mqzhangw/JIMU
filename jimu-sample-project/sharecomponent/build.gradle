@@ -16,7 +16,7 @@ android {
 
         javaCompileOptions {
             annotationProcessorOptions {
-                arguments = [host: "share"]
+                arguments = [host: "share",module: "share"]
             }
         }
 
@@ -49,4 +49,15 @@ combuild {
 }
 repositories {
     mavenCentral()
+}
+
+//use command line:'gradle clean :app:printReporter :app:compileDebugSources'
+//使用插件时存在一些问题，可以使用gradle面板，选择相应的Module 输入：printReporter compileDebugSources
+//执行任务，在相应的Module/Reports目录下会生成相应的报表文件，windows可能还会遇到问题，但不会在平时编译的时候出现了
+task printReporter {
+
+    println("add Router reporter ++++++++++")
+    project.dependencies.add("annotationProcessor", project(':router_path_reporter'))
+    project.dependencies.add("annotationProcessor","osp.leobert.android:report-anno-compiler:1.0.1")
+
 }

@@ -106,7 +106,7 @@ public class AutowiredProcessor extends AbstractProcessor {
             } catch (Exception e) {
                 logger.error(e);
             }
-            return true;
+//            return true; //permit other handles can eat the annotations
         }
 
         return false;

@@ -1,0 +1,11 @@
+apply plugin: 'java-library'
+
+dependencies {
+    compile deps.support.annotations
+    compile "osp.leobert.android:ReportNotation:1.1.1"
+    compile deps.auto.service
+    compile deps.jimu.router_anno//"com.github.jimu:router-annotation:1.0.1"
+}
+
+sourceCompatibility = "1.7"
+targetCompatibility = "1.7"

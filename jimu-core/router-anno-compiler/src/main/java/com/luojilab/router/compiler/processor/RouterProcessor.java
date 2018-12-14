@@ -116,8 +116,8 @@ public class RouterProcessor extends AbstractProcessor {
                 logger.error(e);
             }
             generateRouterImpl();
-            generateRouterTable();
-            return true;
+//            generateRouterTable();
+            return false; // permit other processor handle those annotations
         }
         return false;
     }

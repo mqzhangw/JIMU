@@ -1,7 +1,9 @@
-include ':app',
+include ':app', ':router_path_reporter',
         ':sharecomponentkotlin',
         ':readercomponent',
         ':sharecomponent',
         ':componentservice',
         ':basiclib',
         ':basicres'
+
+project(':router_path_reporter').projectDir = new File('reporters/router_path_reporter')

@@ -11,6 +11,9 @@ buildscript {
     ]
 
     ext.deps = [
+            auto         : [
+                    'service': 'com.google.auto.service:auto-service:1.0-rc3'
+            ],
             //plugins
             android  : [
                     'gradlePlugin': "com.android.tools.build:gradle:${versions.androidPlugin}",
