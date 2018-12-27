@@ -47,23 +47,23 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    testCompile deps.junit
-    compile deps.support.v7.appcompat
+    testImplementation deps.junit
+    implementation deps.support.v7.appcompat
 
-//    compile project(':router-annotation')
-    compile deps.jimu.router_anno
-    compile deps.gson
+//    implementation project(':router-annotation')
+    implementation deps.jimu.router_anno
+    implementation deps.gson
 
-    compile deps.report.anno
+    implementation deps.report.anno
     annotationProcessor deps.report.compiler
 
 
-    compile 'org.apache.commons:commons-lang3:3.4'
-    compile 'org.apache.commons:commons-collections4:4.1'
+    implementation 'org.apache.commons:commons-lang3:3.4'
+    implementation 'org.apache.commons:commons-collections4:4.1'
 }
 
 

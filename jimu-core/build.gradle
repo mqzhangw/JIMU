@@ -4,10 +4,10 @@ buildscript {
             'minSdk'        : 14,
             'targetSdk'     : 21,
             'compileSdk'    : 27,
-            'kotlin'        : '1.2.30',
+            'kotlin'        : '1.2.51',
             'supportLibrary': '27.0.2',
-            'androidPlugin' : '2.3.1',
-            'androidTools'  : '27.0.3',
+            'androidPlugin' : '3.2.1',
+            'androidTools'  : '28.0.3',
     ]
 
     ext.deps = [
@@ -52,7 +52,7 @@ buildscript {
 
             publish  : [
                     'jcenter': 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.2',
-                    'maven'  : 'com.github.dcendents:android-maven-gradle-plugin:1.5',
+                    'maven'  : 'com.github.dcendents:android-maven-gradle-plugin:2.1',
             ],
 
             jimu     : [
