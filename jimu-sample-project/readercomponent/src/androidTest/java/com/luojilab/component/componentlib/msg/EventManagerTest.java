@@ -1,7 +1,9 @@
-package org.github.jimu.msg;
+package com.luojilab.component.componentlib.msg;
 
 import android.support.test.runner.AndroidJUnit4;
 
+import org.github.jimu.msg.EventListener;
+import org.github.jimu.msg.EventManager;
 import org.github.jimu.msg.bean.EventBean;
 
 import org.junit.Before;
