@@ -21,12 +21,12 @@ apply from: '../installv1.gradle'
 apply from: '../bintrayv1.gradle'
 
 dependencies {
-    compile 'com.android.tools.build:gradle:2.3.2'
-    compile group: 'org.javassist', name: 'javassist', version: '3.23.1-GA'
+    implementation 'com.android.tools.build:gradle:4.0.0'
+    implementation group: 'org.javassist', name: 'javassist', version: '3.23.1-GA'
     //gradle sdk
-    compile gradleApi()
+    implementation gradleApi()
     //groovy sdk
-    compile localGroovy()
+    implementation localGroovy()
     testCompile deps.junit
 
 }

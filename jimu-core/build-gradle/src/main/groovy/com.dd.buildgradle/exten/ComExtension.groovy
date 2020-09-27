@@ -22,4 +22,10 @@ class ComExtension {
      * 当isRegisterCompoAuto==true的时候是必须的
      */
     String applicationName
+
+    String runAloneManifest
+    String originalManifest
+    String targetManifest
+
+    boolean enableManifestMerge = true
 }

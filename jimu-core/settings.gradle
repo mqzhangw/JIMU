@@ -1,4 +1,4 @@
-include ':componentlib',
-        ':build-gradle',
-        ':router-annotation',
-        ':router-anno-compiler'
+include ':build-gradle'
+//include ':componentlib'
+//include ':router-annotation'
+//include ':router-anno-compiler'
