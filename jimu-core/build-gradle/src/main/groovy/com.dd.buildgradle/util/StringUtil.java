@@ -4,9 +4,7 @@ import java.util.regex.Pattern;
 
 public class StringUtil {
     /**
-     * 是否是maven 坐标
-     *
-     * @return
+     * is maven repo dependencyLe
      */
     public static boolean isMavenArtifact(String str) {
         if (str == null || str.isEmpty()) {

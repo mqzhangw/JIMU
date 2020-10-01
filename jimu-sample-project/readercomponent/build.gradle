@@ -38,21 +38,34 @@ android {
 }
 
 dependencies {
-    compile project(':componentservice')
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+    implementation project(':componentservice')
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'com.android.support.constraint:constraint-layout:2.0.1'
     annotationProcessor deps.jimu.router_anno_compiler
 //    annotationProcessor project(':router-anno-compiler')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    testCompile deps.junit
-    compile deps.kotlin.kotlin_jdk7
+    testImplementation deps.junit
+    implementation deps.kotlin.kotlin_jdk7
 }
+
+def projectRoot = project.getRootProject().rootDir.absolutePath
+
 
 combuild {
     applicationName = 'com.luojilab.reader.runalone.application.ReaderApplication'
     isRegisterCompoAuto = false
+
+    originalManifest = projectRoot + "/readercomponent/src/main/AndroidManifest.xml"
+
+    runAloneManifest = projectRoot + "/readercomponent/src/main/runalone/AndroidManifest.xml"
+    targetManifest = projectRoot + "/readercomponent/src/main/runalone/mergedManifest.xml"
+    //如果不需要合并，改为false
+    enableManifestMerge = true
 }
+
 repositories {
     mavenCentral()
 }
@@ -62,7 +75,8 @@ sourceCompatibility = "1.7"
 targetCompatibility = "1.7"
 
 
-apply plugin: 'com.github.dcendents.android-maven'
+//apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'maven'
 def MAVEN_LOCAL_PATH = uri('../../local_repo')
 def ARTIFACT_ID = 'readercompo'
 def VERSION_NAME = '1.0.0'

@@ -24,8 +24,8 @@ android {
 }
 
 dependencies {
-    compile project(':basiclib')
-    testCompile deps.junit
+    api project(':basiclib')
+    testImplementation deps.junit
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })

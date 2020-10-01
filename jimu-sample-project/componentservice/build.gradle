@@ -24,13 +24,13 @@ android {
 
 dependencies {
 //    compile project(':componentlib')
-    compile project(':basicres')
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+    api project(':basicres')
+    api fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    testCompile deps.junit
-    compile deps.kotlin.kotlin_jdk7
+    testImplementation deps.junit
+    api deps.kotlin.kotlin_jdk7
 }
 repositories {
     mavenCentral()

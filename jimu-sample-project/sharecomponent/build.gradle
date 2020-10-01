@@ -33,19 +33,29 @@ android {
 }
 
 dependencies {
-    compile project(':componentservice')
+    implementation project(':componentservice')
     annotationProcessor deps.jimu.router_anno_compiler
 //    annotationProcessor project(':router-anno-compiler')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    testCompile deps.junit
-    compile deps.kotlin.kotlin_jdk7
+    testImplementation deps.junit
+    implementation deps.kotlin.kotlin_jdk7
 }
+
+
+def projectRoot = project.getRootProject().rootDir.absolutePath
+
 
 combuild {
     applicationName = 'com.luojilab.share.runalone.application.ShareApplication'
     isRegisterCompoAuto = true
+    originalManifest = projectRoot + "/sharecomponent/src/main/AndroidManifest.xml"
+
+    runAloneManifest = projectRoot + "/sharecomponent/src/main/runalone/AndroidManifest.xml"
+    targetManifest = projectRoot + "/sharecomponent/src/main/runalone/mergedManifest.xml"
+    //如果不需要合并，改为false
+    enableManifestMerge = true
 }
 repositories {
     mavenCentral()

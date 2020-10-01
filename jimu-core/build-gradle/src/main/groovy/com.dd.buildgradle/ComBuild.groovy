@@ -4,24 +4,30 @@ import com.dd.buildgradle.exten.ComExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import com.dd.buildgradle.util.StringUtil
+import org.gradle.api.Task
+import osp.leobert.magnet.Log
+import osp.leobert.magnet.plugin.manifest.ManifestMergerImpl
+import osp.leobert.magnet.plugin.manifest.XmlnsSweeper
 
 class ComBuild implements Plugin<Project> {
 
     //默认是app，直接运行assembleRelease的时候，等同于运行app:assembleRelease
     String compileModule = "app"
 
+    ComExtension comBuild
+
     void apply(Project project) {
-        project.extensions.create('combuild', ComExtension)
+        comBuild = project.extensions.create('combuild', ComExtension)
 
         String taskNames = project.gradle.startParameter.taskNames.toString()
-        System.out.println("taskNames is " + taskNames)
+        Log.info("taskNames is " + taskNames)
         String module = project.path.replace(":", "")
-        System.out.println("current module is " + module)
+        Log.info("current module is " + module)
         AssembleTask assembleTask = getTaskInfo(project.gradle.startParameter.taskNames)
 
         if (assembleTask.isAssemble) {
             fetchMainModuleName(project, assembleTask)
-            System.out.println("compilemodule  is " + compileModule)
+            Log.info("compile module is : " + compileModule)
         }
 
         if (!project.hasProperty("isRunAlone")) {
@@ -31,40 +37,76 @@ class ComBuild implements Plugin<Project> {
         //对于isRunAlone==true的情况需要根据实际情况修改其值，
         // 但如果是false，则不用修改
         boolean isRunAlone = Boolean.parseBoolean((project.properties.get("isRunAlone")))
-        String mainmodulename = project.rootProject.property("mainmodulename")
+        String mainModuleName = project.rootProject.property("mainmodulename")
         if (isRunAlone && assembleTask.isAssemble) {
             //对于要编译的组件和主项目，isRunAlone修改为true，其他组件都强制修改为false
             //这就意味着组件不能引用主项目，这在层级结构里面也是这么规定的
-            if (module.equals(compileModule) || module.equals(mainmodulename)) {
-                isRunAlone = true
-            } else {
-                isRunAlone = false
-            }
+            isRunAlone = module == compileModule || module == mainModuleName
         }
         project.setProperty("isRunAlone", isRunAlone)
 
         //根据配置添加各种组件依赖，并且自动化生成组件加载代码
         if (isRunAlone) {
+            project.afterEvaluate {
+                Log.info("target manifest is: " + comBuild.targetManifest.toString())
+                //merge manifest
+                project.extensions.android.applicationVariants.all { variant ->
+                    // find seal process task
+                    String variantName = variant.name.capitalize()
+                    Task processManifestTask = project.tasks["process${variantName}Manifest"]
+                    processManifestTask.outputs.upToDateWhen { false }
+
+                    def mergeTask = project.task("runaloneMerge${variantName}Manifest").doLast {
+
+                        Log.info("runaloneMerge...Manifest, mergeEnabled? " + comBuild.enableManifestMerge)
+                        if (comBuild.enableManifestMerge) {
+                            def manifestMergerImpl = new ManifestMergerImpl(new File(comBuild.originalManifest),
+                                    new File(comBuild.runAloneManifest))
+                            manifestMergerImpl.merge(project.getLogger())
+                            manifestMergerImpl.dest(comBuild.targetManifest)
+                        }
+                    }
+                    processManifestTask.dependsOn mergeTask
+
+                    processManifestTask.doLast {
+                        def processManifestOutputFilePath = comBuild.targetManifest
+                        Log.info("start handle xmlns:" + processManifestOutputFilePath)
+
+                        File manifestFile = new File(processManifestOutputFilePath)
+                        if (manifestFile.exists() /*&& manifestFile.name == "AndroidManifest.xml"*/) {
+                            String manifestFileContent = manifestFile.text
+                            StringBuilder builder = new StringBuilder(manifestFileContent)
+
+                            manifestFile.text = builder.toString()
+                        }
+                        XmlnsSweeper.sweep(processManifestOutputFilePath)
+                    }
+                }
+            }
+
             project.apply plugin: 'com.android.application'
-            if (!module.equals(mainmodulename)) {
+            if (module != mainModuleName) {
+
                 project.android.sourceSets {
                     main {
-                        manifest.srcFile 'src/main/runalone/AndroidManifest.xml'
-                        java.srcDirs = ['src/main/java', 'src/main/runalone/java']
+                        //使用新特性中的合并manifest产物
+                        manifest.srcFile 'src/main/runalone/mergedManifest.xml'
+//                        manifest.srcFile 'src/main/runalone/runaloneManifest.xml'
+                        java.srcDirs = ['src/main/java', 'src/main/runalone/java', 'src/main/runalone/kotlin']
                         res.srcDirs = ['src/main/res', 'src/main/runalone/res']
                         assets.srcDirs = ['src/main/assets', 'src/main/runalone/assets']
                         jniLibs.srcDirs = ['src/main/jniLibs', 'src/main/runalone/jniLibs']
                     }
                 }
             }
-            System.out.println("apply plugin is " + 'com.android.application')
+            Log.info("apply plugin is " + 'com.android.application')
             if (assembleTask.isAssemble && module.equals(compileModule)) {
                 compileComponents(assembleTask, project)
                 project.android.registerTransform(new ComCodeTransform(project))
             }
         } else {
             project.apply plugin: 'com.android.library'
-            System.out.println("apply plugin is " + 'com.android.library')
+            Log.info("apply plugin is " + 'com.android.library')
         }
 
     }
@@ -106,7 +148,7 @@ class ComBuild implements Plugin<Project> {
                     assembleTask.isDebug = true
                 }
                 assembleTask.isAssemble = true
-                System.out.println("debug assembleTask info:"+task)
+                Log.info("debug assembleTask info:"+task)
                 String[] strs = task.split(":")
                 assembleTask.modules.add(strs.length > 1 ? strs[strs.length - 2] : "all")
                 break
@@ -130,16 +172,16 @@ class ComBuild implements Plugin<Project> {
         }
 
         if (components == null || components.length() == 0) {
-            System.out.println("there is no add dependencies ")
+            Log.info("there is no add dependencies ")
             return
         }
         String[] compileComponents = components.split(",")
         if (compileComponents == null || compileComponents.length == 0) {
-            System.out.println("there is no add dependencies ")
+            Log.info("there is no add dependencies ")
             return
         }
         for (String str : compileComponents) {
-            System.out.println("comp is " + str)
+            Log.info("comp is " + str)
             str = str.trim()
             if (str.startsWith(":")) {
                 str = str.substring(1)
@@ -152,14 +194,14 @@ class ComBuild implements Plugin<Project> {
                  * 注意，前提是已经将组件aar文件发布到maven上，并配置了相应的repositories
                  */
                 project.dependencies.add("compile", str)
-                System.out.println("add dependencies lib  : " + str)
+                Log.info("add dependencies lib  : " + str)
             } else {
                 /**
                  * 示例语法:module
                  * compileComponent=readercomponent,sharecomponent
                  */
                 project.dependencies.add("compile", project.project(':' + str))
-                System.out.println("add dependencies project : " + str)
+                Log.info("add dependencies project : " + str)
             }
         }
     }

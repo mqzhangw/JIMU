@@ -35,14 +35,25 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile project(':componentservice')
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation project(':componentservice')
 //    kapt project(':router-anno-compiler')
     kapt 'com.github.jimu:router-anno-compiler:1.0.1'
-    compile deps.kotlin.kotlin_jdk7
+    implementation deps.kotlin.kotlin_jdk7
 }
+
+
+def projectRoot = project.getRootProject().rootDir.absolutePath
+
 
 combuild {
     applicationName = 'com.luojilab.share.runalone.application.KotlinApplication'
     isRegisterCompoAuto = true
+
+    originalManifest = projectRoot + "/sharecomponentkotlin/src/main/AndroidManifest.xml"
+
+    runAloneManifest = projectRoot + "/sharecomponentkotlin/src/main/runalone/AndroidManifest.xml"
+    targetManifest = projectRoot + "/sharecomponentkotlin/src/main/runalone/mergedManifest.xml"
+    //如果不需要合并，改为false
+    enableManifestMerge = true
 }

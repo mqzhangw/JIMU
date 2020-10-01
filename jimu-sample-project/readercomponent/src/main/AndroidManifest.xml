@@ -3,10 +3,21 @@
 
     package="com.luojilab.reader">
 
+    <!--    添加权限测试manifest合并功能-->
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
-        android:allowBackup="true" android:label="@string/readerbook_app_name"
-        tools:replace="android:label"
-        android:supportsRtl="true">
+        android:allowBackup="true"
+        android:label="@string/readerbook_app_name"
+        android:supportsRtl="true"
+        tools:replace="android:label">
+
+        <!--        添加Activity测试manifest合并功能-->
+        <activity
+            android:name=".ReaderActivity"
+            android:screenOrientation="portrait" />
+
+        <meta-data android:name="a" android:value="a"/>
 
     </application>
 

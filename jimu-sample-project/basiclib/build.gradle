@@ -22,15 +22,15 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    api fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile deps.support.v7.appcompat
-    testCompile deps.junit
-    compile 'com.squareup.picasso:picasso:2.5.2'
+    api deps.support.v7.appcompat
+    testImplementation deps.junit
+    api 'com.squareup.picasso:picasso:2.5.2'
 
 //    compile project(":componentlib")
-    compile deps.jimu.componentLib
+    api deps.jimu.componentLib
 }
 

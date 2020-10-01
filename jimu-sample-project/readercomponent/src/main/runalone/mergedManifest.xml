@@ -1,0 +1,14 @@
+<manifest package="com.luojilab.reader" xmlns:android="http://schemas.android.com/apk/res/android">
+  <uses-permission android:name="android.permission.INTERNET" />
+  <application android:allowBackup="true"  android:label="@string/readerbook_app_name" android:supportsRtl="true" tools:replace="android:label" xmlns:tools="http://schemas.android.com/tools" android:name=".runalone.application.ReaderApplication">
+    <activity android:name=".ReaderActivity" android:screenOrientation="portrait"/>
+    <meta-data android:name="a" android:value="a"/>
+    <activity android:name=".runalone.ReaderTestActivity">
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN"/>
+        <category android:name="android.intent.category.LAUNCHER"/>
+      </intent-filter>
+    </activity>
+    <meta-data android:name="b" android:value="b"/>
+  </application>
+</manifest>

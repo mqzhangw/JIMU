@@ -1,7 +1,7 @@
-include ':app',
-        ':sharecomponentkotlin',
-        ':readercomponent',
-        ':sharecomponent',
-        ':componentservice',
-        ':basiclib',
-        ':basicres'
+include ':app'
+include ':sharecomponentkotlin'
+include ':readercomponent'
+include ':sharecomponent'
+include ':componentservice'
+include ':basiclib'
+include ':basicres'
