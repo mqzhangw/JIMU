@@ -1,6 +1,6 @@
 package com.luojilab.componentservice.readerbook;
 
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 
 /**
  * export module services

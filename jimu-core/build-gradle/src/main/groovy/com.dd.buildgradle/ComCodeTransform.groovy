@@ -20,12 +20,15 @@ class ComCodeTransform extends Transform {
     }
 
     @Override
-    void transform(TransformInvocation transformInvocation) throws TransformException, InterruptedException, IOException {
+    void transform(TransformInvocation transformInvocation) throws TransformException,
+            InterruptedException, IOException {
+
         getRealApplicationName(transformInvocation.getInputs())
         classPool = new ClassPool()
         project.android.bootClasspath.each {
             classPool.appendClassPath((String) it.absolutePath)
         }
+
         def box = ConvertUtils.toCtClasses(transformInvocation.getInputs(), classPool)
 
         //要收集的application，一般情况下只有一个
@@ -83,6 +86,8 @@ class ComCodeTransform extends Transform {
             input.directoryInputs.each { DirectoryInput directoryInput ->
                 boolean isRegisterCompoAuto = project.extensions.combuild.isRegisterCompoAuto
 
+                boolean useMaat = project.extensions.combuild.useMaat
+
                 System.out.println(">>>")
                 System.out.println(">>>")
                 System.out.println(">>>")
@@ -93,7 +98,6 @@ class ComCodeTransform extends Transform {
                         + " ; isRegisterCompoAuto:"
                         + isRegisterCompoAuto)
 
-//                if (isRegisterCompoAuto) {
                 String fileName = directoryInput.file.absolutePath
                 File dir = new File(fileName)
                 dir.eachFileRecurse { File file ->
@@ -103,28 +107,30 @@ class ComCodeTransform extends Transform {
                             .replace("/", ".")
                     if (classNameTemp.endsWith(".class")) {
                         String className = classNameTemp.substring(1, classNameTemp.length() - 6)
-                        if (className.equals(applicationName)) {
+                        if (className == applicationName) {
 
                             injectEventManagerInitializeCode(applications[0], serviceInfoBeans, fileName)
 
                             //auto register component
                             if (isRegisterCompoAuto)
-                                injectApplicationCode(applications.get(0), activators, fileName)
+                                injectApplicationCode(applications.get(0), activators, fileName, useMaat)
 
                             applications[0].detach()
                         }
                     }
                 }
-//                }
 
                 def dest = transformInvocation.outputProvider.getContentLocation(directoryInput.name,
                         directoryInput.contentTypes,
                         directoryInput.scopes, Format.DIRECTORY)
                 // 将input的目录复制到output指定目录
                 FileUtils.copyDirectory(directoryInput.file, dest)
+
             }
         }
     }
+
+    //osp.leobert.android.maat.Maat
 
 
     private void getRealApplicationName(Collection<TransformInput> inputs) {
@@ -134,8 +140,9 @@ class ComCodeTransform extends Transform {
         }
     }
 
-    private
-    static void injectEventManagerInitializeCode(CtClass ctClassApplication, List<CtClass> serviceInfoBeans, String patch) {
+    private static void injectEventManagerInitializeCode(CtClass ctClassApplication,
+                                                         List<CtClass> serviceInfoBeans,
+                                                         String patch) {
         System.out.println("injectEventManagerInitializeCode begin")
         ctClassApplication.defrost()
         try {
@@ -162,12 +169,15 @@ class ComCodeTransform extends Transform {
     }
 
 
-    private void injectApplicationCode(CtClass ctClassApplication, List<ServiceInfoBean> activators, String patch) {
+    private static void injectApplicationCode(CtClass ctClassApplication,
+                                              List<ServiceInfoBean> activators,
+                                              String patch,
+                                              boolean useMaat) {
         System.out.println("injectApplicationCode begin")
         ctClassApplication.defrost()
         try {
             CtMethod attachBaseContextMethod = ctClassApplication.getDeclaredMethod("onCreate", null)
-            attachBaseContextMethod.insertAfter(getAutoLoadComCode(activators))
+            attachBaseContextMethod.insertAfter(getAutoLoadComCode(activators, useMaat))
         } catch (CannotCompileException | NotFoundException e) {
 
             System.out.println("could not found onCreate in Application;   " + e.toString())
@@ -175,7 +185,7 @@ class ComCodeTransform extends Transform {
             StringBuilder methodBody = new StringBuilder()
             methodBody.append("protected void onCreate() {")
             methodBody.append("super.onCreate();")
-            methodBody.append(getAutoLoadComCode(activators))
+            methodBody.append(getAutoLoadComCode(activators, useMaat))
             methodBody.append("}")
             ctClassApplication.addMethod(CtMethod.make(methodBody.toString(), ctClassApplication))
         } catch (Exception e) {
@@ -187,7 +197,7 @@ class ComCodeTransform extends Transform {
         System.out.println("injectApplicationCode success ")
     }
 
-      static String generateEventManagerInitializeCode(List<ServiceInfoBean> serviceInfoBeans) {
+    static String generateEventManagerInitializeCode(List<ServiceInfoBean> serviceInfoBeans) {
         StringBuilder initializeCodeBuilder = new StringBuilder()
         serviceInfoBeans?.forEach({
             //   EventManager.appendMapper("pname", XXX.class);
@@ -201,11 +211,14 @@ class ComCodeTransform extends Transform {
         return initializeCodeBuilder.toString()
     }
 
-    private static String getAutoLoadComCode(List<CtClass> activators) {
+    private static String getAutoLoadComCode(List<CtClass> activators, boolean useMaat) {
         StringBuilder autoLoadComCode = new StringBuilder()
         for (CtClass ctClass : activators) {
             autoLoadComCode.append("new " + ctClass.getName() + "()" + ".onCreate();")
         }
+
+        if (useMaat)
+            autoLoadComCode.append("osp.leobert.android.maat.Maat.Companion.getDefault().start();")
 
         return autoLoadComCode.toString()
     }
@@ -216,8 +229,8 @@ class ComCodeTransform extends Transform {
             if (applicationName != null && applicationName == ctClass.getName()) {
                 return true
             }
-        } catch (Exception e) {
-            println "class not found exception class name:  " + ctClass.getName()
+        } catch (Exception ignore) {
+            println "class not found exception, class name:  " + ctClass.getName()
         }
         return false
     }
@@ -230,7 +243,7 @@ class ComCodeTransform extends Transform {
     private static boolean isActivator(CtClass ctClass) {
         try {
             for (CtClass ctClassInter : ctClass.getInterfaces()) {
-                if ("com.luojilab.component.componentlib.applicationlike.IApplicationLike".equals(ctClassInter.name)) {
+                if ("com.luojilab.component.componentlib.applicationlike.IApplicationLike" == ctClassInter.name) {
                     boolean hasManualNotation = ctClass.hasAnnotation(Class.forName("com.luojilab.component.componentlib.applicationlike.RegisterCompManual"))
 //                    return true
                     System.out.println(">>>> " + ctClass + " manual register?" + hasManualNotation)

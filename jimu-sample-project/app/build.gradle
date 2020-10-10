@@ -10,7 +10,7 @@ android {
         versionCode 1
         versionName "1.0"
         applicationId "com.luojilab.androidcomponent"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
 
         javaCompileOptions {
             annotationProcessorOptions {
@@ -46,13 +46,23 @@ android {
 
 dependencies {
     implementation project(':componentservice')
-    implementation 'com.android.support.constraint:constraint-layout:2.0.1'
-    implementation 'com.android.support:design:28.0.0'
-    implementation 'com.android.support:support-vector-drawable:28.0.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
+    implementation 'com.google.android.material:material:1.2.1'
+    implementation 'androidx.vectordrawable:vectordrawable:1.1.0'
     annotationProcessor deps.jimu.router_anno_compiler
 }
+
+def projectRoot = project.getRootProject().rootDir.absolutePath
+
 
 combuild {
     applicationName = 'com.luojilab.componentdemo.application.AppApplication'
     isRegisterCompoAuto = true
+
+    originalManifest = projectRoot + "/app/src/main/AndroidManifest.xml"
+
+    runAloneManifest = projectRoot + "/app/src/main/AndroidManifest.xml"
+    targetManifest = projectRoot + "/app/src/main/AndroidManifest.xml"
+    //如果不需要合并，改为false
+    enableManifestMerge = false
 }

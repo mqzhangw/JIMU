@@ -28,4 +28,9 @@ class ComExtension {
     String targetManifest
 
     boolean enableManifestMerge = true
+
+    /**
+     * 是否使用Maat进行按序初始化业务，如果使用则需要自动织入代码
+     * */
+    boolean useMaat = true
 }

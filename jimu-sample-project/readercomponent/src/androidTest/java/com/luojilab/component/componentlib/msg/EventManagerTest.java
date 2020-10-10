@@ -1,12 +1,11 @@
 package com.luojilab.component.componentlib.msg;
 
-import android.support.test.runner.AndroidJUnit4;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.github.jimu.msg.EventListener;
 import org.github.jimu.msg.EventManager;
 import org.github.jimu.msg.bean.EventBean;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 

@@ -1,7 +1,7 @@
 package com.luojilab.component.basicres;
 
 import android.app.Application;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 /**
  * Created by mrzhang on 2018/1/16.

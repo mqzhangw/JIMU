@@ -2,9 +2,9 @@ package com.luojilab.componentdemo;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.text.style.ClickableSpan;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
 import android.view.View;
 import android.widget.Button;
 
@@ -12,12 +12,9 @@ import com.luojilab.component.basiclib.ToastManager;
 import com.luojilab.component.basicres.BaseActivity;
 import com.luojilab.component.basicres.BaseApplication;
 import com.luojilab.component.componentlib.router.Router;
-import com.luojilab.component.componentlib.router.ui.IComponentRouter;
 import com.luojilab.component.componentlib.router.ui.UIRouter;
 import com.luojilab.componentservice.readerbook.ReadBookService;
 import com.luojilab.router.facade.annotation.RouteNode;
-
-import java.util.Arrays;
 
 @RouteNode(path = "/main", desc = "首页")
 public class MainActivity extends BaseActivity implements View.OnClickListener {
