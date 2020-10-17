@@ -33,6 +33,8 @@ JIMU（积木）是一套Android组件化框架，支持组件的代码资源隔
 - 任意组件可以充当host，集成其他组件进行集成调试
 - 可以动态对已集成的组件进行加载和卸载
 - 支持kotlin组件
+- 组件独立运行的Manifest可以基于“壳”和组件原始的Manifest合并生成（from version 1.3.4）
+- 组件初始化支持按序（from version 1.3.4）这部分基于[Maat](https://github.com/leobert-lan/Maat), [参考博客](https://juejin.im/post/6884492604370026503/)
 
 
 ### 原理解析
@@ -41,6 +43,8 @@ JIMU（积木）是一套Android组件化框架，支持组件的代码资源隔
 原理解释请参考文章[Android彻底组件化方案实践](http://www.jianshu.com/p/1b1d77f58e84)
 
 demo解读请参考文章[Android彻底组件化demo发布](http://www.jianshu.com/p/59822a7b2fad)
+
+按序初始化业务组件请参考文章[组件化：代码隔离也难不倒组件的按序初始化 ](https://juejin.im/post/6884492604370026503/)
 
 ### 使用指南
 #### 1、主项目引用编译脚本
@@ -60,7 +64,7 @@ buildscript {
     }
 }
 ```
-*current lastest version 1.3.2 has just post a request to includeed in the bintray's jCenter,maybe you cannot fetch it before the request has been approved*
+*A.B.C是版本号，最新的版本号可以参考上面的jcenter外链*
 
 为每个组件引入依赖库，如果项目中存在basiclib等基础库，可以统一交给basiclib引入
 
@@ -97,8 +101,36 @@ combuild {
 ```
 组件注册还支持反射的方式，有关isRegisterCompoAuto的解释请参见上文第二篇文章
 
+##### 1.3.4新特性
+
+```
+def projectRoot = project.getRootProject().rootDir.absolutePath
+
+combuild {
+    applicationName = 'com.luojilab.reader.runalone.application.ReaderApplication'
+    isRegisterCompoAuto = false
+
+    originalManifest = projectRoot + "/readercomponent/src/main/AndroidManifest.xml"
+
+    runAloneManifest = projectRoot + "/readercomponent/src/main/runalone/AndroidManifest.xml"
+    targetManifest = projectRoot + "/readercomponent/src/main/runalone/mergedManifest.xml"
+    //如果不需要合并，改为false
+    enableManifestMerge = true
+}
+
+```
+
+增加了5个可配项目：
+
+* useMaat 默认为true，本处没有写，如果你不打算使用Maat，务必改为false，否则会织入代码并发生ClassNotFoundException
+* originalManifest 原始manifest文件路径
+* runAloneManifest 一个壳manifest，用于指定独立运行时额外需要的权限、Application配置，启动Activity、额外的四大组件，metadata
+* targetManifest 合并后输出的manifest，需要先创建文件，runalone使用的manifest；*如不先创建会影响gradle任务，被认为是一个缺失manifest的Component！*
+* enableManifestMerge 如果是true，则会在合适的时机执行manifest合并功能，并且插件中增加的如：runaloneMergeDebugManifest等任务会执行合并，否则该任务并不会合并manifest文件
+
 #### 4、混淆
 在混淆文件中增加如下配置
+
 ```
 -keep interface * {
   <methods>;
@@ -109,6 +141,7 @@ combuild {
 -keep class * implements com.luojilab.component.componentlib.applicationlike.IApplicationLike {*;}
 
 ```
+
 *注意：com.luojilab.component.componentlib和com.luojilab.gen.router包可能在项目迁移的过程中发生过或即将发生变化，文档更新不一定及时，请手工确认一下生成类的包路径。*
 
 关于如何进行组件之间数据交互和UI跳转，请参看 [Wiki](https://github.com/mqzhangw/JIMU/wiki)
