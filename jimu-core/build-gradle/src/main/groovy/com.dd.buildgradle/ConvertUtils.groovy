@@ -12,6 +12,19 @@ import java.util.jar.JarFile
 import java.util.regex.Matcher
 
 class ConvertUtils {
+    static boolean ignore(String className) {
+        try {
+            return className.contains(".R\$") ||
+                    className.endsWith("R" + SdkConstants.DOT_CLASS) ||
+                    className.endsWith("R2" + SdkConstants.DOT_CLASS) ||
+                    className.startsWith("META-INF")
+
+        } catch (Exception e) {
+            e.printStackTrace()
+        }
+        return true
+    }
+
     static List<CtClass> toCtClasses(Collection<TransformInput> inputs, ClassPool classPool) {
         List<String> classNames = new ArrayList<>()
         List<CtClass> allClass = new ArrayList<>()
@@ -21,11 +34,16 @@ class ConvertUtils {
                 classPool.insertClassPath(it.file.absolutePath)
                 FileUtils.listFiles(it.file, null, true).each {
                     if (it.absolutePath.endsWith(SdkConstants.DOT_CLASS)) {
-                        def className = it.absolutePath.substring(dirPath.length() + 1, it.absolutePath.length() - SdkConstants.DOT_CLASS.length()).replaceAll(Matcher.quoteReplacement(File.separator), '.')
-                        if (classNames.contains(className)) {
-                            throw new RuntimeException("You have duplicate classes with the same name : " + className + " please remove duplicate classes ")
+                        def className = it.absolutePath.substring(dirPath.length() + 1, it.absolutePath.length() - SdkConstants.DOT_CLASS.length())
+                                .replaceAll(Matcher.quoteReplacement(File.separator), '.')
+                        if (!ignore(className)) {
+                            if (classNames.contains(className)) {
+                                if (!className.contains("BuildConfig"))
+                                    throw new RuntimeException("directoryInputs:You have duplicate classes with the same name : " + className + " please remove duplicate classes ")
+                            } else {
+                                classNames.add(className)
+                            }
                         }
-                        classNames.add(className)
                     }
                 }
             }
@@ -34,18 +52,25 @@ class ConvertUtils {
                 classPool.insertClassPath(it.file.absolutePath)
                 def jarFile = new JarFile(it.file)
                 Enumeration<JarEntry> classes = jarFile.entries()
-                while (classes.hasMoreElements()) {
-                    JarEntry libClass = classes.nextElement()
-                    String className = libClass.getName()
-                    if (className.endsWith(SdkConstants.DOT_CLASS)) {
-                        className = className.substring(0, className.length() - SdkConstants.DOT_CLASS.length()).replaceAll('/', '.')
-                        if (classNames.contains(className)) {
-                            throw new RuntimeException("You have duplicate classes with the same name : " + className + " please remove duplicate classes ")
+                try {
+                    while (classes.hasMoreElements()) {
+                        JarEntry libClass = classes.nextElement()
+                        String className = libClass.getName()
+                        if (className.endsWith(SdkConstants.DOT_CLASS)) {
+                            className = className.substring(0, className.length() - SdkConstants.DOT_CLASS.length()).replaceAll('/', '.')
+                            if (!ignore(className)) {
+                                if (classNames.contains(className)) {
+                                    if (!className.contains("BuildConfig") /*&& !className.contains("module-info")*/)
+                                        throw new RuntimeException("jarInputs:You have duplicate classes with the same name : " + className + " please remove duplicate classes ")
+                                } else {
+                                    classNames.add(className)
+                                }
+                            }
                         }
-                        classNames.add(className)
                     }
+                } finally {
+                    jarFile.close()
                 }
-                jarFile.close()
             }
         }
         classNames.each {
@@ -57,6 +82,5 @@ class ConvertUtils {
         }
         return allClass
     }
-
 
 }

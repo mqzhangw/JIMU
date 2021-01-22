@@ -8,6 +8,7 @@ import org.apache.commons.io.FileUtils
 import org.github.jimu.msg.MsgBridgeService
 import org.github.jimu.msg.ServiceInfoBean
 import org.gradle.api.Project
+import osp.leobert.magnet.Log
 
 class ComCodeTransform extends Transform {
 
@@ -39,18 +40,36 @@ class ComCodeTransform extends Transform {
         List<ServiceInfoBean> serviceInfoBeans = []
 
         for (CtClass ctClass : box) {
-            if (isMsgBridgeService(ctClass)) {
-                MsgBridgeService annotation = ctClass.getAnnotation(MsgBridgeService.class)
-                ServiceInfoBean bean = new ServiceInfoBean(annotation.workProcessName(), ctClass)
-                serviceInfoBeans.add(bean)
+            try {
+
+                if (isMsgBridgeService(ctClass)) {
+                    MsgBridgeService annotation = ctClass.getAnnotation(MsgBridgeService.class)
+                    ServiceInfoBean bean = new ServiceInfoBean(annotation.workProcessName(), ctClass)
+                    serviceInfoBeans.add(bean)
+                }
+            } catch (Exception e) {
+                Log.info("exception in isMsgBridgeService:" + e.localizedMessage)
+                throw e
             }
 
-            if (isApplication(ctClass)) {
-                applications.add(ctClass)
-                continue
+            try {
+
+                if (isApplication(ctClass)) {
+                    applications.add(ctClass)
+                    continue
+                }
+            } catch (Exception e) {
+                Log.info("exception in isApplication:" + e.localizedMessage)
+                throw e
             }
-            if (isActivator(ctClass)) {
-                activators.add(ctClass)
+
+            try {
+                if (isActivator(ctClass)) {
+                    activators.add(ctClass)
+                }
+            } catch (Exception e) {
+                Log.info("exception in isActivator:" + e.localizedMessage)
+                throw e
             }
 
         }
@@ -258,7 +277,12 @@ class ComCodeTransform extends Transform {
     }
 
     private static boolean isMsgBridgeService(CtClass ctClass) {
-        return ctClass.hasAnnotation(MsgBridgeService.class)
+        try {
+            return ctClass.hasAnnotation(MsgBridgeService.class)
+        } catch (Exception e) {
+            e.printStackTrace()
+        }
+        return false
     }
 
     @Override
