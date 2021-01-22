@@ -55,5 +55,7 @@ combuild {
     runAloneManifest = projectRoot + "/sharecomponentkotlin/src/main/runalone/AndroidManifest.xml"
     targetManifest = projectRoot + "/sharecomponentkotlin/src/main/runalone/mergedManifest.xml"
     //如果不需要合并，改为false
-    enableManifestMerge = true
+    enableManifestMerge = false //如果是true，注意可能需要额外补充一些配置，例如style，
+    useMaat = false
+    //先禁用掉，如果runalone时却有需要，可以参考App-module或者sharecomponent，进行初始化并补全所有任务依赖
 }

@@ -55,7 +55,8 @@ combuild {
     runAloneManifest = projectRoot + "/sharecomponent/src/main/runalone/AndroidManifest.xml"
     targetManifest = projectRoot + "/sharecomponent/src/main/runalone/mergedManifest.xml"
     //如果不需要合并，改为false
-    enableManifestMerge = true
+    enableManifestMerge = false
+    useMaat=true
 }
 repositories {
     mavenCentral()

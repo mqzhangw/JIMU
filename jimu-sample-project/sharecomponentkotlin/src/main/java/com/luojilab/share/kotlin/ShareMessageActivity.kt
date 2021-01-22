@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.kotlin_activity_share.*
  * Created by mrzhang on 2017/12/29.
  */
 @RouteNode(path = "/shareMagazine", desc = "分享杂志页面")
-class ShareMessageActivity : BaseActivity() {
+open class ShareMessageActivity : BaseActivity() {
 
     @Autowired(name = "bookName")
     @JvmField

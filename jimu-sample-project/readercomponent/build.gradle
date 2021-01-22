@@ -63,7 +63,7 @@ combuild {
     runAloneManifest = projectRoot + "/readercomponent/src/main/runalone/AndroidManifest.xml"
     targetManifest = projectRoot + "/readercomponent/src/main/runalone/mergedManifest.xml"
     //如果不需要合并，改为false
-    enableManifestMerge = true
+    enableManifestMerge = false
 }
 
 repositories {

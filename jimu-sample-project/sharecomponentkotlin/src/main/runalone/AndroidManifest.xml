@@ -7,14 +7,23 @@
         android:allowBackup="true"
         android:supportsRtl="true"
         android:theme="@style/commonAppTheme">
-        <activity android:name=".ShareMessageActivity">
+        <activity android:name="com.luojilab.share.runalone.application.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".JavaTarget" />
-
     </application>
 </manifest>
+
+    <!--        <activity android:name=".ShareMessageActivity">-->
+    <!--            <intent-filter>-->
+    <!--                <action android:name="android.intent.action.MAIN" />-->
+
+    <!--                <category android:name="android.intent.category.LAUNCHER" />-->
+    <!--            </intent-filter>-->
+    <!--        </activity>-->
+    <!--        不再需要额外重复声明了，但是以ShareMessageActivity 为例，如果要改变配置，合并就会出现问题，
+    考虑到独立运行是一个开发阶段的工作，我们继承一个Activity重新声明，或者单独配一个启动页，或者在runaloneApplication中植入逻辑-->
+    <!--        <activity android:name=".JavaTarget" />-->
