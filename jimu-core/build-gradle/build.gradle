@@ -32,17 +32,17 @@ dependencies {
 }
 
 
-//apply from: '../installv1.gradle' //注意，发布到jcenter是需要切换插件，否则groupID会切换，没细看原因
-apply plugin: 'maven'
-uploadArchives() {
-    repositories {
-        mavenDeployer {
-            repository(url: MAVEN_LOCAL_PATH)
-            pom.project {
-                groupId GROUP_ID
-                artifactId ARTIFACT_ID
-                version VERSION_NAME
-            }
-        }
-    }
-}
+apply from: '../installv1.gradle' //注意，发布到jcenter是需要切换插件，否则groupID会切换，没细看原因
+//apply plugin: 'maven'
+//uploadArchives() {
+//    repositories {
+//        mavenDeployer {
+//            repository(url: MAVEN_LOCAL_PATH)
+//            pom.project {
+//                groupId GROUP_ID
+//                artifactId ARTIFACT_ID
+//                version VERSION_NAME
+//            }
+//        }
+//    }
+//}
