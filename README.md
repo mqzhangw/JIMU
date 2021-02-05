@@ -46,6 +46,8 @@ demo解读请参考文章[Android彻底组件化demo发布](http://www.jianshu.c
 
 按序初始化业务组件请参考文章[组件化：代码隔离也难不倒组件的按序初始化 ](https://juejin.im/post/6884492604370026503/)
 
+单项目，多module背景下，依赖方式的优雅实践探索：[三思系列：组件化场景下module依赖优雅实践方案 ](https://juejin.cn/post/6925629544946892813)
+
 ### 使用指南
 #### 1、主项目引用编译脚本
 在根目录的gradle.properties文件中，增加属性：
