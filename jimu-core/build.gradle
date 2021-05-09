@@ -57,41 +57,48 @@ buildscript {
 
             jimu     : [
                     'componentLib'        : 'com.github.jimu:componentlib:1.3.1',
-                    'router_anno'         : 'com.github.jimu:router-annotation:1.0.1',
-                    'router_anno_compiler': 'com.github.jimu:router-anno-compiler:1.0.1',
+                    'router_anno'         : 'io.github.leobert-lan:jimu-router-annotation:1.0.1',
+                    'router_anno_compiler': 'io.github.leobert-lan:jimu-router-anno-compiler:1.0.1',
             ],
 
             gson     : 'com.google.code.gson:gson:2.8.2',
 
-            report : [
-                    'anno' : 'osp.leobert.android:ReportNotation:1.0.0',
-                    'compiler':'osp.leobert.android:report-anno-compiler:1.0.0'
+            report   : [
+                    'anno'    : 'osp.leobert.android:ReportNotation:1.0.0',
+                    'compiler': 'osp.leobert.android:report-anno-compiler:1.0.0'
             ]
     ]
 
 
-
     repositories {
+        mavenCentral()
+        maven { url "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/" }
+        maven { url "https://s01.oss.sonatype.org/content/repositories/releases/" }
         jcenter()
-        maven { url "https://jitpack.io" }
-        maven {
-            url 'https://dl.bintray.com/leobert-lan-oss/maven/'
-        }
+//        deprecated
+//        maven { url "https://jitpack.io" }
+//        maven {
+//            url 'https://dl.bintray.com/leobert-lan-oss/maven/'
+//        }
         google()
     }
     dependencies {
         classpath deps.android.gradlePlugin
-        classpath deps.publish.jcenter
-        classpath deps.publish.maven
+//        classpath deps.publish.jcenter
+//        classpath deps.publish.maven
         classpath deps.kotlin
     }
 }
 
 allprojects {
     repositories {
+        mavenCentral()
+        maven { url "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/" }
+        maven { url "https://s01.oss.sonatype.org/content/repositories/releases/" }
+
         jcenter()
         google()
-        maven { url 'https://jitpack.io' }
+//        maven { url 'https://jitpack.io' }
         maven {
             url 'https://dl.bintray.com/leobert-lan-oss/maven/'
         }

@@ -1,24 +1,14 @@
-apply plugin: 'groovy'
-
+plugins {
+    id 'groovy'
+    id 'signing'
+    id 'maven-publish'
+}
 
 def MAVEN_LOCAL_PATH = uri('../../local_repo')
-def ARTIFACT_ID = 'build-gradle'
+def GROUP_ID = 'io.github.leobert-lan'
+def ARTIFACT_ID = 'jimu-build-gradle'
 def VERSION_NAME = '1.3.5'
-def GROUP_ID = 'com.github.jimu'
-def changeLog ="支持 kotlin-1.4.x 等支持Java语法的内容"
-
-ext {
-    bintrayRepo = 'maven'
-    bintrayName = ARTIFACT_ID
-    artifact = ARTIFACT_ID
-    libraryName = ARTIFACT_ID
-    libraryVersion = VERSION_NAME
-    libraryDescription = 'gradle plugin for buid component'
-    licenseName = 'The Apache Software License, Version 2.0'
-    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-    allLicenses = ["Apache-2.0"]
-}
-apply from: '../bintrayv1.gradle'
+def changeLog = "支持 kotlin-1.4.x 等支持Java语法的内容"
 
 dependencies {
     implementation 'com.android.tools.build:gradle:4.1.1'
@@ -31,8 +21,103 @@ dependencies {
 
 }
 
+Properties properties = new Properties()
+InputStream inputStream = project.rootProject.file('local.properties').newDataInputStream()
+properties.load(inputStream)
+def ACCOUNT = properties.get("nexus_user", "")
+def PASSWORD = properties.get("nexus_pwd", "")
 
-apply from: '../installv1.gradle' //注意，发布到jcenter是需要切换插件，否则groupID会切换，没细看原因
+//apply plugin: 'maven'
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+//task javadoc(type: Javadoc) {
+//    source = sourceSets.main.java.srcDirs
+//    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+////    exclude 'osp/leobert/android/uibinding/**'
+//}
+
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+tasks.withType(Javadoc) {
+    options.addStringOption('Xdoclint:none', '-quiet')
+    options.addStringOption('encoding', 'UTF-8')
+    options.addStringOption('charSet', 'UTF-8')
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
+afterEvaluate {
+    publishing {
+        publications {
+            mavenAndroid(MavenPublication) {
+                groupId GROUP_ID
+                artifactId ARTIFACT_ID
+                version VERSION_NAME
+                artifact sourcesJar
+                artifact javadocJar
+                artifact('build/libs/build-gradle.jar')
+                // 配置 pom 文件格式
+                pom {
+
+                    groupId = GROUP_ID
+                    artifactId = ARTIFACT_ID
+                    version = VERSION_NAME
+
+                    packaging = 'jar'
+                    name = ARTIFACT_ID
+                    description = ARTIFACT_ID
+                    url = siteUrl
+                    licenses {
+                        license {
+                            name = 'The Apache Software License, Version 2.0'
+                            url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id = 'mqzhang,leobert'
+                            name = 'mqzhang,leobert'
+                            email = 'zhmqq0527@gmail.com,leobert.l@hotmail.com'
+                        }
+                    }
+                    scm {
+                        connection = siteUrl
+                        developerConnection = gitUrl
+                        url = siteUrl
+                    }
+                }
+            }
+        }
+        // 配置远程仓库
+        repositories {
+            maven {
+                // 发布地址，新申请的项目发布地址为：https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/
+//            url = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+                url = 'https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/'
+                credentials {
+                    username ACCOUNT
+                    password PASSWORD
+                }
+            }
+        }
+    }
+
+    signing {
+        sign publishing.publications.mavenAndroid
+    }
+}
+
+
 //apply plugin: 'maven'
 //uploadArchives() {
 //    repositories {
