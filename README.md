@@ -10,19 +10,15 @@ JIMU（积木）是一套Android组件化框架，支持组件的代码资源隔
 
 ### 最新版本
 
+> 2021-05-23补充：
+> 受JFrog运营策略影响，项目重新发布到MavenCentral，注意仓库变更
+
 [release-note&change-logs](https://github.com/mqzhangw/JIMU/releases) 关注版本变更以及注意事项是个好习惯。
 
 模块|build-gradle|componentlib|router-anno-compiler|router-annotation
 ---|---|---|---|---
-最新版本|[![Download](https://api.bintray.com/packages/zhmqq0527/compbuild/build-gradle/images/download.svg)](https://bintray.com/zhmqq0527/compbuild/build-gradle/_latestVersion)|[![Download](https://api.bintray.com/packages/zhmqq0527/compbuild/componentlib/images/download.svg)](https://bintray.com/zhmqq0527/compbuild/componentlib/_latestVersion)|[![Download](https://api.bintray.com/packages/zhmqq0527/compbuild/router-anno-compiler/images/download.svg)](https://bintray.com/zhmqq0527/compbuild/router-anno-compiler/_latestVersion)|[![Download](https://api.bintray.com/packages/zhmqq0527/compbuild/router-annotation/images/download.svg)](https://bintray.com/zhmqq0527/compbuild/router-annotation/_latestVersion)
+最新版本|[![Download](https://img.shields.io/maven-central/v/io.github.leobert-lan/jimu-build-gradle.svg?label=Maven%20Central)](https://search.maven.org/artifact/io.github.leobert-lan/jimu-build-gradle)|[![Download](https://img.shields.io/maven-central/v/io.github.leobert-lan/jimu-componentlib.svg?label=Maven%20Central)](https://search.maven.org/artifact/io.github.leobert-lan/jimu-componentlib)|[![Download](https://img.shields.io/maven-central/v/io.github.leobert-lan/jimu-router-anno-compiler.svg?label=Maven%20Central)](https://search.maven.org/artifact/io.github.leobert-lan/jimu-router-anno-compiler)|[![Download](https://img.shields.io/maven-central/v/io.github.leobert-lan/jimu-router-annotation.svg?label=Maven%20Central)](https://search.maven.org/artifact/io.github.leobert-lan/jimu-router-annotation)
 
-仓库2：
-
-模块|build-gradle|componentlib|router-anno-compiler|router-annotation
----|---|---|---|---
-最新版本|[![Download](https://api.bintray.com/packages/leobert-lan-oss/maven/build-gradle/images/download.svg)](https://api.bintray.com/packages/leobert-lan-oss/maven/build-gradle/_latestVersion)|[![Download](https://api.bintray.com/packages/leobert-lan-oss/maven/componentlib/images/download.svg)](https://bintray.com/leobert-lan-oss/maven/componentlib/_latestVersion)|[![Download](https://api.bintray.com/packages/leobert-lan-oss/maven/router-anno-compiler/images/download.svg)](https://bintray.com/leobert-lan-oss/maven/router-anno-compiler/_latestVersion)|[![Download](https://api.bintray.com/packages/leobert-lan-oss/maven/router-annotation/images/download.svg)](https://bintray.com/leobert-lan-oss/maven/router-annotation/_latestVersion)
-
-*因为没有创建组织账号，可能会发布到不同的仓库，出现版本差异时请关注下release-note*
 
 ### 实现功能：
 - 组件可以单独调试
@@ -57,21 +53,30 @@ mainmodulename=app
 ```
 其中mainmodulename是项目中的host工程，一般为app
 
+添加mavenCentral仓库
+
 在根目录的build.gradle中增加配置
 
 ```gradle
 buildscript {
     dependencies {
-        classpath 'com.github.jimu:build-gradle:A.B.C'
+        classpath 'io.github.leobert-lan:jimu-build-gradle:A.B.C'
     }
 }
 ```
-*A.B.C是版本号，最新的版本号可以参考上面的jcenter外链*
+*A.B.C是版本号，最新的版本号可以参考上面的MavenCentral外链*
 
 为每个组件引入依赖库，如果项目中存在basiclib等基础库，可以统一交给basiclib引入
 
 ```gradle
-compile 'com.github.jimu:componentlib:A.B.C'
+compile 'io.github.leobert-lan:jimu-componentlib:A.B.C'
+```
+*注意GroupId和ArtifactId在重新发布到MavenCentral后已经变更*
+
+```gradle
+'componentLib'        : 'io.github.leobert-lan:jimu-componentlib:{version}',
+'router_anno'         : 'io.github.leobert-lan:jimu-router-annotation:{version}',
+'router_anno_compiler': 'io.github.leobert-lan:jimu-router-anno-compiler:{version}',
 ```
 
 #### 2、拆分组件为module工程
