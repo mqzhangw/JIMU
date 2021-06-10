@@ -32,6 +32,10 @@ dependencies {
 
 //    compile project(":componentlib")
     api deps.jimu.componentLib
+
+    api "com.google.code.gson:gson:2.8.2"
+    api "io.github.leobert-lan:jimu-router-annotation:1.0.1"
+
     api 'osp.leobert.android:maat:1.0.0'
 }
 

@@ -1,4 +1,5 @@
-apply plugin: 'com.dd.comgradle'
+//apply plugin: 'com.dd.comgradle'
+apply plugin: 'JimuHotfix'
 
 android {
     compileSdkVersion versions.compileSdk
