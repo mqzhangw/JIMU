@@ -10,6 +10,14 @@ JIMU（积木）是一套Android组件化框架，支持组件的代码资源隔
 
 ### 最新版本
 
+> 2021-06-10补充：
+> 因为我的错误操作，导致发布到MavenCentral的版本：
+> 
+> * build-gradle：1.3.5
+> * componentlib: 1.3.3
+> * router-anno-compiler: 1.0.1 
+> 均出现了Pom文件错误，遗失了dependency，再问题被修正前，可以按照hotfix-bad-pom分支的内容，做紧急修复。致歉 -- leobert
+
 > 2021-05-23补充：
 > 受JFrog运营策略影响，项目重新发布到MavenCentral，注意仓库变更
 
