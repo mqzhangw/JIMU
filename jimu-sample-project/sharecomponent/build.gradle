@@ -1,5 +1,5 @@
-apply plugin: 'com.dd.comgradle'
-
+//apply plugin: 'com.dd.comgradle'
+apply plugin: 'JimuHotfix'
 
 android {
     compileSdkVersion versions.compileSdk
@@ -34,7 +34,12 @@ android {
 
 dependencies {
     implementation project(':componentservice')
-    annotationProcessor deps.jimu.router_anno_compiler
+
+//    annotationProcessor deps.jimu.router_anno_compiler
+
+    annotationProcessor(project(":AptHotfix"))
+
+
 //    annotationProcessor project(':router-anno-compiler')
     androidTestCompile('androidx.test.espresso:espresso-core:3.1.0', {
         exclude group: 'com.android.support', module: 'support-annotations'

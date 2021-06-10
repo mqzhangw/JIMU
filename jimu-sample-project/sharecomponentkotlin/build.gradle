@@ -1,4 +1,5 @@
-apply plugin: 'com.dd.comgradle'
+//apply plugin: 'com.dd.comgradle'
+apply plugin: 'JimuHotfix'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'

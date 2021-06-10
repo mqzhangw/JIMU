@@ -99,7 +99,7 @@ public class ReaderTestActivity extends AppCompatActivity {
         public void run() {
             super.run();
             int i = 0;
-            while (true) {
+            while (i<1000) {
                 i++;
                 EventManager.getInstance().postEvent(new TestClz("forceTest:" + i));
             }
