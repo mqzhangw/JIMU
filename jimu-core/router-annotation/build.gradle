@@ -10,43 +10,10 @@ def ARTIFACT_ID = 'jimu-router-annotation'
 def VERSION_NAME = '1.0.1'
 def GROUP_ID = 'io.github.leobert-lan'
 
-//ext {
-//    bintrayRepo = 'maven'
-//    bintrayName = ARTIFACT_ID
-//    artifact = ARTIFACT_ID
-//    libraryName = ARTIFACT_ID
-//    libraryDescription = 'component build lib '
-//    libraryVersion = VERSION_NAME
-//    licenseName = 'The Apache Software License, Version 2.0'
-//    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-//    allLicenses = ["Apache-2.0"]
-//}
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    //none
 }
-
-compileJava {
-    sourceCompatibility = '1.7'
-    targetCompatibility = '1.7'
-}
-
-//apply from: '../installv1.gradle'
-//apply from: '../bintrayv1.gradle'
-//
-//uploadArchives() {
-//    repositories {
-//        mavenDeployer {
-//            repository(url: MAVEN_LOCAL_PATH)
-//            pom.project {
-//                groupId GROUP_ID
-//                artifactId ARTIFACT_ID
-//                version VERSION_NAME
-//                packaging 'aar'
-//            }
-//        }
-//    }
-//}
 
 
 Properties properties = new Properties()
@@ -61,11 +28,6 @@ task sourcesJar(type: Jar) {
     from sourceSets.main.java.srcDirs
 }
 
-//task javadoc(type: Javadoc) {
-//    source = android.sourceSets.main.java.srcDirs
-//    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-////    exclude 'osp/leobert/android/uibinding/**'
-//}
 task javadocJar(type: Jar, dependsOn: javadoc) {
     classifier = 'javadoc'
     from javadoc.destinationDir
@@ -86,6 +48,7 @@ afterEvaluate {
     publishing {
         publications {
             mavenAndroid(MavenPublication) {
+                from components.java
                 groupId GROUP_ID
                 artifactId ARTIFACT_ID
                 version VERSION_NAME
@@ -139,4 +102,8 @@ afterEvaluate {
     signing {
         sign publishing.publications.mavenAndroid
     }
+}
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
 }

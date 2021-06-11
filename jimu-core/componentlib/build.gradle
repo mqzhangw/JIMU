@@ -8,22 +8,10 @@ sourceCompatibility = "1.7"
 targetCompatibility = "1.7"
 
 
-
 def MAVEN_LOCAL_PATH = uri('../../local_repo')
 def ARTIFACT_ID = 'jimu-componentlib'
 def VERSION_NAME = '1.3.3'
 def GROUP_ID = 'io.github.leobert-lan'
-
-//ext {
-//    bintrayName = ARTIFACT_ID
-//    artifact = ARTIFACT_ID
-//    libraryName = ARTIFACT_ID
-//    libraryDescription = 'component build lib '
-//    libraryVersion = VERSION_NAME
-//    licenseName = 'The Apache Software License, Version 2.0'
-//    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-//    allLicenses = ["Apache-2.0"]
-//}
 
 android {
     compileSdkVersion versions.compileSdk
@@ -51,11 +39,10 @@ android {
 }
 
 dependencies {
-//    compile fileTree(include: ['*.jar'], dir: 'libs')
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    testCompile deps.junit
+    testImplementation deps.junit
     api deps.support.v7.appcompat
 
 //    compile project(':router-annotation')
@@ -63,30 +50,7 @@ dependencies {
     api deps.gson
 
     compileOnly deps.report.anno
-    //remove reporter
-//    annotationProcessor deps.report.compiler
-//    compile 'org.apache.commons:commons-lang3:3.4'
-//    compile 'org.apache.commons:commons-collections4:4.1'
 }
-
-
-//apply from: '../installv1.gradle'
-//apply from: '../bintrayv1.gradle'
-//
-//uploadArchives() {
-//    repositories {
-//        mavenDeployer {
-//            repository(url: MAVEN_LOCAL_PATH)
-//            pom.project {
-//                groupId GROUP_ID
-//                artifactId ARTIFACT_ID
-//                version VERSION_NAME
-//                packaging 'aar'
-//            }
-//        }
-//    }
-//}
-
 
 Properties properties = new Properties()
 InputStream inputStream = project.rootProject.file('local.properties').newDataInputStream()
@@ -133,7 +97,7 @@ afterEvaluate {
                 artifact('build/outputs/aar/componentlib-release.aar')
                 // 配置 pom 文件格式
                 pom {
-
+//                    from components.java 非标准Java项目，无法应用
                     groupId = GROUP_ID
                     artifactId = ARTIFACT_ID
                     version = VERSION_NAME
@@ -161,6 +125,19 @@ afterEvaluate {
                         url = siteUrl
                     }
                 }
+
+                pom.withXml {
+                    def dependenciesNode = asNode().appendNode('dependencies')
+
+                    //Iterate over the compile dependencies (we don't want the test ones), adding a <dependency> node for each
+                    configurations.api.allDependencies.each {
+                        def dependencyNode = dependenciesNode.appendNode('dependency')
+                        dependencyNode.appendNode('groupId', it.group)
+                        dependencyNode.appendNode('artifactId', it.name)
+                        dependencyNode.appendNode('version', it.version)
+                    }
+                }
+
             }
         }
         // 配置远程仓库
@@ -173,6 +150,7 @@ afterEvaluate {
                 }
             }
         }
+        println configurations.api?.allDependencies
     }
 
     signing {

@@ -7,7 +7,7 @@ buildscript {
             'kotlin'        : '1.4.20',
             'supportLibrary': '27.0.2',
             'androidPlugin' : '4.1.1',
-            'androidTools'  : '27.0.3',
+            'androidTools'  : '29.0.2',
     ]
 
     ext.deps = [
@@ -76,7 +76,6 @@ buildscript {
         maven { url "https://s01.oss.sonatype.org/content/repositories/releases/" }
         jcenter()
 //        deprecated
-//        maven { url "https://jitpack.io" }
 //        maven {
 //            url 'https://dl.bintray.com/leobert-lan-oss/maven/'
 //        }
@@ -84,8 +83,6 @@ buildscript {
     }
     dependencies {
         classpath deps.android.gradlePlugin
-//        classpath deps.publish.jcenter
-//        classpath deps.publish.maven
         classpath deps.kotlin
     }
 }
@@ -98,7 +95,6 @@ allprojects {
 
         jcenter()
         google()
-//        maven { url 'https://jitpack.io' }
         maven {
             url 'https://dl.bintray.com/leobert-lan-oss/maven/'
         }

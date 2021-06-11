@@ -10,32 +10,18 @@ def ARTIFACT_ID = 'jimu-router-anno-compiler'
 def VERSION_NAME = '1.0.1'
 def GROUP_ID = 'io.github.leobert-lan'
 
-//ext {
-//    bintrayRepo = 'maven'
-//    bintrayName = ARTIFACT_ID
-//    artifact = ARTIFACT_ID
-//    libraryName = ARTIFACT_ID
-//    libraryDescription = 'component build lib '
-//    libraryVersion = VERSION_NAME
-//    licenseName = 'The Apache Software License, Version 2.0'
-//    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-//    allLicenses = ["Apache-2.0"]
-//}
-
-//apply from: '../installv1.gradle'
-//apply from: '../bintrayv1.gradle'
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.google.auto.service:auto-service:1.0-rc2'
-    compile 'com.squareup:javapoet:1.9.0'
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.google.auto.service:auto-service:1.0-rc2'
+    implementation 'com.squareup:javapoet:1.9.0'
 
 
-    compile 'org.apache.commons:commons-lang3:3.4'
-    compile 'org.apache.commons:commons-collections4:4.1'
+    implementation 'org.apache.commons:commons-lang3:3.4'
+    implementation 'org.apache.commons:commons-collections4:4.1'
 
 //    compile project(':router-annotation')
-    compile deps.jimu.router_anno
+    implementation deps.jimu.router_anno
 
 }
 
@@ -73,11 +59,6 @@ task sourcesJar(type: Jar) {
     from sourceSets.main.java.srcDirs
 }
 
-//task javadoc(type: Javadoc) {
-//    source = android.sourceSets.main.java.srcDirs
-//    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-////    exclude 'osp/leobert/android/uibinding/**'
-//}
 task javadocJar(type: Jar, dependsOn: javadoc) {
     classifier = 'javadoc'
     from javadoc.destinationDir
@@ -98,6 +79,7 @@ afterEvaluate {
     publishing {
         publications {
             mavenAndroid(MavenPublication) {
+                from components.java
                 groupId GROUP_ID
                 artifactId ARTIFACT_ID
                 version VERSION_NAME
@@ -151,4 +133,8 @@ afterEvaluate {
     signing {
         sign publishing.publications.mavenAndroid
     }
+}
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
 }
