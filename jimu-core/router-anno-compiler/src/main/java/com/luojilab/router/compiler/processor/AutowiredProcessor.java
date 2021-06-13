@@ -1,6 +1,5 @@
 package com.luojilab.router.compiler.processor;
 
-import com.google.auto.service.AutoService;
 import com.luojilab.router.compiler.utils.AnnoUtils;
 import com.luojilab.router.compiler.utils.Constants;
 import com.luojilab.router.compiler.utils.Logger;
@@ -53,7 +52,6 @@ import static javax.lang.model.element.Modifier.PUBLIC;
  * <p><b>Description:</b> Autowired Processor,Only Activity and Fragment/Fragment_V4 allowed </p>
  * Created by leobert on 2017/9/18.
  */
-@AutoService(Processor.class)
 @SupportedOptions(KEY_HOST_NAME)
 @SupportedSourceVersion(SourceVersion.RELEASE_7)
 @SupportedAnnotationTypes({ANNOTATION_TYPE_AUTOWIRED})

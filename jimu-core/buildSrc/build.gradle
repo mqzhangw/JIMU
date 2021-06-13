@@ -1,0 +1,24 @@
+apply plugin: "kotlin"
+
+sourceSets {
+    main {
+        java {
+            srcDirs "../../src_build/main/java"
+        }
+    }
+}
+buildscript {
+    ext.kotlin_version = "1.4.21"
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        gradleApi()
+    }
+}
+repositories {
+//    mavenCentral()
+//    google()
+    jcenter()
+}

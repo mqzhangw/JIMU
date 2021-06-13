@@ -1,5 +1,7 @@
-//apply plugin: 'com.dd.comgradle'
-apply plugin: 'JimuHotfix'
+import jimu.Consts
+
+apply plugin: Consts.jimu_plugin_name
+//apply plugin: 'JimuHotfix'
 
 android {
     compileSdkVersion versions.compileSdk
@@ -35,12 +37,10 @@ android {
 dependencies {
     implementation project(':componentservice')
 
-//    annotationProcessor deps.jimu.router_anno_compiler
+    annotationProcessor Consts.Deps.JIMU_ROUTER_COMPILER
 
-    annotationProcessor(project(":AptHotfix"))
+//    annotationProcessor(project(":AptHotfix"))
 
-
-//    annotationProcessor project(':router-anno-compiler')
     androidTestCompile('androidx.test.espresso:espresso-core:3.1.0', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
@@ -61,7 +61,7 @@ combuild {
     targetManifest = projectRoot + "/sharecomponent/src/main/runalone/mergedManifest.xml"
     //如果不需要合并，改为false
     enableManifestMerge = false
-    useMaat=true
+    useMaat = true
 }
 repositories {
     mavenCentral()

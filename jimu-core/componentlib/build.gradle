@@ -150,7 +150,6 @@ afterEvaluate {
                 }
             }
         }
-        println configurations.api?.allDependencies
     }
 
     signing {

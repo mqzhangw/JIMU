@@ -1,5 +1,7 @@
-//apply plugin: 'com.dd.comgradle'
-apply plugin: 'JimuHotfix'
+import jimu.Consts
+
+apply plugin: Consts.jimu_plugin_name
+//apply plugin: 'JimuHotfix'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
@@ -38,8 +40,9 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':componentservice')
-//    kapt project(':router-anno-compiler')
-    kapt 'com.github.jimu:router-anno-compiler:1.0.1'
+
+    kapt Consts.Deps.JIMU_ROUTER_COMPILER
+//    kapt 'com.github.jimu:router-anno-compiler:1.0.1'
     implementation deps.kotlin.kotlin_jdk7
 }
 

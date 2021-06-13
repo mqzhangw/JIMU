@@ -1,6 +1,5 @@
 package com.luojilab.router.compiler.processor;
 
-import com.google.auto.service.AutoService;
 import com.luojilab.router.compiler.utils.Constants;
 import com.luojilab.router.compiler.utils.FileUtils;
 import com.luojilab.router.compiler.utils.Logger;
@@ -58,7 +57,6 @@ import static javax.lang.model.element.Modifier.PUBLIC;
  * </p>
  * Created by leobert on 2017/9/18.
  */
-@AutoService(Processor.class)
 @SupportedOptions(KEY_HOST_NAME)
 @SupportedSourceVersion(SourceVersion.RELEASE_7)
 @SupportedAnnotationTypes({ANNOTATION_TYPE_ROUTE_NODE, ANNOTATION_TYPE_ROUTER})

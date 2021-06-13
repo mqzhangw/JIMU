@@ -1,3 +1,5 @@
+import jimu.Consts
+
 plugins {
     id 'java'
     id 'signing'
@@ -6,21 +8,19 @@ plugins {
 
 
 def MAVEN_LOCAL_PATH = uri('../../local_repo')
-def ARTIFACT_ID = 'jimu-router-anno-compiler'
-def VERSION_NAME = '1.0.1'
-def GROUP_ID = 'io.github.leobert-lan'
+
+def ARTIFACT_ID = Consts.Artifacts.router_anno_compiler
+def VERSION_NAME = Consts.Versions.router_anno_compiler
+def GROUP_ID = Consts.GROUP_ID
 
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.google.auto.service:auto-service:1.0-rc2'
-    implementation 'com.squareup:javapoet:1.9.0'
-
+    implementation 'com.squareup:javapoet:1.10.0'
 
     implementation 'org.apache.commons:commons-lang3:3.4'
     implementation 'org.apache.commons:commons-collections4:4.1'
 
-//    compile project(':router-annotation')
     implementation deps.jimu.router_anno
 
 }
@@ -29,23 +29,6 @@ compileJava {
     sourceCompatibility = '1.7'
     targetCompatibility = '1.7'
 }
-
-
-//uploadArchives() {
-//    repositories {
-//        mavenDeployer {
-//            repository(url: MAVEN_LOCAL_PATH)
-//            pom.project {
-//                groupId GROUP_ID
-//                artifactId ARTIFACT_ID
-//                version VERSION_NAME
-//                packaging 'aar'
-//            }
-//        }
-//    }
-//}
-
-
 
 Properties properties = new Properties()
 InputStream inputStream = project.rootProject.file('local.properties').newDataInputStream()
@@ -79,7 +62,6 @@ afterEvaluate {
     publishing {
         publications {
             mavenAndroid(MavenPublication) {
-                from components.java
                 groupId GROUP_ID
                 artifactId ARTIFACT_ID
                 version VERSION_NAME
@@ -114,6 +96,31 @@ afterEvaluate {
                         connection = siteUrl
                         developerConnection = gitUrl
                         url = siteUrl
+                    }
+                }
+                pom.withXml {
+                    def dependenciesNode = asNode().appendNode('dependencies')
+                    def runtimes = new ArrayList()
+
+                    //Iterate over the compile dependencies (we don't want the test ones), adding a <dependency> node for each
+                    configurations.implementation.allDependencies.each {
+                        if (it.group != null) {
+                            runtimes.add(it)
+                            def dependencyNode = dependenciesNode.appendNode('dependency')
+                            dependencyNode.appendNode('groupId', it.group)
+                            dependencyNode.appendNode('artifactId', it.name)
+                            dependencyNode.appendNode('version', it.version)
+                            dependencyNode.appendNode('scope', "runtime")
+                        }
+                    }
+                    configurations.testImplementation.allDependencies.each {
+                        if (it.group != null && !runtimes.contains(it)) {
+                            def dependencyNode = dependenciesNode.appendNode('dependency')
+                            dependencyNode.appendNode('groupId', it.group)
+                            dependencyNode.appendNode('artifactId', it.name)
+                            dependencyNode.appendNode('version', it.version)
+                            dependencyNode.appendNode('scope', "test")
+                        }
                     }
                 }
             }

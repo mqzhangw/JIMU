@@ -4,6 +4,13 @@ repositories {
     google()
     jcenter()
 }
+sourceSets {
+    main {
+        java {
+            srcDirs "../../src_build/main/java"
+        }
+    }
+}
 dependencies {
     implementation "io.github.leobert-lan:jimu-build-gradle:1.3.5"
 

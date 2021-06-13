@@ -1,5 +1,7 @@
-//apply plugin: 'com.dd.comgradle'
-apply plugin: 'JimuHotfix'
+import jimu.Consts
+
+//apply plugin: 'JimuHotfix'
+apply plugin: Consts.jimu_plugin_name
 apply plugin: 'kotlin-android'
 
 android {
@@ -44,8 +46,8 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
 
-//    annotationProcessor deps.jimu.router_anno_compiler
-    annotationProcessor(project(":AptHotfix"))
+    annotationProcessor Consts.Deps.JIMU_ROUTER_COMPILER
+//    annotationProcessor(project(":AptHotfix"))
 
 //    annotationProcessor project(':router-anno-compiler')
     androidTestCompile('androidx.test.espresso:espresso-core:3.1.0', {

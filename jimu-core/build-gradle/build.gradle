@@ -1,3 +1,5 @@
+import jimu.Consts
+
 plugins {
     id 'groovy'
     id 'signing'
@@ -5,9 +7,9 @@ plugins {
 }
 
 def MAVEN_LOCAL_PATH = uri('../../local_repo')
-def GROUP_ID = 'io.github.leobert-lan'
+def GROUP_ID = Consts.GROUP_ID //'io.github.leobert-lan'
 def ARTIFACT_ID = 'jimu-build-gradle'
-def VERSION_NAME = '1.3.5'
+def VERSION_NAME = Consts.Versions.jimu_plugin
 def changeLog = "支持 kotlin-1.4.x 等支持Java语法的内容"
 
 dependencies {
@@ -61,7 +63,6 @@ afterEvaluate {
                 artifact('build/libs/build-gradle.jar')
                 // 配置 pom 文件格式
                 pom {
-                    from components.java
                     groupId = GROUP_ID
                     artifactId = ARTIFACT_ID
                     version = VERSION_NAME
@@ -87,6 +88,32 @@ afterEvaluate {
                         connection = siteUrl
                         developerConnection = gitUrl
                         url = siteUrl
+                    }
+                }
+
+                pom.withXml {
+                    def dependenciesNode = asNode().appendNode('dependencies')
+                    def runtimes = new ArrayList()
+
+                    //Iterate over the compile dependencies (we don't want the test ones), adding a <dependency> node for each
+                    configurations.implementation.allDependencies.each {
+                        if (it.group != null) {
+                            runtimes.add(it)
+                            def dependencyNode = dependenciesNode.appendNode('dependency')
+                            dependencyNode.appendNode('groupId', it.group)
+                            dependencyNode.appendNode('artifactId', it.name)
+                            dependencyNode.appendNode('version', it.version)
+                            dependencyNode.appendNode('scope', "runtime")
+                        }
+                    }
+                    configurations.testImplementation.allDependencies.each {
+                        if (it.group != null && !runtimes.contains(it)) {
+                            def dependencyNode = dependenciesNode.appendNode('dependency')
+                            dependencyNode.appendNode('groupId', it.group)
+                            dependencyNode.appendNode('artifactId', it.name)
+                            dependencyNode.appendNode('version', it.version)
+                            dependencyNode.appendNode('scope', "test")
+                        }
                     }
                 }
             }
